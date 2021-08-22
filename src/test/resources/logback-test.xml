@@ -1,0 +1,19 @@
+<configuration debug="false">
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %highlight(%-5level) [%thread] %highlight(%class.%method:%line) - %msg %mdc %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="com.github.dockerjava" level="WARN"/>
+    <logger name="pom.framework.aspects.AbstractLogAspect" level="DEBUG"/>
+    <logger name="org.openqa.selenium" level="WARN"/> <!-- can be used to trace communication with driver -->
+    <logger name="io.github.glytching.junit.extension.watcher.WatcherExtension" level="INFO"/>
+</configuration>

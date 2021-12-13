@@ -20,7 +20,7 @@ public class TestExceptionLoggerAspect {
             "|| execution(@org.junit.jupiter.api.TestTemplate * *(..))")
     public void scope() {}
 
-    @AfterThrowing(value = "scope()", throwing = "throwable")
+    @AfterThrowing(pointcut = "scope()", throwing = "throwable")
     public void logException(JoinPoint jp, Throwable throwable) {
         logger.error(convertToString(getMethod(jp)) + " caused " + throwable);
     }

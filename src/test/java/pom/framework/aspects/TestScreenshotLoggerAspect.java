@@ -29,7 +29,7 @@ public class TestScreenshotLoggerAspect {
             "|| execution(@org.junit.jupiter.api.TestTemplate * *(..))")
     public void scope() {}
 
-    @AfterThrowing(value = "scope()", throwing = "throwable")
+    @AfterThrowing(pointcut = "scope()", throwing = "throwable")
     public void attachScreenshot(JoinPoint jp, Throwable throwable) {
         Method method = getMethod(jp);
         Object[] args = jp.getArgs();
@@ -37,14 +37,12 @@ public class TestScreenshotLoggerAspect {
 
         List<WebDriver> drivers = getDriver(args, fields, jp);
 
-        if (drivers.size() > 0)
+        if (!drivers.isEmpty())
             drivers.forEach(driver -> {
                 try {
-                    if (Objects.nonNull(driver))
+                    if (driver != null)
                         doAttachScreenshotToReport(method.getName(), driver);
-                } catch (IOException ignored) {
-                    //do nothing
-                }
+                } catch (IOException ignored) {}
             });
     }
 
@@ -55,7 +53,7 @@ public class TestScreenshotLoggerAspect {
     }
 
     private List<WebDriver> doGetDriver(Object[] args) {
-        if (Objects.isNull(args))
+        if (args == null)
             return Collections.emptyList();
 
         return Arrays.stream(args)
@@ -65,7 +63,7 @@ public class TestScreenshotLoggerAspect {
     }
 
     private List<WebDriver> doGetDriver(Field[] fields, JoinPoint jp) {
-        if (Objects.isNull(fields))
+        if (fields == null)
             return Collections.emptyList();
 
         return Arrays.stream(fields)
@@ -92,7 +90,10 @@ public class TestScreenshotLoggerAspect {
         return field -> {
             try {
                 field.setAccessible(true); //in case driver is private
-                return WebDriver.class.isAssignableFrom(field.get(jp.getThis()).getClass());
+                if (field.get(jp.getThis()) != null) //in case driver is not set
+                    return WebDriver.class.isAssignableFrom(field.get(jp.getThis()).getClass());
+
+                return false;
             } catch (IllegalAccessException e) {
                 return false;
             }

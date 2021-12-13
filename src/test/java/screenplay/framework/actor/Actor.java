@@ -5,6 +5,7 @@ import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matcher;
 import screenplay.framework.Ability;
+import screenplay.framework.exceptions.ScreenplayCallException;
 
 import java.util.*;
 
@@ -117,6 +118,8 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
         memory.put(name, value);
     }
     public Object recall(String name) {
+        if(memory.get(name) == null)
+            throw new ScreenplayCallException("Actor does not recall parameter [" + name + "].Call remember() before to define this object in Actor's memory.");
         return memory.get(name);
     }
 }

@@ -31,7 +31,7 @@ public class SimpleTest extends BaseTest {
 
     @ParameterizedTest
     @MethodSource("accountFormDataProvider")
-    void createAnAccount(AccountFormData data) {
+    void shouldCreateAccount(AccountFormData data) {
         Actor user = new Actor();
 
         given(user).can(BrowseTheWeb.with(browser));
@@ -43,7 +43,7 @@ public class SimpleTest extends BaseTest {
     }
 
     @Test
-    void searchForProduct() {
+    void shouldSearchForProduct() {
         Actor user = new Actor();
 
         given(user).can(BrowseTheWeb.with(browser));
@@ -57,7 +57,7 @@ public class SimpleTest extends BaseTest {
     }
 
     @Test
-    void smarterSearchForProduct() {
+    void shouldSearchForProductButSmarter() {
         Actor user = new Actor();
 
         given(user).can(BrowseTheWeb.with(browser));
@@ -69,7 +69,7 @@ public class SimpleTest extends BaseTest {
     }
 
     @Test
-    void productDetailsShouldContainTableDataSheet() {
+    void shouldContainTableDataSheetInProductDetails() {
         Actor user = new Actor();
 
         given(user).can(BrowseTheWeb.with(browser));

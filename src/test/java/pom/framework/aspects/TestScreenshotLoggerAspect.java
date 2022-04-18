@@ -3,7 +3,9 @@ package pom.framework.aspects;
 import io.qameta.allure.Allure;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -27,23 +29,17 @@ public class TestScreenshotLoggerAspect {
     @Pointcut("execution(@org.junit.jupiter.api.Test * *(..)) " +
             "|| execution(@org.junit.jupiter.params.ParameterizedTest * *(..)) " +
             "|| execution(@org.junit.jupiter.api.TestTemplate * *(..))")
-    public void scope() {}
+    public void testMethod() {}
 
-    @AfterThrowing(pointcut = "scope()", throwing = "throwable")
+    @Pointcut("execution(* org.assertj.core.api.SoftAssertionsProvider.assertAll(..))")
+    public void softAssertionsProvider() {}
+
+    @Pointcut("testMethod() || softAssertionsProvider()")
+    public void combined() {}
+
+    @AfterThrowing(pointcut = "combined()", throwing = "throwable")
     public void attachScreenshot(JoinPoint jp, Throwable throwable) {
-        Method method = getMethod(jp);
-        Object[] args = jp.getArgs();
-        Field[] fields = FieldUtils.getAllFields(jp.getThis().getClass());
-
-        List<WebDriver> drivers = getDriver(args, fields, jp);
-
-        if (!drivers.isEmpty())
-            drivers.forEach(driver -> {
-                try {
-                    if (driver != null)
-                        doAttachScreenshotToReport(method.getName(), driver);
-                } catch (IOException ignored) {}
-            });
+        doAttachScreenshot(jp);
     }
 
     private List<WebDriver> getDriver(Object[] args, Field[] fields, JoinPoint jp) {
@@ -57,8 +53,9 @@ public class TestScreenshotLoggerAspect {
             return Collections.emptyList();
 
         return Arrays.stream(args)
-                .filter(obj -> WebDriver.class.isAssignableFrom(obj.getClass()))
-                .map(obj -> (WebDriver) obj)
+                .filter(Objects::nonNull)
+                .filter(arg -> WebDriver.class.isAssignableFrom(arg.getClass()))
+                .map(arg -> (WebDriver) arg)
                 .collect(Collectors.toList());
     }
 
@@ -67,12 +64,29 @@ public class TestScreenshotLoggerAspect {
             return Collections.emptyList();
 
         return Arrays.stream(fields)
+                .filter(Objects::nonNull)
                 .filter(isOfTypeWebDriver(jp))
                 .map(mapToWebDriver(jp))
                 .collect(Collectors.toList());
     }
 
-    private void doAttachScreenshotToReport(String name, WebDriver driver) throws IOException {
+    private void doAttachScreenshot(JoinPoint jp) {
+        Method method = getMethod(jp);
+        Object[] args = jp.getArgs();
+        Field[] fields = FieldUtils.getAllFields(jp.getThis().getClass());
+
+        List<WebDriver> drivers = getDriver(args, fields, jp);
+
+        if (!drivers.isEmpty())
+            drivers.forEach( driver -> {
+                try {
+                    if (driver != null)
+                        attachScreenshotToReport(method.getName(), driver);
+                } catch (IOException ignored) {}
+            });
+    }
+
+    private void attachScreenshotToReport(String name, WebDriver driver) throws IOException {
         try (InputStream is = new ByteArrayInputStream(takeScreenshot(driver))) {
             Allure.addAttachment(name, is);
         }

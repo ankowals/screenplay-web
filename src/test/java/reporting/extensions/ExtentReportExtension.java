@@ -3,28 +3,23 @@ package reporting.extensions;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import org.junit.jupiter.api.extension.AfterAllCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestWatcher;
+import org.junit.jupiter.api.extension.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ExtentReportExtension implements TestWatcher, AfterAllCallback, BeforeAllCallback {
+public class ExtentReportExtension implements TestWatcher, AfterAllCallback {
 
-    public static final String REPORT_PATH = "build/reports/extent-report";
+    private final ExtentReports extentReport;
 
-    private ExtentReports extentReport;
+    public ExtentReportExtension(File file) {
+        this.extentReport = new ExtentReports();
 
-    @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
-        ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH + "/index.html");
-        extentReport = new ExtentReports();
-        extentReport.attachReporter(reporter);
+        extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
     }
 
     @Override

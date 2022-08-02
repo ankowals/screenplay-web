@@ -3,7 +3,9 @@ package tests;
 import base.BaseTest;
 import io.github.bonigarcia.seljup.SingleSession;
 import org.junit.jupiter.api.AfterEach;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.html5.WebStorage;
 
 /**
  * In parallel execution each method requires separate driver instance and with @SingleSession enabled we have a single instance shared for all tests.
@@ -19,5 +21,19 @@ public class SingleSessionSimpleTest extends BaseTest {
     @AfterEach
     void storageCleanup() {
         cleanWebStorage(browser);
+    }
+
+    private void cleanWebStorage(WebDriver driver) {
+        if (driver instanceof WebStorage) {
+            WebStorage webStorage = (WebStorage) driver;
+            webStorage.getSessionStorage().clear();
+            webStorage.getLocalStorage().clear();
+        } else {
+            try {
+                ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
+            } catch (Exception ignored) {
+                //do nothing
+            }
+        }
     }
 }

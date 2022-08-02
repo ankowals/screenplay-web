@@ -1,6 +1,6 @@
 package screenplay.interactions;
 
-import io.qameta.allure.Step;
+
 import pom.models.HomePage;
 import screenplay.abilities.BrowseTheWeb;
 import screenplay.framework.Interaction;
@@ -8,7 +8,6 @@ import testdata.AccountFormData;
 
 public class CreateAccount {
 
-    @Step("Create An Account")
     public static Interaction with(AccountFormData accountFormData) {
         return actor -> BrowseTheWeb.as(actor).onPage(HomePage.class)
                 .clickSignInButton()

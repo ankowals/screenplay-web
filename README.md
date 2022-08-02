@@ -10,33 +10,33 @@ An example of screenplay pattern used for web automation
 * steps can use methods chaining to switch between different pages or can be build from already existing steps, for example screenplay.interactions.CreateAccount and screenplay.interactions.FindProductDetails
 * cross-browser testing supported via junit test-templates -> see SeleniumJupiter extensions documentation https://bonigarcia.dev/selenium-jupiter/
 * jsoup can be used for html parsing if needed to extract data from tables, see ProductDetailsPage for trivial example
-* allure can be used to generate test report with screenshots for failing tests and more readable test steps names (for drill down) -> see documentation for more details https://docs.qameta.io/allure/
+* extent can be used to generate test report with screenshots for failing tests
 
 Tracing example (includes values passed to methods and exception logging)
 
 2021-08-18 09:02:32,743 INFO [ForkJoinPool-1-worker-23] io.github.glytching.junit.extension.watcher.WatcherExtension.beforeTestExecution:86 - Starting test [smarterSearchForProduct]
 
-2021-08-18 09:02:44,172 DEBUG [ForkJoinPool-1-worker-27] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPage.enterIntoEmailInput(jkhzEiEMUrC@terefere.terefere)
+2021-08-18 09:02:44,172 DEBUG [ForkJoinPool-1-worker-27] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPage.enterIntoEmailInput(jkhzEiEMUrC@terefere.terefere)
 
-2021-08-18 09:02:44,174 DEBUG [ForkJoinPool-1-worker-27] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPageView.getEmailInput()
+2021-08-18 09:02:44,174 DEBUG [ForkJoinPool-1-worker-27] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPageView.getEmailInput()
 
-2021-08-18 09:02:44,366 DEBUG [ForkJoinPool-1-worker-23] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetails.getDetails()
+2021-08-18 09:02:44,366 DEBUG [ForkJoinPool-1-worker-23] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetails.getDetails()
 
-2021-08-18 09:02:44,388 DEBUG [ForkJoinPool-1-worker-23] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: BrowseTheWeb.as(Actor[abilities={class screenplay.abilities.BrowseTheWeb=screenplay.abilities.BrowseTheWeb@437f5ca4},memory={}])
+2021-08-18 09:02:44,388 DEBUG [ForkJoinPool-1-worker-23] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: BrowseTheWeb.as(Actor[abilities={class screenplay.abilities.BrowseTheWeb=screenplay.abilities.BrowseTheWeb@437f5ca4},memory={}])
 
-2021-08-18 09:02:44,388 DEBUG [ForkJoinPool-1-worker-23] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: BrowseTheWeb.getDriver()
+2021-08-18 09:02:44,388 DEBUG [ForkJoinPool-1-worker-23] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: BrowseTheWeb.getDriver()
 
-2021-08-18 09:02:44,389 DEBUG [ForkJoinPool-1-worker-23] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetailsPage.getDetails()
+2021-08-18 09:02:44,389 DEBUG [ForkJoinPool-1-worker-23] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetailsPage.getDetails()
 
-2021-08-18 09:02:44,392 DEBUG [ForkJoinPool-1-worker-23] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetailsPageView.getPriceElement()
+2021-08-18 09:02:44,392 DEBUG [ForkJoinPool-1-worker-23] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetailsPageView.getPriceElement()
 
-2021-08-18 09:02:44,530 DEBUG [ForkJoinPool-1-worker-23] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetailsPageView.getShortDescriptionElement()
+2021-08-18 09:02:44,530 DEBUG [ForkJoinPool-1-worker-23] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: ProductDetailsPageView.getShortDescriptionElement()
 
-2021-08-18 09:02:44,869 DEBUG [ForkJoinPool-1-worker-27] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPage.clickCreateAccountButton()
+2021-08-18 09:02:44,869 DEBUG [ForkJoinPool-1-worker-27] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPage.clickCreateAccountButton()
 
-2021-08-18 09:02:44,871 DEBUG [ForkJoinPool-1-worker-27] pom.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPageView.getCreateAccountButton()
+2021-08-18 09:02:44,871 DEBUG [ForkJoinPool-1-worker-27] reporting.framework.aspects.AbstractLogAspect.logMethodExecution:31 - running: AuthenticationPageView.getCreateAccountButton()
 
-2021-08-18 09:02:45,048 ERROR [ForkJoinPool-1-worker-23] pom.framework.aspects.TestExceptionLoggerAspect.logException:25 - SimpleTest.smarterSearchForProduct caused java.lang.AssertionError:
+2021-08-18 09:02:45,048 ERROR [ForkJoinPool-1-worker-23] reporting.framework.aspects.TestExceptionLoggerAspect.logException:25 - SimpleTest.smarterSearchForProduct caused java.lang.AssertionError:
 
 Expecting:
 <ProductDetails{price='$16.40', shortDescription='Printed chiffon knee length dress with tank straps. Deep v-neckline.'}>

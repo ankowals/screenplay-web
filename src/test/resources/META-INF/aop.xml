@@ -4,16 +4,15 @@
         <!-- only weave classes in our application-specific packages -->
         <include within="pom..*" />
         <include within="screenplay..*" />
-        <include within="tests..*" /><!-- grab screenshots from methods under this package -->
-        <include within="io.qameta.allure..*" /><!-- used by allure reporting framework -->
+        <include within="tests..*" />
+        <include within="reporting..*" />
     </weaver>
     <aspects>
         <!-- weave in just this aspects -->
-        <concrete-aspect name="pom.framework.aspects.ConcreteLogAspect" extends="pom.framework.aspects.AbstractLogAspect">
+        <concrete-aspect name="reporting.aspects.ConcreteLogAspect" extends="reporting.aspects.AbstractLogAspect">
             <pointcut name="scope" expression="(execution(* pom..*(..)) AND !execution(* pom.framework..*(..)))
             || (execution(* screenplay..*(..)) AND !execution(* screenplay.framework..*(..)))"/>
         </concrete-aspect>
-        <aspect name="pom.framework.aspects.TestScreenshotLoggerAspect"/>
-        <aspect name="pom.framework.aspects.TestExceptionLoggerAspect"/>
+        <aspect name="reporting.aspects.TestExceptionLoggerAspect"/>
     </aspects>
 </aspectj>

@@ -13,7 +13,7 @@
     </root>
 
     <logger name="com.github.dockerjava" level="WARN"/>
-    <logger name="pom.framework.aspects.AbstractLogAspect" level="DEBUG"/>
+    <logger name="reporting.aspects.AbstractLogAspect" level="DEBUG"/>
     <logger name="org.openqa.selenium" level="WARN"/> <!-- can be used to trace communication with driver -->
     <logger name="io.github.glytching.junit.extension.watcher.WatcherExtension" level="INFO"/>
 </configuration>

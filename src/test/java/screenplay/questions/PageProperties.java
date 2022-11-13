@@ -1,8 +1,8 @@
 package screenplay.questions;
 
-import pom.framework.page.BasePage;
+import framework.pom.page.BasePage;
 import screenplay.abilities.BrowseTheWeb;
-import screenplay.framework.Question;
+import framework.screenplay.Question;
 
 public class PageProperties {
 

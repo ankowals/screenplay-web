@@ -1,6 +1,6 @@
 package screenplay.interactions;
 
-import screenplay.framework.Interaction;
+import framework.screenplay.Interaction;
 
 public class FindProductDetails {
 

@@ -1,9 +1,9 @@
 package screenplay.abilities;
 
 import org.openqa.selenium.WebDriver;
-import pom.framework.page.PageFactory;
-import screenplay.framework.Ability;
-import screenplay.framework.actor.Actor;
+import framework.pom.page.PageFactory;
+import framework.screenplay.Ability;
+import framework.screenplay.actor.Actor;
 
 public class BrowseTheWeb implements Ability {
 

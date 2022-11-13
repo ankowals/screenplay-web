@@ -21,9 +21,11 @@ import org.junit.platform.engine.support.hierarchical.ParallelExecutionConfigura
 
 public class CustomStrategy implements ParallelExecutionConfiguration, ParallelExecutionConfigurationStrategy {
 
+    private static final int NUMBER_OF_THREADS = Runtime.getRuntime().availableProcessors();
+
     @Override
     public int getParallelism() {
-        return 2;
+        return NUMBER_OF_THREADS;
     }
 
     @Override
@@ -33,12 +35,12 @@ public class CustomStrategy implements ParallelExecutionConfiguration, ParallelE
 
     @Override
     public int getMaxPoolSize() {
-        return 2;
+        return NUMBER_OF_THREADS;
     }
 
     @Override
     public int getCorePoolSize() {
-        return 2;
+        return NUMBER_OF_THREADS;
     }
 
     @Override

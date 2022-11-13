@@ -3,9 +3,9 @@ package pom.views;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import pom.framework.elements.Element;
-import pom.framework.elements.ElementImpl;
-import pom.framework.page.BaseView;
+import framework.pom.elements.Element;
+import framework.pom.elements.ElementImpl;
+import framework.pom.page.BaseView;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -2,7 +2,7 @@ package pom.models;
 
 import org.jsoup.Jsoup;
 import org.openqa.selenium.WebDriver;
-import pom.framework.page.BasePage;
+import framework.pom.page.BasePage;
 import pom.views.ProductDetailsView;
 import java.util.*;
 

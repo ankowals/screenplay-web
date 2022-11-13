@@ -8,20 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-import pom.framework.extensions.ExtentWebReportExtension;
 
-import java.io.File;
+import static reporting.ExtentWebReportExtension.REPORT_FILE;
 
 @ExtendWith({WatcherExtension.class})
 public class BaseTest {
 
-    private final static File reportFile = new File("build/reports/extent-report/index.html");
-
     @RegisterExtension
     static SeleniumJupiter seleniumJupiter = new SeleniumJupiter();
-
-    @RegisterExtension
-    static ExtentWebReportExtension extentCachedWebReportExtension = new ExtentWebReportExtension(reportFile);
 
     protected WebDriver browser;
 
@@ -31,11 +25,9 @@ public class BaseTest {
 
     @BeforeAll
     static void beforeAll() {
-        seleniumJupiter.getConfig().setScreenshot(false);
         seleniumJupiter.getConfig().setScreenshotWhenFailure(true);
-        seleniumJupiter.getConfig().setRecording(false);
         seleniumJupiter.getConfig().setRecordingWhenFailure(true);
-        seleniumJupiter.getConfig().setOutputFolder(reportFile.getAbsolutePath());
+        seleniumJupiter.getConfig().setOutputFolder(REPORT_FILE.getAbsolutePath());
     }
 
     @BeforeEach

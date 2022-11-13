@@ -2,7 +2,7 @@ package screenplay.questions;
 
 import pom.models.ProductDetailsPage;
 import screenplay.abilities.BrowseTheWeb;
-import screenplay.framework.Question;
+import framework.screenplay.Question;
 
 import java.util.List;
 import java.util.Map;

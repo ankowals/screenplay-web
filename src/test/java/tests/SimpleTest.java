@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import pom.models.AccountPage;
 import screenplay.abilities.BrowseTheWeb;
 import screenplay.interactions.*;
-import screenplay.framework.actor.Actor;
+import framework.screenplay.actor.Actor;
 import screenplay.questions.PageProperties;
 import screenplay.questions.ProductDetails;
 import testdata.AccountFormData;
@@ -20,10 +20,10 @@ import static io.qala.datagen.RandomShortApi.english;
 import static io.qala.datagen.RandomShortApi.numeric;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
-import static screenplay.framework.helpers.Bdd.given;
-import static screenplay.framework.helpers.Bdd.then;
-import static screenplay.framework.helpers.Bdd.when;
-import static screenplay.framework.helpers.SeeThat.seeThat;
+import static framework.screenplay.helpers.Bdd.given;
+import static framework.screenplay.helpers.Bdd.then;
+import static framework.screenplay.helpers.Bdd.when;
+import static framework.screenplay.helpers.SeeThat.seeThat;
 
 public class SimpleTest extends BaseTest {
 

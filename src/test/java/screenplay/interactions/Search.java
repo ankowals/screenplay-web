@@ -2,7 +2,7 @@ package screenplay.interactions;
 
 import pom.models.HomePage;
 import screenplay.abilities.BrowseTheWeb;
-import screenplay.framework.Interaction;
+import framework.screenplay.Interaction;
 
 public class Search {
 

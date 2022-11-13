@@ -1,7 +1,7 @@
 package pom.models;
 
 import org.openqa.selenium.WebDriver;
-import pom.framework.page.BasePage;
+import framework.pom.page.BasePage;
 import pom.views.AuthenticationView;
 
 public class AuthenticationPage extends BasePage {

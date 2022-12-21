@@ -1,16 +1,19 @@
 package tests;
 
-import base.BaseTest;
+import base.TestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import pom.models.AccountPage;
+import pom.automationpractice.models.AccountPage;
+import pom.automationpractice.models.ProductDetailsPage;
+import pom.automationpractice.models.SearchResultsPage;
 import screenplay.abilities.BrowseTheWeb;
-import screenplay.interactions.*;
+import screenplay.automationpractice.interactions.*;
 import framework.screenplay.actor.Actor;
-import screenplay.questions.PageProperties;
-import screenplay.questions.ProductDetails;
+import screenplay.automationpractice.questions.PageProperties;
+import screenplay.automationpractice.questions.ProductDetails;
+import screenplay.interactions.Open;
 import testdata.AccountFormData;
 
 import java.util.*;
@@ -24,10 +27,9 @@ import static framework.screenplay.helpers.Bdd.given;
 import static framework.screenplay.helpers.Bdd.then;
 import static framework.screenplay.helpers.Bdd.when;
 import static framework.screenplay.helpers.SeeThat.seeThat;
+import static screenplay.PageUrl.AUTOMATION_PRACTICE_HOME;
 
-public class SimpleTest extends BaseTest {
-
-    private static final String HOME_PAGE_URL = "http://automationpractice.com/index.php";
+public class SimpleTest extends TestBase {
 
     @ParameterizedTest
     @MethodSource("accountFormDataProvider")
@@ -36,7 +38,7 @@ public class SimpleTest extends BaseTest {
 
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(HOME_PAGE_URL),
+                Open.browserAt(AUTOMATION_PRACTICE_HOME),
                 CreateAccount.with(data)
         );
         then(user).should(seeThat(PageProperties.title(AccountPage.class), equalTo("My account - My Store")));
@@ -48,7 +50,7 @@ public class SimpleTest extends BaseTest {
 
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(HOME_PAGE_URL),
+                Open.browserAt(AUTOMATION_PRACTICE_HOME),
                 FindProductDetails.of("Printed Chiffon Dress")
         );
         then(user).should(seeThat(ProductDetails.getDetails()))
@@ -62,7 +64,7 @@ public class SimpleTest extends BaseTest {
 
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(HOME_PAGE_URL + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search="),
+                Open.browserAt(AUTOMATION_PRACTICE_HOME + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=", SearchResultsPage.class),
                 ViewProductDetails.of("Printed Chiffon Dress")
         );
         then(user).should(seeThat(ProductDetails.getDetails(), hasProperty("price", equalTo("$17.40"))));
@@ -74,7 +76,7 @@ public class SimpleTest extends BaseTest {
 
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(HOME_PAGE_URL + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2")
+                Open.browserAt(AUTOMATION_PRACTICE_HOME + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2", ProductDetailsPage.class)
         );
         then(user).should(seeThat(ProductDetails.getDataSheet())).asList()
                 .contains(Collections.singletonMap("Compositions", "Polyester"))

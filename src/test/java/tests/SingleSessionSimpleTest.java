@@ -1,6 +1,6 @@
 package tests;
 
-import base.BaseTest;
+import base.TestBase;
 import io.github.bonigarcia.seljup.SingleSession;
 import org.junit.jupiter.api.AfterEach;
 import org.openqa.selenium.JavascriptExecutor;
@@ -16,7 +16,7 @@ import org.openqa.selenium.html5.WebStorage;
  * junit.jupiter.execution.parallel.mode.classes.default=concurrent
  */
 @SingleSession
-public class SingleSessionSimpleTest extends BaseTest {
+public class SingleSessionSimpleTest extends TestBase {
 
     @AfterEach
     void storageCleanup() {

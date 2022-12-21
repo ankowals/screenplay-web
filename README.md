@@ -7,7 +7,7 @@ An example of screenplay pattern used for web automation
 * steps (interaction/questions) implemented using lambda expressions
 * wrappers for web elements (should allow to interact with screen elements using different techniques, for example native selenium call or js execution without introducing helper methods - use polymorphism instead)
 * POM divided to view classes (responsible for finding web elements) and model classes (responsible for element actions implementation) -> convenient methods implementation moved to dedicated classes (steps factories)
-* steps can use methods chaining to switch between different pages or can be build from already existing steps, for example screenplay.interactions.CreateAccount and screenplay.interactions.FindProductDetails
+* steps can use methods chaining to switch between different pages or can be build from already existing steps, for example screenplay.automationpractice.interactions.CreateAccount and screenplay.automationpractice.interactions.FindProductDetails
 * cross-browser testing supported via junit test-templates -> see SeleniumJupiter extensions documentation https://bonigarcia.dev/selenium-jupiter/
 * jsoup can be used for html parsing if needed to extract data from tables, see ProductDetailsPage for trivial example
 * extent can be used to generate test report with screenshots for failing tests

@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v105.log.model.LogEntry;
+import org.openqa.selenium.devtools.v107.log.model.LogEntry;
 import org.openqa.selenium.devtools.v107.log.Log;
 import org.openqa.selenium.devtools.v107.network.Network;
 import org.openqa.selenium.devtools.v107.network.model.*;

@@ -7,12 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v107.network.Network;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-
-import java.util.Optional;
 
 import static reporting.ExtentWebReportExtension.REPORT_FILE;
 
@@ -38,14 +33,5 @@ public class TestBase {
     @BeforeEach
     void beforeEach(WebDriver driver) {
         this.browser = driver;
-        configureTracing(browser);
-    }
-
-
-    private void configureTracing(WebDriver driver) {
-        HasDevTools devToolsDriver = (HasDevTools)driver;
-        DevTools devTools = devToolsDriver.getDevTools();
-        devTools.createSession();
-        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
     }
 }

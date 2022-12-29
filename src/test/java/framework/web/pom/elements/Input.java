@@ -1,4 +1,4 @@
-package framework.pom.elements;
+package framework.web.pom.elements;
 
 public interface Input extends Element {
     void clear();

@@ -1,4 +1,4 @@
-package framework.pom.elements;
+package framework.web.pom.elements;
 
 import java.util.List;
 

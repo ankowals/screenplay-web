@@ -1,4 +1,4 @@
-package framework.pom.page;
+package framework.web.pom.page;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;

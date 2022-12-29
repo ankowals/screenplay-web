@@ -1,7 +1,7 @@
 package pom.automationpractice.models;
 
 import org.openqa.selenium.WebDriver;
-import framework.pom.page.BasePage;
+import framework.web.pom.page.BasePage;
 import pom.automationpractice.views.SearchResultsView;
 
 public class SearchResultsPage extends BasePage {

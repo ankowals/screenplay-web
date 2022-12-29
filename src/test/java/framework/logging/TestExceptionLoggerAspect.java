@@ -1,4 +1,4 @@
-package framework.reporting.aspects;
+package framework.logging;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;

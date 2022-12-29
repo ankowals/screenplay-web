@@ -3,8 +3,8 @@ package pom.automationpractice.views;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import framework.pom.elements.*;
-import framework.pom.page.BaseView;
+import framework.web.pom.elements.*;
+import framework.web.pom.page.BaseView;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;

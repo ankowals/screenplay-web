@@ -1,4 +1,4 @@
- package reporting;
+ package framework.web.reporting;
 
 /*
     Launched via ServiceLauncher declaratively by configuring class name in file

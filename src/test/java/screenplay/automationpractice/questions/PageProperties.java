@@ -1,6 +1,6 @@
 package screenplay.automationpractice.questions;
 
-import framework.pom.page.BasePage;
+import framework.web.pom.page.BasePage;
 import screenplay.abilities.BrowseTheWeb;
 import framework.screenplay.Question;
 

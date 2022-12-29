@@ -1,4 +1,4 @@
-package framework.pom.elements;
+package framework.web.pom.elements;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;

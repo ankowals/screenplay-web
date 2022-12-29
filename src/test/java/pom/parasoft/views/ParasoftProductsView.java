@@ -1,7 +1,7 @@
 package pom.parasoft.views;
 
-import framework.pom.elements.ElementImpl;
-import framework.pom.page.BaseView;
+import framework.web.pom.elements.ElementImpl;
+import framework.web.pom.page.BaseView;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

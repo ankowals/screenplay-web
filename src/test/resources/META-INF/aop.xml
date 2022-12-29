@@ -5,16 +5,14 @@
         <include within="pom..*" />
         <include within="screenplay..*" />
         <include within="tests..*" />
-        <include within="framework.reporting.aspects..*" />
-        <include within="tracing..*" />
+        <include within="framework.logging..*" />
     </weaver>
     <aspects>
         <!-- weave in just this aspects -->
-        <concrete-aspect name="framework.reporting.aspects.ConcreteLogAspect" extends="framework.reporting.aspects.AbstractLogAspect">
+        <concrete-aspect name="framework.logging.ConcreteLogAspect" extends="framework.logging.AbstractLogAspect">
             <pointcut name="scope" expression="(execution(* pom..*(..)) AND !execution(* pom.framework..*(..)))
             || (execution(* screenplay..*(..)) AND !execution(* screenplay.framework..*(..)))"/>
         </concrete-aspect>
-        <aspect name="framework.reporting.aspects.TestExceptionLoggerAspect"/>
-        <aspect name="tracing.TracingAspect"/>
+        <aspect name="framework.logging.TestExceptionLoggerAspect"/>
     </aspects>
 </aspectj>

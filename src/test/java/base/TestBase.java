@@ -1,5 +1,6 @@
 package base;
 
+import framework.web.logging.TraceExtension;
 import io.github.bonigarcia.seljup.*;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,9 +10,9 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import static reporting.ExtentWebReportExtension.REPORT_FILE;
+import static framework.web.reporting.ExtentWebReportExtension.REPORT_FILE;
 
-@ExtendWith({WatcherExtension.class})
+@ExtendWith({WatcherExtension.class, TraceExtension.class})
 public class TestBase {
 
     @RegisterExtension

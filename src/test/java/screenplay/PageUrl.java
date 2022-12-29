@@ -1,6 +1,6 @@
 package screenplay;
 
-import framework.pom.page.BasePage;
+import framework.web.pom.page.BasePage;
 import pom.automationpractice.models.HomePage;
 import pom.parasoft.models.ParasoftProductsPage;
 

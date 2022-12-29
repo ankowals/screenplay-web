@@ -1,6 +1,6 @@
 package pom.parasoft.models;
 
-import framework.pom.page.BasePage;
+import framework.web.pom.page.BasePage;
 import org.openqa.selenium.WebDriver;
 import pom.parasoft.views.ParasoftProductsView;
 

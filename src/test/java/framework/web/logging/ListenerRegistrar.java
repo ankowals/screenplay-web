@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
+/*
+Support may vary between different drivers
+ */
 public class ListenerRegistrar {
 
     private static final Logger log = LoggerFactory.getLogger(ListenerRegistrar.class);

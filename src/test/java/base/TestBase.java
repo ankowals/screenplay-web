@@ -2,7 +2,6 @@ package base;
 
 import framework.web.logging.TraceExtension;
 import io.github.bonigarcia.seljup.*;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +28,7 @@ public class TestBase {
     static SeleniumJupiter seleniumJupiter = new SeleniumJupiter();
 
     @RegisterExtension
-    static TraceExtension traceExtension = new TraceExtension();
+    static TraceExtension traceExtension = new TraceExtension(); //to set selenoid dev tools forwarded port
 
     protected WebDriver browser;
 
@@ -43,23 +42,30 @@ public class TestBase {
         seleniumJupiter.getConfig().setRecordingWhenFailure(true);
         seleniumJupiter.getConfig().setOutputFolder(REPORT_FILE.getParentFile().getAbsolutePath());
 
-        //overwrite default image
-        WebDriverManager wdm = WebDriverManager.chromedriver()
-                .browserInDocker()
-                .dockerCustomImage("selenium/standalone-chrome:4.7.1");
-
-        seleniumJupiter.getConfig().setManager(wdm);
+        //use custom driver manager to expose selenoid dev tools port in container
+        MyWebDriverManager myWdm = new MyWebDriverManager();
+        seleniumJupiter.getConfig().setManager(myWdm);
     }
 
     //@DockerBrowser(type = CHROME, recording = true) WebDriver driver
-    //WebDriver driver
     @BeforeEach
-    void beforeEach(TestInfo testInfo) {
-        //this.browser = driver;
-        this.browser = createRemoteWebDriver(testInfo);
+    void beforeEach(WebDriver driver) {
+        this.browser = driver;
+
+        //turn on tracing for selenoid based images
+        String containerId = seleniumJupiter.getConfig().getManager().getDockerBrowserContainerId();
+        String devToolsPort = seleniumJupiter.getConfig().getManager().getDockerService().getBindPort(containerId, "7070");
+        traceExtension.setSelenoidDevToolsPort(devToolsPort);
     }
 
-    //use test containers for recording when tests use browser in docker until tracing handled for selenoid images
+    /*
+    @BeforeEach
+    void beforeEach(TestInfo testInfo) {
+        this.browser = createRemoteWebDriver(testInfo);
+    }
+     */
+
+    //to use with test containers
     private RemoteWebDriver createRemoteWebDriver(TestInfo testInfo) {
         BrowserWebDriverContainer<?> container = new BrowserWebDriverContainer<>()
                 .withCapabilities(new ChromeOptions())

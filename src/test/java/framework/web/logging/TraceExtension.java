@@ -23,13 +23,9 @@ import java.util.function.Predicate;
 public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, InvocationInterceptor {
 
     private List<WebDriver> drivers;
-    private boolean isSelenoid;
+    private String selenoidDevToolsPort;
 
     public TraceExtension() {}
-
-    public TraceExtension(boolean isSelenoid) {
-        this.isSelenoid = isSelenoid;
-    }
 
     @Override
     public void beforeTestExecution(ExtensionContext context) throws Exception {
@@ -67,9 +63,8 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
         invocation.proceed();
     }
 
-    public TraceExtension selenoid() {
-        this.isSelenoid = true;
-        return this;
+    public void setSelenoidDevToolsPort(String port) {
+        this.selenoidDevToolsPort = port;
     }
 
     private void trace(List<WebDriver> drivers) {
@@ -97,7 +92,7 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
 
     private DevTools getDevTools(WebDriver driver) throws IllegalAccessException {
         if (driver.getClass().isAssignableFrom(RemoteWebDriver.class))
-            return  ((HasDevTools) new DriverAugmenter(isSelenoid).augment(driver)).getDevTools();
+            return  ((HasDevTools) new DriverAugmenter(selenoidDevToolsPort).augment(driver)).getDevTools();
 
         return ((HasDevTools) driver).getDevTools();
     }

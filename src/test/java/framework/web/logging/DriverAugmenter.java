@@ -10,10 +10,10 @@ import java.net.URL;
 
 public class DriverAugmenter {
 
-    private final boolean isSelenoid;
+    private final String selenoidDevToolsPort;
 
-    DriverAugmenter(boolean isSelenoid) {
-        this.isSelenoid = isSelenoid;
+    DriverAugmenter(String selenoidDevToolsPort) {
+        this.selenoidDevToolsPort = selenoidDevToolsPort;
     }
 
     WebDriver augment(WebDriver driver) throws IllegalAccessException {
@@ -29,9 +29,9 @@ public class DriverAugmenter {
         String cdpUrl = String.format("ws://%s:%s/session/%s/se/cdp", hubUrl.getHost(), hubUrl.getPort(), getSessionId(remoteWebDriver));
         mutableCapabilities.setCapability("se:cdp", cdpUrl);
 
-        //selenoid for devTools uses port 7070 so code below does not work, we need to forward 7070 in container and pass it here
-        if (isSelenoid) {
-            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), hubUrl.getPort(), getSessionId(remoteWebDriver));
+        //selenoid for devTools uses port 7070, we need to forward 7070 in container and pass it here
+        if (selenoidDevToolsPort != null && !selenoidDevToolsPort.isEmpty()) {
+            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), selenoidDevToolsPort, getSessionId(remoteWebDriver));
             mutableCapabilities.setCapability("se:cdpVersion", mutableCapabilities.getBrowserVersion());
             mutableCapabilities.setCapability("se:cdp", cdpUrl);
         }

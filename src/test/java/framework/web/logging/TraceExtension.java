@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.v107.fetch.Fetch;
 import org.openqa.selenium.devtools.v107.log.Log;
 import org.openqa.selenium.devtools.v107.network.Network;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -81,12 +82,14 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
 
                     devTools.createSessionIfThereIsNotOne();
                     devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+                    devTools.send(Fetch.enable(Optional.empty(), Optional.empty()));
                     devTools.send(Log.enable());
 
                     new ListenerRegistrar(devTools).addNetworkRequestListener()
                             .addNetworkResponseListener()
                             .addLogListener()
-                            .addJavascriptExceptionListener();
+                            .addJavascriptExceptionListener()
+                            .addNetworkRequestInterceptorListener();
                 });
     }
 

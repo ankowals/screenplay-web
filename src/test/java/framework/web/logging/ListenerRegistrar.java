@@ -1,6 +1,7 @@
 package framework.web.logging;
 
 import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v107.fetch.Fetch;
 import org.openqa.selenium.devtools.v107.log.Log;
 import org.openqa.selenium.devtools.v107.log.model.LogEntry;
 import org.openqa.selenium.devtools.v107.network.Network;
@@ -38,8 +39,8 @@ public class ListenerRegistrar {
                     log.info("[{}] Request with URL: {}",
                             request.getMethod(),
                             request.getUrl());
-                }
-            }
+               }
+           }
         });
 
         return this;
@@ -84,6 +85,30 @@ public class ListenerRegistrar {
                     log.error("Java script exception occurred: {}", e.getMessage());
                     e.printStackTrace();
                 });
+
+        return this;
+    }
+
+    public ListenerRegistrar addNetworkRequestInterceptorListener() {
+        devTools.addListener(Fetch.requestPaused(), entry -> {
+            Request request = entry.getRequest();
+                if (request.getPostData().isPresent()) {
+                    log.info("[{}] Intercepting request with URL: {} => With body: {}",
+                            request.getMethod(),
+                            request.getUrl(),
+                            request.getPostData().get());
+                } else {
+                    log.info("[{}] Intercepting request with URL: {}",
+                            request.getMethod(),
+                            request.getUrl());
+                }
+
+        devTools.send(Fetch.continueRequest(entry.getRequestId(), Optional.of(entry.getRequest().getUrl()),
+                    Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty()));
+        });
 
         return this;
     }

@@ -3,6 +3,7 @@ package screenplay;
 import framework.web.pom.page.BasePage;
 import pom.automationpractice.models.HomePage;
 import pom.parasoft.models.ParasoftProductsPage;
+import tests.AngularFormIoTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.NoSuchElementException;
 public class PageUrl {
     public static final String AUTOMATION_PRACTICE_HOME = "http://automationpractice.com/index.php";
     public static final String PARASOFT_PRODUCTS = "https://www.parasoft.com/products/";
+    public static final String FORM_IO_DEMO = "https://formio.github.io/angular-demo";
 
     private final static Map<String, Class<? extends BasePage>> URL_MAPPING;
 
@@ -18,6 +20,7 @@ public class PageUrl {
         URL_MAPPING = new HashMap<>();
         URL_MAPPING.put(AUTOMATION_PRACTICE_HOME, HomePage.class);
         URL_MAPPING.put(PARASOFT_PRODUCTS, ParasoftProductsPage.class);
+        URL_MAPPING.put(FORM_IO_DEMO, AngularFormIoTest.AngularFormExamplePage.class);
     }
 
     public static Class<? extends BasePage> getMapping(String url) {

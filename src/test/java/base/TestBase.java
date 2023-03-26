@@ -19,7 +19,6 @@ import org.testcontainers.lifecycle.TestDescription;
 import java.util.Optional;
 
 import static framework.web.reporting.ExtentWebReportExtension.REPORT_FILE;
-import static io.github.bonigarcia.seljup.BrowserType.CHROME;
 
 @ExtendWith({WatcherExtension.class})
 public class TestBase {
@@ -38,13 +37,17 @@ public class TestBase {
 
     @BeforeAll
     static void beforeAll() {
-        seleniumJupiter.getConfig().setScreenshotWhenFailure(true);
-        seleniumJupiter.getConfig().setRecordingWhenFailure(true);
-        seleniumJupiter.getConfig().setOutputFolder(REPORT_FILE.getParentFile().getAbsolutePath());
-
         //use custom driver manager to expose selenoid dev tools port in container
+        //ignores browser settings from properties
         MyWebDriverManager myWdm = new MyWebDriverManager();
+        myWdm.browserInDocker();
+        myWdm.browserVersion("107");
+        myWdm.enableRecording(); //recording needs to be set here when custom WDM instance in use
+
         seleniumJupiter.getConfig().setManager(myWdm);
+        seleniumJupiter.getConfig().setScreenshot(true);
+        seleniumJupiter.getConfig().setRecording(true);
+        seleniumJupiter.getConfig().setOutputFolder(REPORT_FILE.getParentFile().getAbsolutePath());
     }
 
     //@DockerBrowser(type = CHROME, recording = true) WebDriver driver
@@ -52,20 +55,31 @@ public class TestBase {
     void beforeEach(WebDriver driver) {
         this.browser = driver;
 
-        //turn on tracing for selenoid based images
-        String containerId = seleniumJupiter.getConfig().getManager().getDockerBrowserContainerId();
-        String devToolsPort = seleniumJupiter.getConfig().getManager().getDockerService().getBindPort(containerId, "7070");
-        traceExtension.setSelenoidDevToolsPort(devToolsPort);
+        turnOnTracingForSelenoidImages();
     }
 
+    private void turnOnTracingForSelenoidImages() {
+        try {
+            String containerId = seleniumJupiter.getConfig().getManager().getDockerBrowserContainerId();
+            if (containerId != null) {
+                String devToolsPort = seleniumJupiter.getConfig().getManager()
+                        .getDockerService()
+                        .getBindPort(containerId, "7070");
+
+                traceExtension.setSelenoidDevToolsPort(devToolsPort);
+            }
+        } catch (NullPointerException ignored) {
+            //browser not started in docker container
+        }
+    }
+
+    //to use with test containers
     /*
     @BeforeEach
     void beforeEach(TestInfo testInfo) {
         this.browser = createRemoteWebDriver(testInfo);
     }
-     */
 
-    //to use with test containers
     private RemoteWebDriver createRemoteWebDriver(TestInfo testInfo) {
         BrowserWebDriverContainer<?> container = new BrowserWebDriverContainer<>()
                 .withCapabilities(new ChromeOptions())
@@ -92,5 +106,5 @@ public class TestBase {
 
         return container.getWebDriver();
     }
-
+     */
 }

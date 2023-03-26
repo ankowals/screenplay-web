@@ -30,12 +30,12 @@ public class ListenerRegistrar {
             Request request = entry.getRequest();
             if (entry.getType().equals(Optional.of(ResourceType.FETCH))) {
                 if (request.getPostData().isPresent()) {
-                    log.info("[{}] Request with URL : {} : With body : {}",
+                    log.info("[{}] Request with URL: {} => With body: {}",
                             request.getMethod(),
                             request.getUrl(),
                             request.getPostData().get());
                 } else {
-                    log.info("[{}] Request with URL : {}",
+                    log.info("[{}] Request with URL: {}",
                             request.getMethod(),
                             request.getUrl());
                 }
@@ -50,11 +50,11 @@ public class ListenerRegistrar {
             Response response = entry.getResponse();
             if (entry.getType().equals(ResourceType.FETCH) || entry.getType().equals(ResourceType.XHR)) {
                 if (response.getStatus() >= 400) {
-                    log.error("Response with URL : {} : With status code : {}",
+                    log.error("Response with URL: {} => With status code: {}",
                             response.getUrl(),
                             response.getStatus());
                 } else {
-                    log.info("Response with URL : {} : With status code : {}",
+                    log.info("Response with URL: {} => With status code: {}",
                             response.getUrl(),
                             response.getStatus());
                 }
@@ -69,7 +69,7 @@ public class ListenerRegistrar {
             if (entry.getLevel().equals(LogEntry.Level.ERROR)) {
                 log.error("[LOG.ERROR] Entry added with text: {}", entry.getText());
                 if (entry.getStackTrace().isPresent()) {
-                    log.error("[LOG.ERROR]\tWith stack trace : {}", entry.getStackTrace().get());
+                    log.error("[LOG.ERROR]\tWith stack trace: {}", entry.getStackTrace().get());
                 }
             }
         });
@@ -81,7 +81,7 @@ public class ListenerRegistrar {
         devTools.getDomains()
                 .events()
                 .addJavascriptExceptionListener(e -> {
-                    log.error("Java script exception occurred : {}", e.getMessage());
+                    log.error("Java script exception occurred: {}", e.getMessage());
                     e.printStackTrace();
                 });
 

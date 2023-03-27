@@ -1,7 +1,7 @@
 package screenplay.automationpractice.interactions;
 
 import pom.automationpractice.models.SearchResultsPage;
-import screenplay.abilities.BrowseTheWeb;
+import screenplay.BrowseTheWeb;
 import framework.screenplay.Interaction;
 
 public class ViewProductDetails {

@@ -22,7 +22,7 @@ public class FieldDriverProvider {
     }
 
     public List<WebDriver> provide() {
-        return getFromClassFields(extensionContext.getRequiredTestInstances());
+        return getFromClassFields(this.extensionContext.getRequiredTestInstances());
     }
 
     private List<WebDriver> getFromClassFields(TestInstances testInstances) {

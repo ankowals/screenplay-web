@@ -1,7 +1,7 @@
 package screenplay.automationpractice.questions;
 
 import pom.automationpractice.models.ProductDetailsPage;
-import screenplay.abilities.BrowseTheWeb;
+import screenplay.BrowseTheWeb;
 import framework.screenplay.Question;
 
 import java.util.List;

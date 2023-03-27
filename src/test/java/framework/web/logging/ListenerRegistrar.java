@@ -1,7 +1,6 @@
 package framework.web.logging;
 
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v107.fetch.Fetch;
 import org.openqa.selenium.devtools.v107.log.Log;
 import org.openqa.selenium.devtools.v107.log.model.LogEntry;
 import org.openqa.selenium.devtools.v107.network.Network;
@@ -27,16 +26,16 @@ public class ListenerRegistrar {
     }
 
     public ListenerRegistrar addNetworkRequestListener() {
-        devTools.addListener(Network.requestWillBeSent(), entry -> {
+        this.devTools.addListener(Network.requestWillBeSent(), entry -> {
             Request request = entry.getRequest();
             if (entry.getType().equals(Optional.of(ResourceType.FETCH))) {
                 if (request.getPostData().isPresent()) {
-                    log.info("[{}] Request with URL: {} => With body: {}",
+                    log.info("Request => method: {}, url: {}, body: {}",
                             request.getMethod(),
                             request.getUrl(),
                             request.getPostData().get());
                 } else {
-                    log.info("[{}] Request with URL: {}",
+                    log.info("Request => method: {}, url: {}",
                             request.getMethod(),
                             request.getUrl());
                }
@@ -47,15 +46,15 @@ public class ListenerRegistrar {
     }
 
     public ListenerRegistrar addNetworkResponseListener() {
-        devTools.addListener(Network.responseReceived(), entry -> {
+        this.devTools.addListener(Network.responseReceived(), entry -> {
             Response response = entry.getResponse();
             if (entry.getType().equals(ResourceType.FETCH) || entry.getType().equals(ResourceType.XHR)) {
                 if (response.getStatus() >= 400) {
-                    log.error("Response with URL: {} => With status code: {}",
+                    log.error("Response => url: {}, status code: {}",
                             response.getUrl(),
                             response.getStatus());
                 } else {
-                    log.info("Response with URL: {} => With status code: {}",
+                    log.info("Response => url: {}, status code: {}",
                             response.getUrl(),
                             response.getStatus());
                 }
@@ -65,12 +64,12 @@ public class ListenerRegistrar {
         return this;
     }
 
-    public ListenerRegistrar addLogListener() {
-        devTools.addListener(Log.entryAdded(), entry -> {
+    public ListenerRegistrar addConsoleLogListener() {
+        this.devTools.addListener(Log.entryAdded(), entry -> {
             if (entry.getLevel().equals(LogEntry.Level.ERROR)) {
-                log.error("[LOG.ERROR] Entry added with text: {}", entry.getText());
+                log.error("Log entry => {}", entry.getText());
                 if (entry.getStackTrace().isPresent()) {
-                    log.error("[LOG.ERROR]\tWith stack trace: {}", entry.getStackTrace().get());
+                    log.error(entry.getStackTrace().get().toString());
                 }
             }
         });
@@ -79,36 +78,12 @@ public class ListenerRegistrar {
     }
 
     public ListenerRegistrar addJavascriptExceptionListener() {
-        devTools.getDomains()
+        this.devTools.getDomains()
                 .events()
                 .addJavascriptExceptionListener(e -> {
-                    log.error("Java script exception occurred: {}", e.getMessage());
+                    log.error("Java script exception => {}", e.getMessage());
                     e.printStackTrace();
                 });
-
-        return this;
-    }
-
-    public ListenerRegistrar addNetworkRequestInterceptorListener() {
-        devTools.addListener(Fetch.requestPaused(), entry -> {
-            Request request = entry.getRequest();
-                if (request.getPostData().isPresent()) {
-                    log.info("[{}] Intercepting request with URL: {} => With body: {}",
-                            request.getMethod(),
-                            request.getUrl(),
-                            request.getPostData().get());
-                } else {
-                    log.info("[{}] Intercepting request with URL: {}",
-                            request.getMethod(),
-                            request.getUrl());
-                }
-
-        devTools.send(Fetch.continueRequest(entry.getRequestId(), Optional.of(entry.getRequest().getUrl()),
-                    Optional.empty(),
-                Optional.empty(),
-                Optional.empty(),
-                Optional.empty()));
-        });
 
         return this;
     }

@@ -8,12 +8,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import pom.automationpractice.models.AccountPage;
 import pom.automationpractice.models.ProductDetailsPage;
 import pom.automationpractice.models.SearchResultsPage;
-import screenplay.abilities.BrowseTheWeb;
+import screenplay.BrowseTheWeb;
 import screenplay.automationpractice.interactions.*;
-import framework.screenplay.actor.Actor;
 import screenplay.automationpractice.questions.PageProperties;
 import screenplay.automationpractice.questions.ProductDetails;
-import screenplay.interactions.Open;
+import screenplay.Open;
 import testdata.AccountFormData;
 
 import java.util.*;
@@ -34,11 +33,9 @@ public class SimpleTest extends TestBase {
     @ParameterizedTest
     @MethodSource("accountFormDataProvider")
     void shouldCreateAccount(AccountFormData data) {
-        Actor user = new Actor();
-
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(AUTOMATION_PRACTICE_HOME),
+                Open.browser(AUTOMATION_PRACTICE_HOME),
                 CreateAccount.with(data)
         );
         then(user).should(seeThat(PageProperties.title(AccountPage.class), equalTo("My account - My Store")));
@@ -46,11 +43,9 @@ public class SimpleTest extends TestBase {
 
     @Test
     void shouldSearchForProduct() {
-        Actor user = new Actor();
-
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(AUTOMATION_PRACTICE_HOME),
+                Open.browser(AUTOMATION_PRACTICE_HOME),
                 FindProductDetails.of("Printed Chiffon Dress")
         );
         then(user).should(seeThat(ProductDetails.getDetails()))
@@ -60,11 +55,9 @@ public class SimpleTest extends TestBase {
 
     @Test
     void shouldSearchForProductButSmarter() {
-        Actor user = new Actor();
-
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(AUTOMATION_PRACTICE_HOME + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=", SearchResultsPage.class),
+                Open.browser(AUTOMATION_PRACTICE_HOME + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=", SearchResultsPage.class),
                 ViewProductDetails.of("Printed Chiffon Dress")
         );
         then(user).should(seeThat(ProductDetails.getDetails(), hasProperty("price", equalTo("$17.40"))));
@@ -72,11 +65,9 @@ public class SimpleTest extends TestBase {
 
     @Test
     void shouldContainTableDataSheetInProductDetails() {
-        Actor user = new Actor();
-
         given(user).can(BrowseTheWeb.with(browser));
         when(user).attemptsTo(
-                Open.browserAt(AUTOMATION_PRACTICE_HOME + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2", ProductDetailsPage.class)
+                Open.browser(AUTOMATION_PRACTICE_HOME + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2", ProductDetailsPage.class)
         );
         then(user).should(seeThat(ProductDetails.getDataSheet())).asList()
                 .contains(Collections.singletonMap("Compositions", "Polyester"))

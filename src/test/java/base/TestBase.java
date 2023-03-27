@@ -1,8 +1,11 @@
 package base;
 
+import framework.screenplay.actor.Actor;
+import framework.web.logging.DriverAugmenter;
 import framework.web.logging.TraceExtension;
 import io.github.bonigarcia.seljup.*;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
@@ -30,6 +33,8 @@ public class TestBase {
     static TraceExtension traceExtension = new TraceExtension(); //to set selenoid dev tools forwarded port
 
     protected WebDriver browser;
+    protected DriverAugmenter driverAugmenter;
+    protected Actor user;
 
     static {
         SLF4JBridgeHandler.install(); //required to bridge jul over slf4j (Selenium and WatcherExtensions are using it)
@@ -47,30 +52,29 @@ public class TestBase {
         seleniumJupiter.getConfig().setManager(myWdm);
         seleniumJupiter.getConfig().setScreenshot(true);
         seleniumJupiter.getConfig().setRecording(true);
-        seleniumJupiter.getConfig().setOutputFolder(REPORT_FILE.getParentFile().getAbsolutePath());
+        seleniumJupiter.getConfig().setOutputFolder(REPORT_FILE.getParent());
     }
 
     //@DockerBrowser(type = CHROME, recording = true) WebDriver driver
     @BeforeEach
     void beforeEach(WebDriver driver) {
         this.browser = driver;
-
-        turnOnTracingForSelenoidImages();
+        this.driverAugmenter = new DriverAugmenter(getDevToolsPort());
+        this.user = new Actor();
+        traceExtension.setDriverAugmenter(this.driverAugmenter);
     }
 
-    private void turnOnTracingForSelenoidImages() {
+    private String getDevToolsPort() {
         try {
             String containerId = seleniumJupiter.getConfig().getManager().getDockerBrowserContainerId();
             if (containerId != null) {
-                String devToolsPort = seleniumJupiter.getConfig().getManager()
+                return seleniumJupiter.getConfig().getManager()
                         .getDockerService()
                         .getBindPort(containerId, "7070");
-
-                traceExtension.setSelenoidDevToolsPort(devToolsPort);
             }
-        } catch (NullPointerException ignored) {
-            //browser not started in docker container
-        }
+        } catch (NullPointerException ignored) {}
+
+        return null;
     }
 
     //to use with test containers

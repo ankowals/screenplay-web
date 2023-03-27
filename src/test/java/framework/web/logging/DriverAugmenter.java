@@ -12,11 +12,11 @@ public class DriverAugmenter {
 
     private final String selenoidDevToolsPort;
 
-    DriverAugmenter(String selenoidDevToolsPort) {
+    public DriverAugmenter(String selenoidDevToolsPort) {
         this.selenoidDevToolsPort = selenoidDevToolsPort;
     }
 
-    WebDriver augment(WebDriver driver) throws IllegalAccessException {
+    public WebDriver augment(WebDriver driver) throws IllegalAccessException {
         if (!driver.getClass().isAssignableFrom(RemoteWebDriver.class))
             return driver;
 
@@ -30,8 +30,8 @@ public class DriverAugmenter {
         mutableCapabilities.setCapability("se:cdp", cdpUrl);
 
         //selenoid for devTools uses port 7070, we need to forward 7070 in container and pass it here
-        if (selenoidDevToolsPort != null && !selenoidDevToolsPort.isEmpty()) {
-            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), selenoidDevToolsPort, getSessionId(remoteWebDriver));
+        if (this.selenoidDevToolsPort != null && !this.selenoidDevToolsPort.isEmpty()) {
+            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), this.selenoidDevToolsPort, getSessionId(remoteWebDriver));
             mutableCapabilities.setCapability("se:cdpVersion", mutableCapabilities.getBrowserVersion());
             mutableCapabilities.setCapability("se:cdp", cdpUrl);
         }

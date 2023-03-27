@@ -6,12 +6,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.v107.fetch.Fetch;
 import org.openqa.selenium.devtools.v107.log.Log;
 import org.openqa.selenium.devtools.v107.network.Network;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -24,7 +22,7 @@ import java.util.function.Predicate;
 public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, InvocationInterceptor {
 
     private List<WebDriver> drivers;
-    private String selenoidDevToolsPort;
+    private DriverAugmenter driverAugmenter;
 
     public TraceExtension() {}
 
@@ -57,15 +55,15 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
         List<WebDriver> arguments = new ArgumentDriverProvider(invocationContext).provide();
 
         if (!arguments.isEmpty()) {
-            drivers.addAll(arguments);
+            this.drivers.addAll(arguments);
             trace(arguments);
         }
 
         invocation.proceed();
     }
 
-    public void setSelenoidDevToolsPort(String port) {
-        this.selenoidDevToolsPort = port;
+    public void setDriverAugmenter(DriverAugmenter driverAugmenter) {
+        this.driverAugmenter = driverAugmenter;
     }
 
     private void trace(List<WebDriver> drivers) {
@@ -82,22 +80,17 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
 
                     devTools.createSessionIfThereIsNotOne();
                     devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
-                    devTools.send(Fetch.enable(Optional.empty(), Optional.empty()));
                     devTools.send(Log.enable());
 
                     new ListenerRegistrar(devTools).addNetworkRequestListener()
                             .addNetworkResponseListener()
-                            .addLogListener()
-                            .addJavascriptExceptionListener()
-                            .addNetworkRequestInterceptorListener();
+                            .addConsoleLogListener()
+                            .addJavascriptExceptionListener();
                 });
     }
 
     private DevTools getDevTools(WebDriver driver) throws IllegalAccessException {
-        if (driver.getClass().isAssignableFrom(RemoteWebDriver.class))
-            return  ((HasDevTools) new DriverAugmenter(selenoidDevToolsPort).augment(driver)).getDevTools();
-
-        return ((HasDevTools) driver).getDevTools();
+        return ((HasDevTools) this.driverAugmenter.augment(driver)).getDevTools();
     }
 
     //CDP not supported by every driver

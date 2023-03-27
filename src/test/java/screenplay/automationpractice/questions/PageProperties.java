@@ -1,7 +1,7 @@
 package screenplay.automationpractice.questions;
 
 import framework.web.pom.page.BasePage;
-import screenplay.abilities.BrowseTheWeb;
+import screenplay.BrowseTheWeb;
 import framework.screenplay.Question;
 
 public class PageProperties {

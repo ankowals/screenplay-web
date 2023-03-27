@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
         this.extentReport = new ExtentReports();
         this.file = file;
 
-        extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
+        this.extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
     }
 
     /*
@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
         List<File> screenshots = getScreenshots();
         List<File> videos = getVideoFiles();
 
-        testStatusMap.forEach((k,v) -> {
+        this.testStatusMap.forEach((k,v) -> {
             screenshots.stream()
                     .filter(f -> f.getName().contains(getMethodName(k)))
                     .max(Comparator.comparingLong(File::lastModified))
@@ -72,7 +72,7 @@ import java.util.stream.Collectors;
                     });
         });
 
-        extentReport.flush();
+        this.extentReport.flush();
     }
 
     @Override
@@ -81,8 +81,8 @@ import java.util.stream.Collectors;
             return;
 
         String testName = getTestName(testIdentifier.getUniqueId()); //identifier == test name used in screenshots
-        ExtentTest extentTest = extentReport.createTest(testName);
-        testStatusMap.putIfAbsent(testName, extentTest);
+        ExtentTest extentTest = this.extentReport.createTest(testName);
+        this.testStatusMap.putIfAbsent(testName, extentTest);
     }
 
     @Override
@@ -91,8 +91,8 @@ import java.util.stream.Collectors;
             return;
 
         String testName = getTestName(testIdentifier.getUniqueId());
-        ExtentTest extentTest = extentReport.createTest(testName).skip(reason);
-        testStatusMap.putIfAbsent(testName, extentTest);
+        ExtentTest extentTest = this.extentReport.createTest(testName).skip(reason);
+        this.testStatusMap.putIfAbsent(testName, extentTest);
     }
 
     @Override
@@ -109,13 +109,13 @@ import java.util.stream.Collectors;
 
         switch (status) {
             case SUCCESSFUL:
-                testStatusMap.get(testName).pass(status.name());
+                this.testStatusMap.get(testName).pass(status.name());
                 break;
             case ABORTED:
-                testStatusMap.get(testName).log(Status.WARNING, status.name() + ", " + cause);
+                this.testStatusMap.get(testName).log(Status.WARNING, status.name() + ", " + cause);
                 break;
             case FAILED:
-                testStatusMap.get(testName).fail(status.name() + ", " + cause);
+                this.testStatusMap.get(testName).fail(status.name() + ", " + cause);
         }
     }
 
@@ -144,13 +144,13 @@ import java.util.stream.Collectors;
     }
 
      private List<File> getScreenshots() {
-         return Arrays.stream(Objects.requireNonNull(file.getParentFile().listFiles()))
+         return Arrays.stream(Objects.requireNonNull(this.file.getParentFile().listFiles()))
                  .filter(f -> f.getName().endsWith(".png"))
                  .collect(Collectors.toList());
      }
 
      private List<File> getVideoFiles() {
-         return Arrays.stream(Objects.requireNonNull(file.getParentFile().listFiles()))
+         return Arrays.stream(Objects.requireNonNull(this.file.getParentFile().listFiles()))
                  .filter(f -> f.getName().endsWith(".mp4") || f.getName().endsWith(".flv"))
                  .collect(Collectors.toList());
      }

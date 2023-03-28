@@ -2,6 +2,7 @@ package base;
 
 import framework.screenplay.actor.Actor;
 import framework.web.logging.DriverAugmenter;
+import framework.web.logging.SelenoidSupport;
 import framework.web.logging.TraceExtension;
 import io.github.bonigarcia.seljup.*;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
@@ -59,22 +60,9 @@ public class TestBase {
     @BeforeEach
     void beforeEach(WebDriver driver) {
         this.browser = driver;
-        this.driverAugmenter = new DriverAugmenter(getDevToolsPort());
+        this.driverAugmenter = new DriverAugmenter(SelenoidSupport.getDevToolsPort(seleniumJupiter));
         this.user = new Actor();
         traceExtension.setDriverAugmenter(this.driverAugmenter);
-    }
-
-    private String getDevToolsPort() {
-        try {
-            String containerId = seleniumJupiter.getConfig().getManager().getDockerBrowserContainerId();
-            if (containerId != null) {
-                return seleniumJupiter.getConfig().getManager()
-                        .getDockerService()
-                        .getBindPort(containerId, "7070");
-            }
-        } catch (NullPointerException ignored) {}
-
-        return null;
     }
 
     //to use with test containers

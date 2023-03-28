@@ -1,9 +1,6 @@
 package mocks;
 
-import org.openqa.selenium.remote.http.Contents;
-import org.openqa.selenium.remote.http.HttpMethod;
-import org.openqa.selenium.remote.http.HttpResponse;
-import org.openqa.selenium.remote.http.Route;
+import org.openqa.selenium.remote.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,21 +16,28 @@ public class Routes {
                         && request.getUri().contains("example.form.io/example/submission"))
                 .to(() -> request -> {
 
-                    String headers = StreamSupport.stream(request.getHeaderNames().spliterator(), false)
-                            .map(name -> name + ":" + request.getHeader(name))
-                            .collect(Collectors.joining(System.lineSeparator()));
+                    log.info(createLogMessage(request));
 
-                    log.info("Request => method: {}" + System.lineSeparator() + "url: {}" + System.lineSeparator() + "headers: {}" + System.lineSeparator() + "body: {}",
-                            request.getMethod(),
-                            request.getUri(),
-                            headers,
-                            Contents.utf8String(request.getContent()));
-
-                    HttpResponse response = new HttpResponse();
-
-                    return response.setStatus(418)
+                    return new HttpResponse().setStatus(418)
                             .addHeader( "Access-Control-Allow-Origin", "*")
                             .setContent(request.getContent());
                 });
+    }
+
+    private static String createLogMessage(HttpRequest request) {
+        return String.format("Request => method: %s, url: %s %s%s %s%s %s",
+                request.getMethod(),
+                request.getUri(),
+                System.lineSeparator(),
+                getHeaders(request),
+                System.lineSeparator(),
+                System.lineSeparator(),
+                Contents.utf8String(request.getContent()));
+    }
+
+    private static String getHeaders(HttpRequest request) {
+        return StreamSupport.stream(request.getHeaderNames().spliterator(), false)
+                .map(name -> name + ":" + request.getHeader(name))
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 }

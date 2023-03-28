@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
     public ExtentWebReportExtension(File file) {
         this.extentReport = new ExtentReports();
         this.file = file;
-
         this.extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
     }
 
@@ -167,7 +166,7 @@ import java.util.stream.Collectors;
 
          MyVideo(File file) {
              String css = "width: 100% !important; height: auto !important;";
-             video = Collections.singletonList("<video style=\"" + css + "\" src=\"./" + file.getName() + "\" controls></video>");
+             this.video = Collections.singletonList("<video style=\"" + css + "\" src=\"./" + file.getName() + "\" controls></video>");
          }
      }
 }

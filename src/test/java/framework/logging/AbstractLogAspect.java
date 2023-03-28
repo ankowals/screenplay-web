@@ -26,7 +26,7 @@ public abstract class AbstractLogAspect {
         Method method = getMethod(pjp);
         Object[] args = pjp.getArgs();
 
-        if (isPublic(method))
+        if (Modifier.isPublic(method.getModifiers()))
             logger.debug("running: " + getMethodCall(method, args));
         else
             logger.trace("running: " + getMethodCall(method, args));
@@ -48,7 +48,7 @@ public abstract class AbstractLogAspect {
             if (isCollection(arg))
                 params.append(",").append(asString((Collection<?>) arg));
             else if (isArray(arg))
-                params.append(",").append(asString(Arrays.asList((Array) arg)));
+                params.append(",").append(asString(List.of((Array) arg)));
             else if (isStream(arg))
                 params.append(",").append(asString((Stream<?>) arg));
             else if (isBaseType(arg))
@@ -61,14 +61,14 @@ public abstract class AbstractLogAspect {
     }
 
     private String asString(Collection<?> collection) {
-        StringBuilder b = new StringBuilder().append(newLine());
-        collection.forEach(e -> b.append(toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(newLine()));
+        StringBuilder b = new StringBuilder().append(System.lineSeparator());
+        collection.forEach(e -> b.append(toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(System.lineSeparator()));
         return b.toString();
     }
 
     private String asString(Stream<?> stream) {
-        StringBuilder b = new StringBuilder().append(newLine());
-        stream.forEach(e -> b.append(toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(newLine()));
+        StringBuilder b = new StringBuilder().append(System.lineSeparator());
+        stream.forEach(e -> b.append(toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(System.lineSeparator()));
         return b.toString();
     }
 
@@ -113,12 +113,5 @@ public abstract class AbstractLogAspect {
         set.add(String.class);
 
         return set;
-    }
-
-    private String newLine() {
-        return System.getProperty("line.separator");
-    }
-    private boolean isPublic(Method method) {
-        return (Modifier.isPublic(method.getModifiers()));
     }
 }

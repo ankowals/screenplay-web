@@ -16,7 +16,7 @@ public class ArgumentDriverProvider {
     }
 
     public List<WebDriver> provide() {
-        return invocationContext.getArguments()
+        return this.invocationContext.getArguments()
                         .stream()
                         .filter(a -> WebDriver.class.isAssignableFrom(a.getClass()))
                         .map(WebDriver.class::cast)

@@ -22,6 +22,6 @@ public class PageFactory {
     }
 
     private <T extends BasePage> T init(Class<T> type) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        return type.getConstructor(WebDriver.class).newInstance(driver);
+        return type.getConstructor(WebDriver.class).newInstance(this.driver);
     }
 }

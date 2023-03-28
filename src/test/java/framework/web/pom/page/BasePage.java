@@ -13,18 +13,18 @@ public class BasePage {
     }
 
     public String getTitle() {
-        return driver.getTitle();
+        return this.driver.getTitle();
     }
     public void open(String url) {
-        driver.get(url);
+        this.driver.get(url);
     }
-    public byte[] takeScreenshot() { return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES); }
+    public byte[] takeScreenshot() { return ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BYTES); }
 
-    protected Actions createAction() { return new Actions(driver); }
-    protected WebDriver.Navigation navigate() { return driver.navigate(); }
-    protected WebDriver.TargetLocator switchTo() { return driver.switchTo(); }
+    protected Actions createAction() { return new Actions(this.driver); }
+    protected WebDriver.Navigation navigate() { return this.driver.navigate(); }
+    protected WebDriver.TargetLocator switchTo() { return this.driver.switchTo(); }
 
     protected boolean isInsideFrame() {
-        return ((JavascriptExecutor) driver).executeScript("return window.frameElement") != null;
+        return ((JavascriptExecutor) this.driver).executeScript("return window.frameElement") != null;
     }
 }

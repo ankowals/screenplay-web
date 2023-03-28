@@ -1,16 +1,17 @@
 package framework.web.logging;
 
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v107.log.Log;
 import org.openqa.selenium.devtools.v107.log.model.LogEntry;
 import org.openqa.selenium.devtools.v107.network.Network;
-import org.openqa.selenium.devtools.v107.network.model.Request;
-import org.openqa.selenium.devtools.v107.network.model.ResourceType;
-import org.openqa.selenium.devtools.v107.network.model.Response;
+import org.openqa.selenium.devtools.v107.network.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /*
 Support may vary between different drivers
@@ -29,17 +30,8 @@ public class ListenerRegistrar {
         this.devTools.addListener(Network.requestWillBeSent(), entry -> {
             Request request = entry.getRequest();
             if (entry.getType().equals(Optional.of(ResourceType.FETCH))) {
-                if (request.getPostData().isPresent()) {
-                    log.info("Request => method: {}, url: {}, body: {}",
-                            request.getMethod(),
-                            request.getUrl(),
-                            request.getPostData().get());
-                } else {
-                    log.info("Request => method: {}, url: {}",
-                            request.getMethod(),
-                            request.getUrl());
-               }
-           }
+                log.info(createLogMessage(request));
+            }
         });
 
         return this;
@@ -48,15 +40,12 @@ public class ListenerRegistrar {
     public ListenerRegistrar addNetworkResponseListener() {
         this.devTools.addListener(Network.responseReceived(), entry -> {
             Response response = entry.getResponse();
+            RequestId requestId = entry.getRequestId();
             if (entry.getType().equals(ResourceType.FETCH) || entry.getType().equals(ResourceType.XHR)) {
                 if (response.getStatus() >= 400) {
-                    log.error("Response => url: {}, status code: {}",
-                            response.getUrl(),
-                            response.getStatus());
+                    log.error(createLogMessage(response, requestId));
                 } else {
-                    log.info("Response => url: {}, status code: {}",
-                            response.getUrl(),
-                            response.getStatus());
+                    log.info(createLogMessage(response, requestId));
                 }
             }
         });
@@ -67,10 +56,10 @@ public class ListenerRegistrar {
     public ListenerRegistrar addConsoleLogListener() {
         this.devTools.addListener(Log.entryAdded(), entry -> {
             if (entry.getLevel().equals(LogEntry.Level.ERROR)) {
-                log.error("Log entry => {}", entry.getText());
-                if (entry.getStackTrace().isPresent()) {
-                    log.error(entry.getStackTrace().get().toString());
-                }
+                log.error(String.format("Console log entry: %s%s%s",
+                        entry.getText(),
+                        System.lineSeparator(),
+                        Objects.toString(entry.getStackTrace().orElse(null), "")));
             }
         });
 
@@ -81,10 +70,46 @@ public class ListenerRegistrar {
         this.devTools.getDomains()
                 .events()
                 .addJavascriptExceptionListener(e -> {
-                    log.error("Java script exception => {}", e.getMessage());
+                    log.error("Java script exception: {}", e.getMessage());
                     e.printStackTrace();
                 });
 
         return this;
+    }
+
+    private String createLogMessage(Request request) {
+        return String.format("Request => method: %s, url: %s%s%s%s%s%s",
+                request.getMethod(),
+                request.getUrl(),
+                System.lineSeparator(),
+                convertToString(request.getHeaders()),
+                System.lineSeparator(),
+                System.lineSeparator(),
+                request.getPostData().orElse(""));
+    }
+
+    private String createLogMessage(Response response, RequestId requestId) {
+        return String.format("Response => url: %s, status code: %s%s%s%s%s%s",
+                response.getUrl(),
+                response.getStatus(),
+                System.lineSeparator(),
+                convertToString(response.getHeaders()),
+                System.lineSeparator(),
+                System.lineSeparator(),
+                getBody(requestId));
+    }
+
+    private String convertToString(Headers headers) {
+        return headers.toJson().entrySet().stream()
+                .map(e -> String.format("%s: %s", e.getKey(), e.getValue()))
+                .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private String getBody(RequestId requestId) {
+        try {
+            return this.devTools.send(Network.getResponseBody(requestId)).getBody();
+        } catch (WebDriverException ignored) {}
+
+        return "";
     }
 }

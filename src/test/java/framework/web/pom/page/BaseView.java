@@ -16,9 +16,9 @@ public class BaseView {
     }
 
     protected WebDriverWait createWebDriverWait(Duration timeout) {
-        return new WebDriverWait(driver, timeout);
+        return new WebDriverWait(this.driver, timeout);
     }
     protected WebDriverWait createWebDriverWait(Duration timeout, Duration sleep) {
-        return new WebDriverWait(driver, timeout, sleep);
+        return new WebDriverWait(this.driver, timeout, sleep);
     }
 }

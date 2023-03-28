@@ -28,19 +28,19 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
 
     @Override
     public void beforeTestExecution(ExtensionContext context) throws Exception {
-        drivers = new FieldDriverProvider(context).provide();
-        trace(drivers);
+        this.drivers = new FieldDriverProvider(context).provide();
+        this.trace(this.drivers);
     }
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        drivers.stream()
+        this.drivers.stream()
                 .filter(withDevToolsSupport())
                 .forEach(driver -> {
                     DevTools devTools;
 
                     try {
-                        devTools = getDevTools(driver);
+                        devTools = this.getDevTools(driver);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
@@ -56,7 +56,7 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
 
         if (!arguments.isEmpty()) {
             this.drivers.addAll(arguments);
-            trace(arguments);
+            this.trace(arguments);
         }
 
         invocation.proceed();
@@ -73,7 +73,7 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
                     DevTools devTools;
 
                     try {
-                        devTools = getDevTools(driver);
+                        devTools = this.getDevTools(driver);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }

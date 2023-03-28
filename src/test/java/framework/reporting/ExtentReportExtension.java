@@ -18,34 +18,33 @@ public class ExtentReportExtension implements TestWatcher, AfterAllCallback {
 
     public ExtentReportExtension(File file) {
         this.extentReport = new ExtentReports();
-
-        extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
+        this.extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
     }
 
     @Override
     public void afterAll(ExtensionContext context) throws Exception {
-        extentReport.flush();
+        this.extentReport.flush();
     }
 
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
-        extentReport.createTest(context.getDisplayName()).skip(reason.orElse("No reason"));
+        this.extentReport.createTest(context.getDisplayName()).skip(reason.orElse("No reason"));
     }
 
     @Override
     public void testSuccessful(ExtensionContext context) {
-        extentReport.createTest(getTestName(context.getUniqueId())).pass(TestResultStatus.SUCCESSFUL.name());
+        this.extentReport.createTest(getTestName(context.getUniqueId())).pass(TestResultStatus.SUCCESSFUL.name());
     }
 
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
-        extentReport.createTest(getTestName(context.getUniqueId()))
+        this.extentReport.createTest(getTestName(context.getUniqueId()))
                 .log(Status.WARNING, TestResultStatus.ABORTED.name() + ", " + cause.toString());
     }
 
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
-        extentReport.createTest(getTestName(context.getUniqueId()))
+        this.extentReport.createTest(getTestName(context.getUniqueId()))
                 .fail(TestResultStatus.FAILED.name() + ", " + cause.toString());
     }
 

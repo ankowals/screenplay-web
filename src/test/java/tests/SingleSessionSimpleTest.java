@@ -20,7 +20,7 @@ public class SingleSessionSimpleTest extends TestBase {
 
     @AfterEach
     void storageCleanup() {
-        cleanWebStorage(browser);
+        cleanWebStorage(this.browser);
     }
 
     private void cleanWebStorage(WebDriver driver) {

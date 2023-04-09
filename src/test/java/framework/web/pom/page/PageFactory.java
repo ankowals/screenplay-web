@@ -15,7 +15,7 @@ public class PageFactory {
 
     public <T extends BasePage> T onPage(Class<T> clazz) {
         try {
-            return init(clazz);
+            return this.init(clazz);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e.getMessage());
         }

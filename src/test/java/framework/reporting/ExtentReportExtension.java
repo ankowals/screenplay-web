@@ -33,23 +33,23 @@ public class ExtentReportExtension implements TestWatcher, AfterAllCallback {
 
     @Override
     public void testSuccessful(ExtensionContext context) {
-        this.extentReport.createTest(getTestName(context.getUniqueId())).pass(TestResultStatus.SUCCESSFUL.name());
+        this.extentReport.createTest(this.getTestName(context.getUniqueId())).pass(TestResultStatus.SUCCESSFUL.name());
     }
 
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
-        this.extentReport.createTest(getTestName(context.getUniqueId()))
+        this.extentReport.createTest(this.getTestName(context.getUniqueId()))
                 .log(Status.WARNING, TestResultStatus.ABORTED.name() + ", " + cause.toString());
     }
 
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
-        this.extentReport.createTest(getTestName(context.getUniqueId()))
+        this.extentReport.createTest(this.getTestName(context.getUniqueId()))
                 .fail(TestResultStatus.FAILED.name() + ", " + cause.toString());
     }
 
     private String getTestName(String uniqueId) {
-        List<String> segments = extractSegments(uniqueId);
+        List<String> segments = this.extractSegments(uniqueId);
         return segments.get(1) + "." + segments.get(2);
     }
 

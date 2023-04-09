@@ -14,12 +14,12 @@ public class DropDownImpl extends ElementImpl implements Dropdown {
 
     @Override
     public void select(String value) {
-        new Select(element).selectByVisibleText(value);
+        new Select(this.element).selectByVisibleText(value);
     }
 
     @Override
     public List<String> getOptions() {
-        return new Select(element).getOptions().stream()
+        return new Select(this.element).getOptions().stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
     }

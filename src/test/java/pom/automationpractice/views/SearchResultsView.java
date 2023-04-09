@@ -19,7 +19,7 @@ public class SearchResultsView extends BaseView {
     }
 
     public Button getProductLink(String product) {
-        WebElement element = wait.until(elementToBeClickable(createProductLinkSelector(product)));
+        WebElement element = this.wait.until(elementToBeClickable(createProductLinkSelector(product)));
         return ButtonImpl.of(element);
     }
 }

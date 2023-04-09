@@ -11,17 +11,17 @@ public class HomePage extends BasePage {
     public HomePage(WebDriver driver) { super(driver); }
 
     public AuthenticationPage clickSignInButton() {
-        view.getSignInButton().click();
-        return new AuthenticationPage(driver);
+        this.view.getSignInButton().click();
+        return new AuthenticationPage(this.driver);
     }
 
     public HomePage enterIntoSearchInput(String text) {
-        view.getSearchInput().insert(text);
+        this.view.getSearchInput().insert(text);
         return this;
     }
 
     public SearchResultsPage clickSearchButton() {
-        view.getSearchButton().click();
-        return new SearchResultsPage(driver);
+        this.view.getSearchButton().click();
+        return new SearchResultsPage(this.driver);
     }
 }

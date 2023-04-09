@@ -15,6 +15,6 @@ public class QuestionConsequence<T> implements Consequence {
 
     @Override
     public void evaluateFor(Actor actor) {
-        actor.checksThat(question.answeredBy(actor), matcher);
+        actor.checksThat(this.question.answeredBy(actor), this.matcher);
     }
 }

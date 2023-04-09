@@ -22,7 +22,7 @@ public class FieldDriverProvider {
     }
 
     public List<WebDriver> provide() {
-        return getFromClassFields(this.extensionContext.getRequiredTestInstances());
+        return this.getFromClassFields(this.extensionContext.getRequiredTestInstances());
     }
 
     private List<WebDriver> getFromClassFields(TestInstances testInstances) {
@@ -30,7 +30,7 @@ public class FieldDriverProvider {
         List<Field> fields = Arrays.stream(FieldUtils.getAllFields(instance.getClass()))
                 .collect(Collectors.toList());
 
-        return readFieldValues(fields, instance, isOfWebDriverType(instance))
+        return readFieldValues(fields, instance, this.isOfWebDriverType(instance))
                 .stream().map(WebDriver.class::cast)
                 .collect(Collectors.toList());
 

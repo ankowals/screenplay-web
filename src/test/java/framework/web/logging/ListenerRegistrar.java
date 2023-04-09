@@ -30,7 +30,7 @@ public class ListenerRegistrar {
         this.devTools.addListener(Network.requestWillBeSent(), entry -> {
             Request request = entry.getRequest();
             if (entry.getType().equals(Optional.of(ResourceType.FETCH))) {
-                log.info(createLogMessage(request));
+                log.info(this.createLogMessage(request));
             }
         });
 
@@ -43,9 +43,9 @@ public class ListenerRegistrar {
             RequestId requestId = entry.getRequestId();
             if (entry.getType().equals(ResourceType.FETCH) || entry.getType().equals(ResourceType.XHR)) {
                 if (response.getStatus() >= 400) {
-                    log.error(createLogMessage(response, requestId));
+                    log.error(this.createLogMessage(response, requestId));
                 } else {
-                    log.info(createLogMessage(response, requestId));
+                    log.info(this.createLogMessage(response, requestId));
                 }
             }
         });
@@ -82,7 +82,7 @@ public class ListenerRegistrar {
                 request.getMethod(),
                 request.getUrl(),
                 System.lineSeparator(),
-                convertToString(request.getHeaders()),
+                this.convertToString(request.getHeaders()),
                 System.lineSeparator(),
                 System.lineSeparator(),
                 request.getPostData().orElse(""));
@@ -93,10 +93,10 @@ public class ListenerRegistrar {
                 response.getUrl(),
                 response.getStatus(),
                 System.lineSeparator(),
-                convertToString(response.getHeaders()),
+                this.convertToString(response.getHeaders()),
                 System.lineSeparator(),
                 System.lineSeparator(),
-                getBody(requestId));
+                this.getBody(requestId));
     }
 
     private String convertToString(Headers headers) {

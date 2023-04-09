@@ -27,7 +27,7 @@ public class TestExceptionLoggerAspect {
 
     @AfterThrowing(pointcut = "combined()", throwing = "throwable")
     public void logException(JoinPoint jp, Throwable throwable) {
-        logger.error(convertToString(getMethod(jp)) + " caused " + throwable);
+        logger.error(this.convertToString(this.getMethod(jp)) + " caused " + throwable);
     }
 
     private Method getMethod(JoinPoint jp) {

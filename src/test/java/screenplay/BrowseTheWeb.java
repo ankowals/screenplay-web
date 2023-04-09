@@ -18,6 +18,6 @@ public class BrowseTheWeb implements Ability {
     }
     public static PageFactory as(Actor actor) { return new PageFactory(actor.using(BrowseTheWeb.class).getDriver()); }
     public WebDriver getDriver() {
-        return driver;
+        return this.driver;
     }
 }

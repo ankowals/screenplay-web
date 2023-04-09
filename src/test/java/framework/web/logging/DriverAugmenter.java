@@ -22,16 +22,16 @@ public class DriverAugmenter {
 
         RemoteWebDriver remoteWebDriver = (RemoteWebDriver) driver;
 
-        URL hubUrl = getHubUrl(remoteWebDriver);
+        URL hubUrl = this.getHubUrl(remoteWebDriver);
 
         MutableCapabilities mutableCapabilities = (MutableCapabilities) remoteWebDriver.getCapabilities();
 
-        String cdpUrl = String.format("ws://%s:%s/session/%s/se/cdp", hubUrl.getHost(), hubUrl.getPort(), getSessionId(remoteWebDriver));
+        String cdpUrl = String.format("ws://%s:%s/session/%s/se/cdp", hubUrl.getHost(), hubUrl.getPort(), this.getSessionId(remoteWebDriver));
         mutableCapabilities.setCapability("se:cdp", cdpUrl);
 
         //selenoid for devTools uses port 7070, we need to forward 7070 in container and pass it here
         if (this.selenoidDevToolsPort != null && !this.selenoidDevToolsPort.isEmpty()) {
-            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), this.selenoidDevToolsPort, getSessionId(remoteWebDriver));
+            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), this.selenoidDevToolsPort, this.getSessionId(remoteWebDriver));
             mutableCapabilities.setCapability("se:cdpVersion", mutableCapabilities.getBrowserVersion());
             mutableCapabilities.setCapability("se:cdp", cdpUrl);
         }

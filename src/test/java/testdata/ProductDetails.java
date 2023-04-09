@@ -13,17 +13,17 @@ public class ProductDetails {
     }
 
     public String getPrice() {
-        return price;
+        return this.price;
     }
     public String getShortDescription() {
-        return shortDescription;
+        return this.shortDescription;
     }
 
     @Override
     public String toString() {
         return "ProductDetails{" +
-                "price='" + price + '\'' +
-                ", shortDescription='" + shortDescription + '\'' +
+                "price='" + this.price + '\'' +
+                ", shortDescription='" + this.shortDescription + '\'' +
                 '}';
     }
 
@@ -37,7 +37,7 @@ public class ProductDetails {
         }
 
         public ProductDetails create() {
-            return new ProductDetails(price, shortDescription);
+            return new ProductDetails(this.price, this.shortDescription);
         }
     }
 }

@@ -6,12 +6,12 @@ import pom.automationpractice.views.SearchResultsView;
 
 public class SearchResultsPage extends BasePage {
 
-    private final SearchResultsView view = new SearchResultsView(driver);
+    private final SearchResultsView view = new SearchResultsView(this.driver);
 
     public SearchResultsPage(WebDriver driver) { super(driver); }
 
     public ProductDetailsPage clickProductLinkButton(String product) {
-        view.getProductLink(product).click();
-        return new ProductDetailsPage(driver);
+        this.view.getProductLink(product).click();
+        return new ProductDetailsPage(this.driver);
     }
 }

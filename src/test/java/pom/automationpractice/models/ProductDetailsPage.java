@@ -13,14 +13,14 @@ public class ProductDetailsPage extends BasePage {
     public ProductDetailsPage(WebDriver driver) { super(driver); }
 
     public String getPrice() {
-        return view.getPriceElement().getText();
+        return this.view.getPriceElement().getText();
     }
     public String getShortDescription() {
-        return view.getShortDescriptionElement().getText();
+        return this.view.getShortDescriptionElement().getText();
     }
     public List<Map<String, String>> getDataSheet() {
         List<Map<String, String>> table = new ArrayList<>();
-        String source = "<table>" + view.getDataSheetTable().getElementSource() + "</table>";
+        String source = "<table>" + this.view.getDataSheetTable().getElementSource() + "</table>";
 
         Jsoup.parseBodyFragment(source).select("tr").forEach(row -> {
             List<String> columns = row.select("td").eachText();

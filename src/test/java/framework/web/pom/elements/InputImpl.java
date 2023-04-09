@@ -10,13 +10,13 @@ public class InputImpl extends ElementImpl implements Input {
 
     @Override
     public void insert(String text) {
-        clear();
-        sendKeys(text);
+        this.clear();
+        this.sendKeys(text);
     }
 
     @Override
     public String getText() {
-        return getAttribute("value");
+        return this.getAttribute("value");
     }
 
     public static InputImpl of(WebElement element) {

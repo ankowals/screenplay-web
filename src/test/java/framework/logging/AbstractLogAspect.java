@@ -23,13 +23,13 @@ public abstract class AbstractLogAspect {
 
     @Around("scope()")
     public Object logMethodExecution(ProceedingJoinPoint pjp) throws Throwable {
-        Method method = getMethod(pjp);
+        Method method = this.getMethod(pjp);
         Object[] args = pjp.getArgs();
 
         if (Modifier.isPublic(method.getModifiers()))
-            logger.debug("running: " + getMethodCall(method, args));
+            logger.debug("running: " + this.getMethodCall(method, args));
         else
-            logger.trace("running: " + getMethodCall(method, args));
+            logger.trace("running: " + this.getMethodCall(method, args));
 
         return pjp.proceed();
     }
@@ -39,22 +39,22 @@ public abstract class AbstractLogAspect {
     }
 
     private String getMethodCall(Method method, Object[] args) {
-        return method.getDeclaringClass().getCanonicalName() + "." + method.getName() + "(" + convertArgs(args) + ")";
+        return method.getDeclaringClass().getCanonicalName() + "." + method.getName() + "(" + this.convertArgs(args) + ")";
     }
 
     private String convertArgs(Object[] args) {
         StringBuilder params = new StringBuilder();
         for (Object arg : args) {
-            if (isCollection(arg))
-                params.append(",").append(asString((Collection<?>) arg));
-            else if (isArray(arg))
-                params.append(",").append(asString(List.of((Array) arg)));
-            else if (isStream(arg))
-                params.append(",").append(asString((Stream<?>) arg));
-            else if (isBaseType(arg))
+            if (this.isCollection(arg))
+                params.append(",").append(this.asString((Collection<?>) arg));
+            else if (this.isArray(arg))
+                params.append(",").append(this.asString(List.of((Array) arg)));
+            else if (this.isStream(arg))
+                params.append(",").append(this.asString((Stream<?>) arg));
+            else if (this.isBaseType(arg))
                 params.append(",").append(arg);
             else
-               params.append(",").append(toStringWithAttributes(arg, SHORT_PREFIX_STYLE));
+               params.append(",").append(this.toStringWithAttributes(arg, SHORT_PREFIX_STYLE));
         }
 
         return params.toString().replaceFirst(",", "");
@@ -62,13 +62,13 @@ public abstract class AbstractLogAspect {
 
     private String asString(Collection<?> collection) {
         StringBuilder b = new StringBuilder().append(System.lineSeparator());
-        collection.forEach(e -> b.append(toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(System.lineSeparator()));
+        collection.forEach(e -> b.append(this.toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(System.lineSeparator()));
         return b.toString();
     }
 
     private String asString(Stream<?> stream) {
         StringBuilder b = new StringBuilder().append(System.lineSeparator());
-        stream.forEach(e -> b.append(toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(System.lineSeparator()));
+        stream.forEach(e -> b.append(this.toStringWithAttributes(e, SHORT_PREFIX_STYLE)).append(System.lineSeparator()));
         return b.toString();
     }
 

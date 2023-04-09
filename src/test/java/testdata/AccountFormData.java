@@ -31,47 +31,47 @@ public class AccountFormData {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public String getCountry() {
-        return country;
+        return this.country;
     }
 
     public String getState() {
-        return state;
+        return this.state;
     }
 
     public String getPostalCode() {
-        return postalCode;
+        return this.postalCode;
     }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
     public String getMobilePhone() {
-        return mobilePhone;
+        return this.mobilePhone;
     }
 
     public String getAlias() {
-        return alias;
+        return this.alias;
     }
 
     public static class Builder {
@@ -93,7 +93,17 @@ public class AccountFormData {
         }
 
         public AccountFormData create() {
-            return new AccountFormData(email, firstName, lastName, password, city, country, state, postalCode, address, mobilePhone, alias);
+            return new AccountFormData(this.email,
+                    this.firstName,
+                    this.lastName,
+                    this.password,
+                    this.city,
+                    this.country,
+                    this.state,
+                    this.postalCode,
+                    this.address,
+                    this.mobilePhone,
+                    this.alias);
         }
     }
 

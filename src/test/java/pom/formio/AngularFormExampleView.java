@@ -18,17 +18,17 @@ public class AngularFormExampleView extends BaseView {
     }
 
     public InputImpl getFirstNameInput() {
-        WebElement element = wait.until(visibilityOfElementLocated(By.xpath("//*[@name='data[firstName]']")));
+        WebElement element = this.wait.until(visibilityOfElementLocated(By.xpath("//*[@name='data[firstName]']")));
         return InputImpl.of(element);
     }
 
     public ButtonImpl getSubmitButton() {
-        WebElement element = wait.until(elementToBeClickable(By.xpath("//*[@name='data[submit]']")));
+        WebElement element = this.wait.until(elementToBeClickable(By.xpath("//*[@name='data[submit]']")));
         return ButtonImpl.of(element);
     }
 
     public ElementImpl getSubmitMessage() {
-        WebElement element = wait.until(visibilityOfElementLocated(By.xpath("//*[@ref='buttonMessage']")));
+        WebElement element = this.wait.until(visibilityOfElementLocated(By.xpath("//*[@ref='buttonMessage']")));
         return ElementImpl.of(element);
     }
 }

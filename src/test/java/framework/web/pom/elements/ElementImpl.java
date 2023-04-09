@@ -11,116 +11,120 @@ public class ElementImpl implements Element {
 
     public ElementImpl(final WebElement element) {
         this.element = element;
-        this.js = (JavascriptExecutor) ((WrapsDriver) getWrappedElement()).getWrappedDriver();
+        this.js = (JavascriptExecutor) ((WrapsDriver) this.getWrappedElement()).getWrappedDriver();
     }
 
     @Override
     public void click() {
-        element.click();
+        this.element.click();
     }
 
     @Override
     public boolean isDisplayed() {
-        return element.isDisplayed();
+        return this.element.isDisplayed();
     }
 
     @Override
     public Point getLocation() {
-        return element.getLocation();
+        return this.element.getLocation();
     }
 
     @Override
     public Dimension getSize() {
-        return element.getSize();
+        return this.element.getSize();
     }
 
     @Override
     public Rectangle getRect() {
-        return element.getRect();
+        return this.element.getRect();
     }
 
     @Override
     public String getCssValue(String propertyName) {
-        return element.getCssValue(propertyName);
+        return this.element.getCssValue(propertyName);
     }
 
     @Override
     public void submit() {
-        element.submit();
+        this.element.submit();
     }
 
     @Override
     public void sendKeys(CharSequence... charSequences) {
         if (isDisplayed())
-            element.sendKeys(charSequences);
+            this.element.sendKeys(charSequences);
     }
 
     @Override
     public String getText() {
         isDisplayed();
-        return element.getText();
+        return this.element.getText();
     }
 
     @Override
     public List<WebElement> findElements(By by) {
-        return element.findElements(by);
+        return this.element.findElements(by);
     }
 
     @Override
     public WebElement findElement(By by) {
-        return element.findElement(by);
+        return this.element.findElement(by);
     }
 
     @Override
     public void clear() {
-        if(isDisplayed())
-            element.clear();
+        if(this.isDisplayed())
+            this.element.clear();
     }
 
     @Override
     public String getTagName() {
-        return element.getTagName();
+        return this.element.getTagName();
     }
 
     @Override
     public String getAttribute(String s) {
-        return element.getAttribute(s);
+        return this.element.getAttribute(s);
     }
 
     @Override
     public boolean isSelected() {
-        return element.isSelected();
+        return this.element.isSelected();
     }
 
     @Override
     public boolean isEnabled() {
-        return element.isEnabled();
+        return this.element.isEnabled();
     }
 
     @Override
     public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
-        return element.getScreenshotAs(target);
+        return this.element.getScreenshotAs(target);
     }
 
     public WebElement getWrappedElement() {
-        return element;
+        return this.element;
     }
 
     public String getElementSource() {
-            return (String) js.executeScript("return arguments[0].innerHTML;", element);
+            return (String) this.js.executeScript("return arguments[0].innerHTML;", this.element);
     }
 
     public void scrollTo() {
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
+        this.js.executeScript("arguments[0].scrollIntoView(true);", this.element);
     }
 
     protected boolean isAttachedToDOM() {
         try {
-            element.isEnabled();
+            this.element.isEnabled();
         } catch (StaleElementReferenceException e) {
             return false;
         }
         return true;
+    }
+
+    protected boolean isInsideFrame() {
+        return this.js.executeScript("return window.frameElement") != null;
     }
 
     public static ElementImpl of(WebElement element) {

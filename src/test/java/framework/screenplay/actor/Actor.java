@@ -28,14 +28,14 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public <T extends Ability> Actor can(T doSomething) {
-        abilities.put(doSomething.getClass(), doSomething);
+        this.abilities.put(doSomething.getClass(), doSomething);
         return this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Ability> T using(Class<? extends T> ability) {
-        return (T) abilities.get(ability);
+        return (T) this.abilities.get(ability);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public PerformsInteractions wasAbleTo(Interaction... interactions) {
-        return attemptsTo(interactions);
+        return this.attemptsTo(interactions);
     }
 
     @Override
@@ -57,12 +57,12 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public ManagesFacts was(Fact... facts) {
-        return has(facts);
+        return this.has(facts);
     }
 
     @Override
     public ManagesFacts is(Fact... facts) {
-        return has(facts);
+        return this.has(facts);
     }
 
     @Override
@@ -78,13 +78,13 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public <T> void expects(Question<T> question, Matcher<? super T> matcher) {
-        checksThat(question.answeredBy(this), matcher);
+        this.checksThat(question.answeredBy(this), matcher);
     }
 
     @SafeVarargs
     @Override
     public final <T> PerformsChecks should(T actual, Matcher<? super T>... matchers) {
-        checksThat(actual, matchers);
+        this.checksThat(actual, matchers);
         return this;
     }
 
@@ -96,14 +96,14 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question) {
-        return should(seeThat(question.answeredBy(this)));
+        return this.should(seeThat(question.answeredBy(this)));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T, E extends AbstractObjectAssert<E, T>> E should(T actual) {
-        if(softAssertions != null)
-            return (E) softAssertions.assertThat(actual);
+        if(this.softAssertions != null)
+            return (E) this.softAssertions.assertThat(actual);
 
         return (E) assertThat(actual);
     }
@@ -114,11 +114,11 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
     }
 
     public <T> void remember(String name, T value) {
-        memory.put(name, value);
+        this.memory.put(name, value);
     }
     public Object recall(String name) {
-        if(memory.get(name) == null)
+        if(this.memory.get(name) == null)
             throw new ScreenplayCallException("Actor does not recall parameter [" + name + "].Call remember() before to define this object in Actor's memory.");
-        return memory.get(name);
+        return this.memory.get(name);
     }
 }

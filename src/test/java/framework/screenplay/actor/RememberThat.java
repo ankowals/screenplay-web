@@ -17,7 +17,7 @@ public class RememberThat {
             this.name = name;
         }
 
-        public Interaction is(T value) { return actor -> actor.remember(name, value); }
-        public Interaction is(Question<?> question) { return actor -> actor.remember(name, question.answeredBy(actor)); }
+        public Interaction is(T value) { return actor -> actor.remember(this.name, value); }
+        public Interaction is(Question<?> question) { return actor -> actor.remember(this.name, question.answeredBy(actor)); }
     }
 }

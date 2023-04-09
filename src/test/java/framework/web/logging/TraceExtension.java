@@ -35,7 +35,7 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
         this.drivers.stream()
-                .filter(withDevToolsSupport())
+                .filter(this.withDevToolsSupport())
                 .forEach(driver -> {
                     DevTools devTools;
 
@@ -68,7 +68,7 @@ public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExe
 
     private void trace(List<WebDriver> drivers) {
         drivers.stream()
-                .filter(withDevToolsSupport())
+                .filter(this.withDevToolsSupport())
                 .forEach(driver -> {
                     DevTools devTools;
 

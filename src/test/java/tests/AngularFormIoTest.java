@@ -35,7 +35,7 @@ public class AngularFormIoTest extends TestBase {
      */
     @Test
     void shouldNotifyAboutSubmissionFailure() throws IllegalAccessException {
-        try (NetworkInterceptor interceptor = new NetworkInterceptor(driverAugmenter.augment(browser),
+        try (NetworkInterceptor interceptor = new NetworkInterceptor(this.driverAugmenter.augment(this.browser),
                 Routes.returnIamTeapot())) {
 
             given(user).can(BrowseTheWeb.with(browser));

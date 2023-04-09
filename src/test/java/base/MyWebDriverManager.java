@@ -7,15 +7,15 @@ import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 public class MyWebDriverManager extends ChromeDriverManager {
 
     public MyWebDriverManager browserInDocker() {
-        dockerEnabled = true;
+        this.dockerEnabled = true;
         return this;
     }
 
     @Override
     public synchronized DockerService getDockerService() {
-        if (dockerService == null) {
-            dockerService = new MyDockerService(config(), getHttpClient(), getResolutionCache());
+        if (this.dockerService == null) {
+            this.dockerService = new MyDockerService(config(), getHttpClient(), getResolutionCache());
         }
-        return dockerService;
+        return this.dockerService;
     }
 }

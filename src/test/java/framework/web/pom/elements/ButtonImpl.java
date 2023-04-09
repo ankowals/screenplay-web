@@ -10,7 +10,7 @@ public class ButtonImpl extends ElementImpl implements Button {
 
     @Override
     public String getText() {
-        return getAttribute("title");
+        return this.getAttribute("title");
     }
 
     public static ButtonImpl of(WebElement element) {

@@ -6,13 +6,13 @@ import java.time.Duration;
 
 public class BaseView {
 
-    private static final Duration TIMEOUT_10_SECONDS = Duration.ofSeconds(10);
+    private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
     protected final WebDriver driver;
     protected final WebDriverWait wait;
 
     public BaseView(WebDriver driver) {
         this.driver = driver;
-        this.wait = createWebDriverWait(TIMEOUT_10_SECONDS);
+        this.wait = this.createWebDriverWait(DEFAULT_TIMEOUT);
     }
 
     protected WebDriverWait createWebDriverWait(Duration timeout) {

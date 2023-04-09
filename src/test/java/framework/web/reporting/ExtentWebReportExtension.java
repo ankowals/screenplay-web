@@ -47,17 +47,17 @@ import java.util.stream.Collectors;
      */
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        List<File> screenshots = getScreenshots();
-        List<File> videos = getVideoFiles();
+        List<File> screenshots = this.getScreenshots();
+        List<File> videos = this.getVideoFiles();
 
         this.testStatusMap.forEach((k,v) -> {
             screenshots.stream()
-                    .filter(f -> f.getName().contains(getMethodName(k)))
+                    .filter(f -> f.getName().contains(this.getMethodName(k)))
                     .max(Comparator.comparingLong(File::lastModified))
                     .ifPresent(f -> v.addScreenCaptureFromPath("./" + f.getName()));
 
             videos.stream()
-                    .filter(f -> f.getName().contains(getMethodName(k)))
+                    .filter(f -> f.getName().contains(this.getMethodName(k)))
                     .max(Comparator.comparingLong(File::lastModified))
                     .ifPresent(f -> {
                         switch(v.getStatus()) {
@@ -79,7 +79,7 @@ import java.util.stream.Collectors;
         if (!testIdentifier.isTest())
             return;
 
-        String testName = getTestName(testIdentifier.getUniqueId()); //identifier == test name used in screenshots
+        String testName = this.getTestName(testIdentifier.getUniqueId()); //identifier == test name used in screenshots
         ExtentTest extentTest = this.extentReport.createTest(testName);
         this.testStatusMap.putIfAbsent(testName, extentTest);
     }
@@ -89,7 +89,7 @@ import java.util.stream.Collectors;
         if (!testIdentifier.isTest())
             return;
 
-        String testName = getTestName(testIdentifier.getUniqueId());
+        String testName = this.getTestName(testIdentifier.getUniqueId());
         ExtentTest extentTest = this.extentReport.createTest(testName).skip(reason);
         this.testStatusMap.putIfAbsent(testName, extentTest);
     }
@@ -99,7 +99,7 @@ import java.util.stream.Collectors;
         if (!testIdentifier.isTest())
             return;
 
-        String testName = getTestName(testIdentifier.getUniqueId());
+        String testName = this.getTestName(testIdentifier.getUniqueId());
         TestExecutionResult.Status status = testExecutionResult.getStatus();
         String cause = "Cause unknown";
 
@@ -123,7 +123,7 @@ import java.util.stream.Collectors;
     //segments[2] = nested class or method
     //etc...
     private String getTestName(String uniqueId) {
-        return extractSegments(uniqueId)
+        return this.extractSegments(uniqueId)
                 .stream().skip(1)
                 .collect(Collectors.joining("."));
     }

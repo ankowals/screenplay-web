@@ -6,21 +6,13 @@ import framework.web.logging.SelenoidSupport;
 import framework.web.logging.TraceExtension;
 import io.github.bonigarcia.seljup.*;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-import org.testcontainers.containers.BrowserWebDriverContainer;
-import org.testcontainers.containers.VncRecordingContainer;
-import org.testcontainers.lifecycle.TestDescription;
-
-import java.util.Optional;
+import wdm.MyWebDriverManager;
 
 import static framework.web.reporting.ExtentWebReportExtension.REPORT_FILE;
 
@@ -60,7 +52,7 @@ public class TestBase {
     @BeforeEach
     void beforeEach(WebDriver driver) {
         this.browser = driver;
-        this.driverAugmenter = new DriverAugmenter(SelenoidSupport.getDevToolsPort(seleniumJupiter));
+        this.driverAugmenter = new DriverAugmenter(new SelenoidSupport(seleniumJupiter).getDevToolsPort());
         this.user = new Actor();
         traceExtension.setDriverAugmenter(this.driverAugmenter);
     }

@@ -17,7 +17,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * Works with selenium/standalone-chrome docker image but not with selenoid images
+ * Works with selenium/standalone-chrome docker image and selenoid images
+ * selenoid for devTools uses port 7070, we need to forward 7070 in container
  */
 public class TraceExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback, InvocationInterceptor {
 

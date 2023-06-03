@@ -51,13 +51,13 @@ public class ElementImpl implements Element {
 
     @Override
     public void sendKeys(CharSequence... charSequences) {
-        if (isDisplayed())
+        if (this.isDisplayed())
             this.element.sendKeys(charSequences);
     }
 
     @Override
     public String getText() {
-        isDisplayed();
+        this.isDisplayed();
         return this.element.getText();
     }
 
@@ -73,7 +73,7 @@ public class ElementImpl implements Element {
 
     @Override
     public void clear() {
-        if(this.isDisplayed())
+        if (this.isDisplayed())
             this.element.clear();
     }
 

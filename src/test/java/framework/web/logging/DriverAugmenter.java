@@ -30,7 +30,7 @@ public class DriverAugmenter {
         mutableCapabilities.setCapability("se:cdp", cdpUrl);
 
         //selenoid for devTools uses port 7070, we need to forward 7070 in container and pass it here
-        if (this.selenoidDevToolsPort != null && !this.selenoidDevToolsPort.isEmpty()) {
+        if (!this.isNullOrEmpty(this.selenoidDevToolsPort)) {
             cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), this.selenoidDevToolsPort, this.getSessionId(remoteWebDriver));
             mutableCapabilities.setCapability("se:cdpVersion", mutableCapabilities.getBrowserVersion());
             mutableCapabilities.setCapability("se:cdp", cdpUrl);
@@ -51,5 +51,9 @@ public class DriverAugmenter {
         Field field = FieldUtils.getField(TracedCommandExecutor.class, "delegate", true);
 
         return ((HttpCommandExecutor) field.get(tce)).getAddressOfRemoteServer();
+    }
+
+    private boolean isNullOrEmpty(String text) {
+        return text == null || text.isEmpty();
     }
 }

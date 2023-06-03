@@ -4,11 +4,21 @@ import io.github.bonigarcia.seljup.SeleniumJupiter;
 
 public class SelenoidSupport {
 
-    public static String getDevToolsPort(SeleniumJupiter seleniumJupiter) {
+    private final SeleniumJupiter seleniumJupiter;
+
+    public SelenoidSupport(SeleniumJupiter seleniumJupiter) {
+        this.seleniumJupiter = seleniumJupiter;
+    }
+
+    public String getDevToolsPort() {
         try {
-            String containerId = seleniumJupiter.getConfig().getManager().getDockerBrowserContainerId();
+            String containerId = this.seleniumJupiter.getConfig()
+                    .getManager()
+                    .getDockerBrowserContainerId();
+
             if (containerId != null) {
-                return seleniumJupiter.getConfig().getManager()
+                return this.seleniumJupiter.getConfig()
+                        .getManager()
                         .getDockerService()
                         .getBindPort(containerId, "7070");
             }

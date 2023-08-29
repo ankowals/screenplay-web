@@ -1,7 +1,7 @@
 package tests;
 
 import base.TestBase;
-import mocks.HttpRequests;
+import mocks.HttpPredicates;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
@@ -52,13 +52,13 @@ public class AngularFormIoTest extends TestBase {
 
     private Routable createRouting() {
         return Route.combine(
-                Route.matching(HttpRequests.post("example.form.io/example/submission"))
+                Route.matching(HttpPredicates.post("example.form.io/example/submission"))
                         .to(() -> req -> new HttpResponse()
                                         .setStatus(418)
                                         .addHeader( "Access-Control-Allow-Origin", "*")
                                         .setContent(req.getContent())),
 
-                Route.matching(HttpRequests.get("tequila.123/entity/1"))
+                Route.matching(HttpPredicates.get("tequila.123/entity/1"))
                         .to(() -> req -> new HttpResponse()
                                 .setStatus(200)
                                 .addHeader( "Access-Control-Allow-Origin", "*")

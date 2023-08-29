@@ -1,6 +1,7 @@
 package framework.screenplay.exceptions;
 
 public class ScreenplayCallException extends RuntimeException {
+
     public ScreenplayCallException(String message) {
         super(message);
     }

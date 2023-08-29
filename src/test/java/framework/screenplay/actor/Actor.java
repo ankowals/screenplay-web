@@ -1,19 +1,19 @@
 package framework.screenplay.actor;
 
 import framework.screenplay.*;
+import org.apache.commons.lang3.function.Failable;
 import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matcher;
 import framework.screenplay.exceptions.ScreenplayCallException;
 
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.HamcrestCondition.matching;
 import static framework.screenplay.helpers.SeeThat.seeThat;
-import static framework.screenplay.helpers.ThrowingConsumer.unchecked;
 
-public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts, ManagesAbilities, ManagesIntegrations, AsksQuestions {
+public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts, ManagesAbilities, AsksQuestions {
 
     private SoftAssertions softAssertions;
 
@@ -40,7 +40,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public PerformsInteractions attemptsTo(Interaction... interactions) {
-        Arrays.asList(interactions).forEach(unchecked(interaction -> interaction.performAs(this)));
+        Failable.stream(Arrays.asList(interactions)).forEach(interaction -> interaction.performAs(this));
         return this;
     }
 
@@ -51,7 +51,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public ManagesFacts has(Fact... facts) {
-        Arrays.asList(facts).forEach(unchecked(fact -> fact.setupFor(this)));
+        Failable.stream(Arrays.asList(facts)).forEach(fact -> fact.setupFor(this));
         return this;
     }
 
@@ -102,23 +102,21 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
     @SuppressWarnings("unchecked")
     @Override
     public <T, E extends AbstractObjectAssert<E, T>> E should(T actual) {
-        if(this.softAssertions != null)
+        if (this.softAssertions != null)
             return (E) this.softAssertions.assertThat(actual);
 
-        return (E) assertThat(actual);
-    }
-
-    @Override
-    public <T> T should (Integration<T> integration) {
-        return integration.integratedBy(this);
+        return (E) Assertions.assertThat(actual);
     }
 
     public <T> void remember(String name, T value) {
         this.memory.put(name, value);
     }
+
     public Object recall(String name) {
-        if(this.memory.get(name) == null)
-            throw new ScreenplayCallException("Actor does not recall parameter [" + name + "].Call remember() before to define this object in Actor's memory.");
+        if (this.memory.get(name) == null)
+            throw new ScreenplayCallException("Actor does not recall parameter [" + name + "]." +
+                    "Call remember() before to define this object in Actor's memory.");
+
         return this.memory.get(name);
     }
 }

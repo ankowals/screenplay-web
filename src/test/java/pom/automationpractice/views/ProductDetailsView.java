@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import framework.web.pom.elements.Element;
-import framework.web.pom.elements.ElementImpl;
+import framework.web.pom.elements.common.ElementImpl;
 import framework.web.pom.page.BaseView;
 
 import java.util.List;

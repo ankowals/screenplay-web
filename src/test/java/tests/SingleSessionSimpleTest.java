@@ -16,7 +16,7 @@ import org.openqa.selenium.html5.WebStorage;
  * junit.jupiter.execution.parallel.mode.classes.default=concurrent
  */
 @SingleSession
-public class SingleSessionSimpleTest extends TestBase {
+class SingleSessionSimpleTest extends TestBase {
 
     @AfterEach
     void storageCleanup() {

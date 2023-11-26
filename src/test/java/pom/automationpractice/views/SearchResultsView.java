@@ -1,5 +1,6 @@
 package pom.automationpractice.views;
 
+import framework.web.pom.elements.common.ButtonImpl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -1,6 +1,7 @@
 package framework.screenplay.actor;
 
 import framework.screenplay.*;
+import framework.screenplay.helpers.See;
 import org.apache.commons.lang3.function.Failable;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.Assertions;
@@ -11,7 +12,6 @@ import framework.screenplay.exceptions.ScreenplayCallException;
 import java.util.*;
 
 import static org.assertj.core.api.HamcrestCondition.matching;
-import static framework.screenplay.helpers.SeeThat.seeThat;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts, ManagesAbilities, AsksQuestions {
 
@@ -73,7 +73,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
     @SafeVarargs
     @Override
     public final <T> void checksThat(T actual, Matcher<? super T>... matchers) {
-        Arrays.asList(matchers).forEach(matcher -> should(seeThat(actual)).is(matching(matcher)));
+        Arrays.asList(matchers).forEach(matcher -> should(See.that(actual)).is(matching(matcher)));
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question) {
-        return this.should(seeThat(question.answeredBy(this)));
+        return this.should(See.that(question.answeredBy(this)));
     }
 
     @SuppressWarnings("unchecked")

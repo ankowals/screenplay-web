@@ -2,7 +2,6 @@ package pom.formio;
 
 import framework.web.pom.page.BasePage;
 import org.openqa.selenium.WebDriver;
-import tests.AngularFormIoTest;
 
 public class AngularFormExamplePage extends BasePage {
 
@@ -13,8 +12,7 @@ public class AngularFormExamplePage extends BasePage {
     }
 
     public AngularFormExamplePage enterFirstName(String firstName) {
-        this.view.getFirstNameInput().clear();
-        this.view.getFirstNameInput().sendKeys(firstName);
+        this.view.getFirstNameInput().insert(firstName);
 
         return this;
     }

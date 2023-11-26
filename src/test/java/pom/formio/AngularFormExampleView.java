@@ -1,8 +1,8 @@
 package pom.formio;
 
-import framework.web.pom.elements.ButtonImpl;
-import framework.web.pom.elements.ElementImpl;
-import framework.web.pom.elements.InputImpl;
+import framework.web.pom.elements.common.ButtonImpl;
+import framework.web.pom.elements.common.ElementImpl;
+import framework.web.pom.elements.common.InputImpl;
 import framework.web.pom.page.BaseView;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

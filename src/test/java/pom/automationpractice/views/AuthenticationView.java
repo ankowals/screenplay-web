@@ -1,5 +1,8 @@
 package pom.automationpractice.views;
 
+import framework.web.pom.elements.common.ButtonImpl;
+import framework.web.pom.elements.common.DropDownImpl;
+import framework.web.pom.elements.common.InputImpl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -1,6 +1,6 @@
 package framework.web.pom.elements;
 
-public interface Input extends Element {
+public interface Input {
     void clear();
     void insert(String text);
     String getText();

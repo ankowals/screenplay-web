@@ -1,5 +1,6 @@
-package framework.web.logging;
+package framework.web.tracing;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
@@ -10,10 +11,10 @@ import java.net.URL;
 
 public class DriverAugmenter {
 
-    private final String selenoidDevToolsPort;
+    private final WebDriverManager webDriverManager;
 
-    public DriverAugmenter(String selenoidDevToolsPort) {
-        this.selenoidDevToolsPort = selenoidDevToolsPort;
+    public DriverAugmenter(WebDriverManager webDriverManager) {
+        this.webDriverManager = webDriverManager;
     }
 
     public WebDriver augment(WebDriver driver) throws IllegalAccessException {
@@ -30,8 +31,9 @@ public class DriverAugmenter {
         mutableCapabilities.setCapability("se:cdp", cdpUrl);
 
         //selenoid for devTools uses port 7070, we need to forward 7070 in container and pass it here
-        if (!this.isNullOrEmpty(this.selenoidDevToolsPort)) {
-            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), this.selenoidDevToolsPort, this.getSessionId(remoteWebDriver));
+        String selenoidDevToolsPort = this.getContainerExposedPort(7070);
+        if (!this.isNullOrEmpty(selenoidDevToolsPort)) {
+            cdpUrl = String.format("http://%s:%s/devtools/%s/", hubUrl.getHost(), selenoidDevToolsPort, this.getSessionId(remoteWebDriver));
             mutableCapabilities.setCapability("se:cdpVersion", mutableCapabilities.getBrowserVersion());
             mutableCapabilities.setCapability("se:cdp", cdpUrl);
         }
@@ -55,5 +57,16 @@ public class DriverAugmenter {
 
     private boolean isNullOrEmpty(String text) {
         return text == null || text.isEmpty();
+    }
+
+    private String getContainerExposedPort(int port) {
+        try {
+            String containerId = this.webDriverManager.getDockerBrowserContainerId();
+            if (!this.isNullOrEmpty(containerId))
+                return this.webDriverManager.getDockerService().getBindPort(containerId, String.valueOf(port));
+
+        } catch(NullPointerException ignored) {}
+
+        return "";
     }
 }

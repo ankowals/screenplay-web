@@ -1,13 +1,12 @@
  package framework.web.reporting;
 
 /*
-    Launched via ServiceLauncher declaratively by configuring class name in file
-    resources/META_INF/services/org.junit.platform.launcher.TestExecutionListener
+    Launched in a declarative way via ServiceLauncher
+    Configure class name in file resources/META_INF/services/org.junit.platform.launcher.TestExecutionListener
  */
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
@@ -17,17 +16,14 @@ import org.junit.platform.launcher.TestPlan;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
  public class ExtentWebReportExtension implements TestExecutionListener {
 
     public static final File REPORT_FILE = new File("build/reports/extent-report/index.html");
 
     private final ExtentReports extentReport;
-    private final File file;
-    private final Map<String, ExtentTest> testStatusMap = new ConcurrentHashMap<>();
+    private final Map<FqdnTestName, ExtentTest> testStatusMap = new ConcurrentHashMap<>();
+    private final MediaAttacher mediaAttacher;
 
     public ExtentWebReportExtension() {
         this(REPORT_FILE);
@@ -35,42 +31,20 @@ import java.util.stream.Collectors;
 
     public ExtentWebReportExtension(File file) {
         this.extentReport = new ExtentReports();
-        this.file = file;
         this.extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
+        this.mediaAttacher = new MediaAttacher(file);
     }
 
     /*
     add screenshots for tests in report
 
     restrictions: * only newest screenshot per method is attached
-                  * matching is based only on method name without checking package, class and arguments
+                  * junit 5 nested test class not supported
      */
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        List<File> screenshots = this.getScreenshots();
-        List<File> videos = this.getVideoFiles();
-
-        this.testStatusMap.forEach((k,v) -> {
-            screenshots.stream()
-                    .filter(f -> f.getName().contains(this.getMethodName(k)))
-                    .max(Comparator.comparingLong(File::lastModified))
-                    .ifPresent(f -> v.addScreenCaptureFromPath("./" + f.getName()));
-
-            videos.stream()
-                    .filter(f -> f.getName().contains(this.getMethodName(k)))
-                    .max(Comparator.comparingLong(File::lastModified))
-                    .ifPresent(f -> {
-                        switch(v.getStatus()) {
-                            case FAIL:
-                                v.fail(MarkupHelper.toTable(new MyVideo(f)));
-                                break;
-                            case PASS:
-                                v.pass(MarkupHelper.toTable(new MyVideo(f)));
-                                break;
-                        }
-                    });
-        });
-
+        this.mediaAttacher.attachedNestedMedia(this.testStatusMap);
+        this.mediaAttacher.attachMedia(this.testStatusMap);
         this.extentReport.flush();
     }
 
@@ -79,9 +53,12 @@ import java.util.stream.Collectors;
         if (!testIdentifier.isTest())
             return;
 
-        String testName = this.getTestName(testIdentifier.getUniqueId()); //identifier == test name used in screenshots
-        ExtentTest extentTest = this.extentReport.createTest(testName);
-        this.testStatusMap.putIfAbsent(testName, extentTest);
+        FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
+        ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString());
+
+        testIdentifier.getTags().forEach(tag -> extentTest.assignCategory(tag.getName()));
+
+        this.testStatusMap.putIfAbsent(fqdnTestName, extentTest);
     }
 
     @Override
@@ -89,9 +66,12 @@ import java.util.stream.Collectors;
         if (!testIdentifier.isTest())
             return;
 
-        String testName = this.getTestName(testIdentifier.getUniqueId());
-        ExtentTest extentTest = this.extentReport.createTest(testName).skip(reason);
-        this.testStatusMap.putIfAbsent(testName, extentTest);
+        FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
+        ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString()).skip(reason);
+
+        testIdentifier.getTags().forEach(tag -> extentTest.assignCategory(tag.getName()));
+
+        this.testStatusMap.putIfAbsent(fqdnTestName, extentTest);
     }
 
     @Override
@@ -99,7 +79,7 @@ import java.util.stream.Collectors;
         if (!testIdentifier.isTest())
             return;
 
-        String testName = this.getTestName(testIdentifier.getUniqueId());
+        FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
         TestExecutionResult.Status status = testExecutionResult.getStatus();
         String cause = "Cause unknown";
 
@@ -108,65 +88,13 @@ import java.util.stream.Collectors;
 
         switch (status) {
             case SUCCESSFUL:
-                this.testStatusMap.get(testName).pass(status.name());
+                this.testStatusMap.get(fqdnTestName).pass(status.name());
                 break;
             case ABORTED:
-                this.testStatusMap.get(testName).log(Status.WARNING, status.name() + ", " + cause);
+                this.testStatusMap.get(fqdnTestName).log(Status.WARNING, status.name() + ", " + cause);
                 break;
             case FAILED:
-                this.testStatusMap.get(testName).fail(status.name() + ", " + cause);
+                this.testStatusMap.get(fqdnTestName).fail(status.name() + ", " + cause);
         }
     }
-
-    //segments[0] = engine
-    //segments[1] = package + class
-    //segments[2] = nested class or method
-    //etc...
-    private String getTestName(String uniqueId) {
-        return this.extractSegments(uniqueId)
-                .stream().skip(1)
-                .collect(Collectors.joining("."));
-    }
-
-    private List<String> extractSegments(String source) {
-        Pattern p = Pattern.compile("\\[(.*?)\\]");
-        Matcher m = p.matcher(source);
-
-        List<String> segments = new ArrayList<>();
-
-        while(m.find()) {
-            String src = m.group(1);
-            segments.add(src.substring(src.indexOf(':') + 1));
-        }
-
-        return segments;
-    }
-
-     private List<File> getScreenshots() {
-         return Arrays.stream(Objects.requireNonNull(this.file.getParentFile().listFiles()))
-                 .filter(f -> f.getName().endsWith(".png"))
-                 .collect(Collectors.toList());
-     }
-
-     private List<File> getVideoFiles() {
-         return Arrays.stream(Objects.requireNonNull(this.file.getParentFile().listFiles()))
-                 .filter(f -> f.getName().endsWith(".mp4") || f.getName().endsWith(".flv"))
-                 .collect(Collectors.toList());
-     }
-
-     private String getMethodName(String testName) {
-         String tmp = testName.substring(0, testName.indexOf("("));
-
-         return tmp.substring(tmp.lastIndexOf(".") + 1);
-     }
-
-     private static class MyVideo {
-
-         private final List<String> video;
-
-         MyVideo(File file) {
-             String css = "width: 100% !important; height: auto !important;";
-             this.video = Collections.singletonList("<video style=\"" + css + "\" src=\"./" + file.getName() + "\" controls></video>");
-         }
-     }
-}
+ }

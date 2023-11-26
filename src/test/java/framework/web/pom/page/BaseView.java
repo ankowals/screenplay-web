@@ -1,8 +1,11 @@
 package framework.web.pom.page;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
 public class BaseView {
 
@@ -20,5 +23,11 @@ public class BaseView {
     }
     protected WebDriverWait createWebDriverWait(Duration timeout, Duration sleep) {
         return new WebDriverWait(this.driver, timeout, sleep);
+    }
+    protected void waitUntil(ExpectedCondition<?>... conditions) {
+        this.waitUntil(Arrays.asList(conditions));
+    }
+    protected void waitUntil(List<ExpectedCondition<?>> conditions) {
+        conditions.forEach(this.wait::until);
     }
 }

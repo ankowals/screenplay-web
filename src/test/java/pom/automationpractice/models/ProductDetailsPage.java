@@ -20,7 +20,7 @@ public class ProductDetailsPage extends BasePage {
     }
     public List<Map<String, String>> getDataSheet() {
         List<Map<String, String>> table = new ArrayList<>();
-        String source = "<table>" + this.view.getDataSheetTable().getElementSource() + "</table>";
+        String source = "<table>" + this.view.getDataSheetTable().getWebElementSource() + "</table>";
 
         Jsoup.parseBodyFragment(source).select("tr").forEach(row -> {
             List<String> columns = row.select("td").eachText();

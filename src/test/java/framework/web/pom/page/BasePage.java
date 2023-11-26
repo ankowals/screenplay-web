@@ -5,11 +5,12 @@ import org.openqa.selenium.interactions.Actions;
 
 public class BasePage {
 
-    /* alternatively set driver thorough setter and init via default constructor */
     protected final WebDriver driver;
+    protected final JavascriptExecutor js;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
+        this.js = (JavascriptExecutor) this.driver;
     }
 
     public String getTitle() {
@@ -25,6 +26,6 @@ public class BasePage {
     protected WebDriver.TargetLocator switchTo() { return this.driver.switchTo(); }
 
     protected boolean isInsideFrame() {
-        return ((JavascriptExecutor) this.driver).executeScript("return window.frameElement") != null;
+        return this.js.executeScript("return window.frameElement") != null;
     }
 }

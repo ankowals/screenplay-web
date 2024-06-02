@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 @Aspect
 public abstract class AbstractLogAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractLogAspect.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLogAspect.class);
 
     @Pointcut
     abstract void scope();
@@ -27,9 +27,9 @@ public abstract class AbstractLogAspect {
         Object[] args = pjp.getArgs();
 
         if (Modifier.isPublic(method.getModifiers()))
-            logger.debug("running: " + this.getMethodCall(method, args));
+            LOGGER.debug("running: {}", this.getMethodCall(method, args));
         else
-            logger.trace("running: " + this.getMethodCall(method, args));
+            LOGGER.trace("running: {}", this.getMethodCall(method, args));
 
         return pjp.proceed();
     }
@@ -46,7 +46,7 @@ public abstract class AbstractLogAspect {
         StringBuilder params = new StringBuilder();
         for (Object arg : args) {
             if (this.isCollection(arg))
-                params.append(",").append(this.asString((Collection<?>) arg));
+                params.append(",").append(this.asString(Stream.of(arg)));
             else if (this.isArray(arg))
                 params.append(",").append(this.asString(List.of((Array) arg)));
             else if (this.isStream(arg))

@@ -35,7 +35,7 @@ class MediaFinder {
 
     //directory per fqdn test class name
     List<File> getMediaDirs() {
-        return Arrays.stream(Objects.requireNonNull(dir.listFiles()))
+        return Arrays.stream(Objects.requireNonNull(this.dir.listFiles()))
                 .filter(File::isDirectory)
                 .toList();
     }

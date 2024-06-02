@@ -1,4 +1,4 @@
-package framework.screenplay.helpers;
+package framework.screenplay.hooks;
 
 import org.apache.commons.lang3.function.FailableRunnable;
 
@@ -11,15 +11,16 @@ public class OnShutdown {
     private static final AtomicBoolean HAS_RUN = new AtomicBoolean(false);
     private static final List<FailableRunnable<?>> RUNNABLES = new CopyOnWriteArrayList<>();
 
+    //find better name for this method
     public static void run(FailableRunnable<?> runnable) {RUNNABLES.add(runnable); }
 
-    public static void cleanUp() {
+    public static void execute() {
         if (HAS_RUN.compareAndSet(false, true)) {
-            Runtime.getRuntime().addShutdownHook(new Thread(OnShutdown::execute));
+            Runtime.getRuntime().addShutdownHook(new Thread(OnShutdown::doExecute));
         }
     }
 
-    private static void execute() {
+    private static void doExecute() {
         Collections.reverse(RUNNABLES);
         RUNNABLES.forEach(
                 runnable -> {

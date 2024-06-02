@@ -1,4 +1,4 @@
-package wdm;
+package framework.web.wdm;
 
 import io.github.bonigarcia.wdm.docker.DockerService;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;

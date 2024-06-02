@@ -2,10 +2,10 @@ package framework.web.tracing;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v119.log.Log;
-import org.openqa.selenium.devtools.v119.log.model.LogEntry;
-import org.openqa.selenium.devtools.v119.network.Network;
-import org.openqa.selenium.devtools.v119.network.model.*;
+import org.openqa.selenium.devtools.v124.log.Log;
+import org.openqa.selenium.devtools.v124.log.model.LogEntry;
+import org.openqa.selenium.devtools.v124.network.Network;
+import org.openqa.selenium.devtools.v124.network.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

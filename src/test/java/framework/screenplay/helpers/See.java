@@ -2,7 +2,7 @@ package framework.screenplay.helpers;
 
 import framework.screenplay.Consequence;
 import framework.screenplay.Question;
-import framework.screenplay.QuestionConsequence;
+import framework.screenplay.interactions.QuestionConsequence;
 import org.hamcrest.Matcher;
 
 public class See {

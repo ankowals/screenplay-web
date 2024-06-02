@@ -7,9 +7,11 @@ import org.hamcrest.Matcher;
 
 public interface PerformsChecks {
     <T> void checksThat(T actual, Matcher<? super T>... matchers);
+    <T, E extends AbstractObjectAssert<E, T>> E assertsThat(T actual);
+    <T, E extends AbstractObjectAssert<E, T>> E assertsThat(Question<T> question);
+    <T> void expects(Question<T> question, Matcher<? super T>... matchers);
     <T> PerformsChecks should(T actual, Matcher<? super T>... matchers);
     PerformsChecks should(Consequence consequence);
-    <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question);
     <T, E extends AbstractObjectAssert<E, T>> E should(T actual);
-    <T> void expects(Question<T> question, Matcher<? super T> matcher);
+    <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question);
 }

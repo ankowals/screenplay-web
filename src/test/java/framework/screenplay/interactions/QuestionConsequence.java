@@ -1,5 +1,7 @@
-package framework.screenplay;
+package framework.screenplay.interactions;
 
+import framework.screenplay.Consequence;
+import framework.screenplay.Question;
 import framework.screenplay.actor.Actor;
 import org.hamcrest.Matcher;
 

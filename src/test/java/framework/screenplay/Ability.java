@@ -1,5 +1,3 @@
 package framework.screenplay;
 
-public interface Ability {
-
-}
+public interface Ability {}

@@ -1,19 +1,20 @@
 package framework.screenplay.actor;
 
 import framework.screenplay.*;
+import framework.screenplay.exceptions.NoMatchingAbilityException;
+import framework.screenplay.exceptions.NoObjectToRecallException;
 import framework.screenplay.helpers.See;
 import org.apache.commons.lang3.function.Failable;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matcher;
-import framework.screenplay.exceptions.ScreenplayCallException;
 
 import java.util.*;
 
 import static org.assertj.core.api.HamcrestCondition.matching;
 
-public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts, ManagesAbilities, AsksQuestions {
+public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities, AsksQuestions, RemembersThings {
 
     private SoftAssertions softAssertions;
 
@@ -34,8 +35,11 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Ability> T using(Class<? extends T> ability) {
-        return (T) this.abilities.get(ability);
+    public <T extends Ability> T usingAbilityTo(Class<? extends T> doSomething) {
+        if (this.abilities.get(doSomething) == null)
+            throw new NoMatchingAbilityException(doSomething);
+
+        return (T) this.abilities.get(doSomething);
     }
 
     @Override
@@ -50,19 +54,18 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
     }
 
     @Override
-    public ManagesFacts has(Fact... facts) {
-        Failable.stream(Arrays.asList(facts)).forEach(fact -> fact.setupFor(this));
-        return this;
+    public PerformsInteractions has(Interaction... interactions) {
+        return this.attemptsTo(interactions);
     }
 
     @Override
-    public ManagesFacts was(Fact... facts) {
-        return this.has(facts);
+    public PerformsInteractions was(Interaction... interactions) {
+        return this.attemptsTo(interactions);
     }
 
     @Override
-    public ManagesFacts is(Fact... facts) {
-        return this.has(facts);
+    public PerformsInteractions is(Interaction... interactions) {
+        return this.attemptsTo(interactions);
     }
 
     @Override
@@ -73,12 +76,13 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
     @SafeVarargs
     @Override
     public final <T> void checksThat(T actual, Matcher<? super T>... matchers) {
-        Arrays.asList(matchers).forEach(matcher -> should(See.that(actual)).is(matching(matcher)));
+        Arrays.asList(matchers).forEach(matcher -> this.should(See.that(actual)).is(matching(matcher)));
     }
 
+    @SafeVarargs
     @Override
-    public <T> void expects(Question<T> question, Matcher<? super T> matcher) {
-        this.checksThat(question.answeredBy(this), matcher);
+    public final <T> void expects(Question<T> question, Matcher<? super T>... matchers) {
+        this.checksThat(question.answeredBy(this), matchers);
     }
 
     @SafeVarargs
@@ -96,27 +100,44 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesFacts
 
     @Override
     public <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question) {
-        return this.should(See.that(question.answeredBy(this)));
+        return this.should(question.answeredBy(this));
+    }
+
+    @Override
+    public <T, E extends AbstractObjectAssert<E, T>> E should(T actual) {
+        return this.assertsThat(actual);
+    }
+
+    @Override
+    public <T, E extends AbstractObjectAssert<E, T>> E assertsThat(Question<T> question) {
+        return this.assertsThat(question.answeredBy(this));
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T, E extends AbstractObjectAssert<E, T>> E should(T actual) {
+    public <T, E extends AbstractObjectAssert<E, T>> E assertsThat(T actual) {
         if (this.softAssertions != null)
             return (E) this.softAssertions.assertThat(actual);
 
         return (E) Assertions.assertThat(actual);
     }
 
+    @Override
+    public <T> void remember(String name, Question<T> question) {
+        this.remember(name, this.asksFor(question));
+    }
+
+    @Override
     public <T> void remember(String name, T value) {
         this.memory.put(name, value);
     }
 
-    public Object recall(String name) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T recall(String name) {
         if (this.memory.get(name) == null)
-            throw new ScreenplayCallException("Actor does not recall parameter [" + name + "]." +
-                    "Call remember() before to define this object in Actor's memory.");
+            throw new NoObjectToRecallException(name);
 
-        return this.memory.get(name);
+        return (T) this.memory.get(name);
     }
 }

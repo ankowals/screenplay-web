@@ -8,7 +8,7 @@ import java.util.*;
 
 public class ProductDetailsPage extends BasePage {
 
-    private final ProductDetailsView view  = new ProductDetailsView(driver);
+    private final ProductDetailsView view  = new ProductDetailsView(this.driver);
 
     public ProductDetailsPage(WebDriver driver) { super(driver); }
 

@@ -32,43 +32,43 @@ class SimpleTest extends TestBase {
     @ParameterizedTest
     @MethodSource("accountFormDataProvider")
     void shouldCreateAccount(AccountFormData data) {
-        given(user).can(BrowseTheWeb.with(browser));
-        when(user).attemptsTo(
+        given(this.user).can(BrowseTheWeb.with(this.browser));
+        when(this.user).attemptsTo(
                 Open.browser(AUTOMATION_PRACTICE_HOME),
                 CreateAccount.with(data)
         );
-        then(user).should(See.that(PageProperties.title(AccountPage.class), equalTo("My account - My Store")));
+        then(this.user).should(See.that(PageProperties.title(AccountPage.class), equalTo("My account - My Store")));
     }
 
     @Test
     void shouldSearchForProduct() {
-        given(user).can(BrowseTheWeb.with(browser));
-        when(user).attemptsTo(
+        given(this.user).can(BrowseTheWeb.with(this.browser));
+        when(this.user).attemptsTo(
                 Open.browser(AUTOMATION_PRACTICE_HOME),
                 FindProductDetails.of("Printed Chiffon Dress")
         );
-        then(user).should(See.that(ProductDetails.getDetails()))
+        then(this.user).should(See.that(ProductDetails.get()))
                 .extracting(testdata.ProductDetails::getPrice)
                 .isEqualTo("$16.40");
     }
 
     @Test
     void shouldSearchForProductButSmarter() {
-        given(user).can(BrowseTheWeb.with(browser));
-        when(user).attemptsTo(
+        given(this.user).can(BrowseTheWeb.with(this.browser));
+        when(this.user).attemptsTo(
                 Open.browser(AUTOMATION_PRACTICE_HOME + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=", SearchResultsPage.class),
                 ViewProductDetails.of("Printed Chiffon Dress")
         );
-        then(user).should(See.that(ProductDetails.getDetails(), hasProperty("price", equalTo("$17.40"))));
+        then(this.user).should(See.that(ProductDetails.get(), hasProperty("price", equalTo("$17.40"))));
     }
 
     @Test
     void shouldContainTableDataSheetInProductDetails() {
-        given(user).can(BrowseTheWeb.with(browser));
-        when(user).attemptsTo(
+        given(this.user).can(BrowseTheWeb.with(this.browser));
+        when(this.user).attemptsTo(
                 Open.browser(AUTOMATION_PRACTICE_HOME + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2", ProductDetailsPage.class)
         );
-        then(user).should(See.that(ProductDetails.getDataSheet())).asList()
+        then(this.user).should(See.that(ProductDetails.dataSheet())).asList()
                 .contains(Collections.singletonMap("Compositions", "Polyester"))
                 .contains(Collections.singletonMap("Styles", "Girly"))
                 .contains(Collections.singletonMap("Properties", "Midi Dress"));

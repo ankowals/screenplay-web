@@ -6,7 +6,7 @@ import pom.automationpractice.views.HomeView;
 
 public class HomePage extends BasePage {
 
-    private final HomeView view = new HomeView(driver);
+    private final HomeView view = new HomeView(this.driver);
 
     public HomePage(WebDriver driver) { super(driver); }
 

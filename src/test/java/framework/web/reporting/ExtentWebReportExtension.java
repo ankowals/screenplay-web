@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
      */
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        this.mediaAttacher.attachedNestedMedia(this.testStatusMap);
+        this.mediaAttacher.attachNestedMedia(this.testStatusMap);
         this.mediaAttacher.attachMedia(this.testStatusMap);
         this.extentReport.flush();
     }

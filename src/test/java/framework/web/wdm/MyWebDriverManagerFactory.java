@@ -1,4 +1,4 @@
-package wdm;
+package framework.web.wdm;
 
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -7,10 +7,12 @@ public class MyWebDriverManagerFactory {
     public static MyChromeDriverManager chrome() {
         MyChromeDriverManager myChromeDriverManager = new MyChromeDriverManager();
         myChromeDriverManager.capabilities(MyWebDriverManagerFactory.chromeOptions());
-        myChromeDriverManager.browserVersion("119");
         myChromeDriverManager.enableRecording();
 
-       // if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null)
+        if (System.getenv("BROWSER_VERSION") != null)
+            myChromeDriverManager.browserVersion(System.getenv("BROWSER_VERSION"));
+
+        if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null)
             myChromeDriverManager.browserInDocker();
 
         return myChromeDriverManager;

@@ -24,13 +24,13 @@ class AngularFormIoTest extends TestBase {
     @Tag("short-circuit-demo")
     @Test
     void shouldSubmitForm() {
-            given(user).can(BrowseTheWeb.with(browser));
-            when(user).attemptsTo(
+            given(this.user).can(BrowseTheWeb.with(this.browser));
+            when(this.user).attemptsTo(
                     Open.browser(FORM_IO_DEMO),
                     FillExampleForm.firstName(RandomStringUtils.randomAlphabetic(8)),
                     Submit.exampleForm()
             );
-            then(user).should(See.that(ExampleForm.submitMessage(),
+            then(this.user).should(See.that(ExampleForm.submitMessage(),
                     containsString("Submission Complete")));
     }
 
@@ -42,13 +42,13 @@ class AngularFormIoTest extends TestBase {
     void shouldNotifyAboutSubmissionFailure() {
         try (NetworkInterceptor interceptor = new NetworkInterceptor(this.browser, this.createRouting())) {
 
-            given(user).can(BrowseTheWeb.with(browser));
-            when(user).attemptsTo(
+            given(this.user).can(BrowseTheWeb.with(this.browser));
+            when(this.user).attemptsTo(
                     Open.browser(FORM_IO_DEMO),
                     FillExampleForm.firstName(RandomStringUtils.randomAlphabetic(8)),
                     Submit.exampleForm()
             );
-            then(user).should(See.that(ExampleForm.submitMessage(),
+            then(this.user).should(See.that(ExampleForm.submitMessage(),
                     containsString("Please check the form and correct all errors before submitting")));
         }
     }

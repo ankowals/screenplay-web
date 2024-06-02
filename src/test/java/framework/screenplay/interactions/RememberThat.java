@@ -1,4 +1,4 @@
-package framework.screenplay.actor;
+package framework.screenplay.interactions;
 
 import framework.screenplay.Interaction;
 import framework.screenplay.Question;
@@ -18,6 +18,6 @@ public class RememberThat {
         }
 
         public Interaction is(T value) { return actor -> actor.remember(this.name, value); }
-        public Interaction is(Question<?> question) { return actor -> actor.remember(this.name, question.answeredBy(actor)); }
+        public Interaction is(Question<?> question) { return actor -> actor.remember(this.name, question); }
     }
 }

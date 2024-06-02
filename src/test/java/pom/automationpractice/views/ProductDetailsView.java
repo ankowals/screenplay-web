@@ -56,7 +56,7 @@ public class ProductDetailsView extends BaseView {
                 .collect(Collectors.toList());
     }
 
-    public ElementImpl getDataSheetTable() {
+    public Element getDataSheetTable() {
         WebElement element = this.wait.until(visibilityOfElementLocated(By.xpath("//table[@class='table-data-sheet']")));
         return ElementImpl.of(element);
     }

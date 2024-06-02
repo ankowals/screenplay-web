@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-import wdm.MyWebDriverManagerFactory;
+import framework.web.wdm.MyWebDriverManagerFactory;
 
 import static framework.web.reporting.ExtentWebReportExtension.REPORT_FILE;
 

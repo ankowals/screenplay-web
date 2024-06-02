@@ -19,7 +19,6 @@ class MediaAttacher {
         this.mediaFinder = new MediaFinder(report.getParentFile());
     }
 
-    //look for media in report parent directory
     void attachMedia(Map<FqdnTestName, ExtentTest> testStatusMap) {
         List<File> screenshots = this.mediaFinder.getScreenshots();
         List<File> videos = this.mediaFinder.getVideos();
@@ -45,8 +44,7 @@ class MediaAttacher {
         });
     }
 
-    //look for media in nested directories
-    void attachedNestedMedia(Map<FqdnTestName, ExtentTest> testStatusMap) {
+    void attachNestedMedia(Map<FqdnTestName, ExtentTest> testStatusMap) {
         List<File> dirs = this.mediaFinder.getMediaDirs();
 
         testStatusMap.forEach((fqdnTestName, extentTest) -> {

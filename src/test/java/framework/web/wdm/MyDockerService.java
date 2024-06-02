@@ -1,4 +1,4 @@
-package wdm;
+package framework.web.wdm;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.*;

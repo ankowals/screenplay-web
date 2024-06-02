@@ -1,4 +1,4 @@
-package framework.screenplay.helpers;
+package framework.screenplay.hooks;
 
 import org.apache.commons.lang3.function.FailableRunnable;
 
@@ -14,9 +14,10 @@ public class OnTeardown {
         this.runnables = new CopyOnWriteArrayList<>();
     }
 
+    //find better name for this method
     public void run(FailableRunnable<?> runnable) { this.runnables.add(runnable); }
 
-    public void cleanUp() {
+    public void execute() {
         Collections.reverse(this.runnables);
         this.runnables.forEach(
                 runnable -> {

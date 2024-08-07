@@ -2,6 +2,8 @@ package framework.web.wdm;
 
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.Map;
+
 public class MyWebDriverManagerFactory {
 
     public static MyChromeDriverManager chrome() {
@@ -20,6 +22,11 @@ public class MyWebDriverManagerFactory {
 
     private static ChromeOptions chromeOptions() {
         return new ChromeOptions()
+                .setExperimentalOption("prefs",
+                        Map.of(
+                                "profile.managed_default_content_settings.geolocation",
+                                2 //switch off location services
+                        ))
                 .setExperimentalOption("excludeSwitches", new String[]{"enable-automation"})
                 .addArguments("disable-infobars",
                         "--no-sandbox",
@@ -29,6 +36,9 @@ public class MyWebDriverManagerFactory {
                         "--disable-popup-blocking",
                         "--disable-extensions",
                         "--disable-dev-shm-usage",
-                        "--incognito");
+                        "--incognito",
+                        "--no-default-browser-check",
+                        "--disable-search-engine-choice-screen",
+                        "--window-size=1920,1080");
     }
 }

@@ -2,7 +2,7 @@ package screenplay.automationpractice.interactions;
 
 
 import pom.automationpractice.models.HomePage;
-import screenplay.BrowseTheWeb;
+import framework.web.screenplay.BrowseTheWeb;
 import framework.screenplay.Interaction;
 import testdata.AccountFormData;
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import pom.automationpractice.models.AccountPage;
 import pom.automationpractice.models.ProductDetailsPage;
 import pom.automationpractice.models.SearchResultsPage;
-import screenplay.BrowseTheWeb;
+import framework.web.screenplay.BrowseTheWeb;
 import screenplay.automationpractice.interactions.*;
 import screenplay.automationpractice.questions.PageProperties;
 import screenplay.automationpractice.questions.ProductDetails;

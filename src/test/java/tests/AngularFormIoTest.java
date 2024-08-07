@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
-import screenplay.BrowseTheWeb;
+import framework.web.screenplay.BrowseTheWeb;
 import screenplay.formio.ExampleForm;
 import screenplay.Open;
 import screenplay.formio.FillExampleForm;

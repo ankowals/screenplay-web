@@ -2,7 +2,7 @@ package screenplay.formio;
 
 import framework.screenplay.Interaction;
 import pom.formio.AngularFormExamplePage;
-import screenplay.BrowseTheWeb;
+import framework.web.screenplay.BrowseTheWeb;
 
 public class FillExampleForm {
     public static Interaction firstName(String firstName) {

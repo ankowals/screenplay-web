@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import framework.web.wdm.MyWebDriverManagerFactory;
 
@@ -45,7 +47,14 @@ public class TestBase {
     void beforeEach(WebDriver driver) throws IllegalAccessException {
         DriverAugmenter driverAugmenter = new DriverAugmenter(seleniumJupiter.getConfig().getManager());
 
+        ((RemoteWebDriver) driver).getCapabilities().getCapabilityNames().forEach(System.out::println);
+
         this.browser = driverAugmenter.augment(driver);
+
+        if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
+            ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
+        }
+
         this.devTools = ((HasDevTools) this.browser).getDevTools();
 
         new DevToolsTracer(this.devTools).trace();

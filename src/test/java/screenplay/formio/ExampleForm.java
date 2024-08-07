@@ -2,7 +2,7 @@ package screenplay.formio;
 
 import framework.screenplay.Question;
 import pom.formio.AngularFormExamplePage;
-import screenplay.BrowseTheWeb;
+import framework.web.screenplay.BrowseTheWeb;
 
 public class ExampleForm {
 

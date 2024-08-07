@@ -2,6 +2,7 @@ package screenplay;
 
 import framework.web.pom.page.BasePage;
 import framework.screenplay.Interaction;
+import framework.web.screenplay.BrowseTheWeb;
 
 public class Open {
 

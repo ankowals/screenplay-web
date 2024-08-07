@@ -1,4 +1,4 @@
-package screenplay;
+package framework.web.screenplay;
 
 import org.openqa.selenium.WebDriver;
 import framework.web.pom.page.PageFactory;

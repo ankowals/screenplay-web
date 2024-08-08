@@ -7,8 +7,6 @@ import io.github.bonigarcia.wdm.config.Config;
 import io.github.bonigarcia.wdm.docker.DockerContainer;
 import io.github.bonigarcia.wdm.docker.DockerService;
 import io.github.bonigarcia.wdm.online.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -26,7 +24,6 @@ We do not use host names so no need to setup a dedicated docker network.
 */
 public class MyDockerService extends DockerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyDockerService.class);
     private static final Map<String, DockerContainer> PROXY_CONTAINER_CACHE = new ConcurrentHashMap<>();
 
     private final Config config;
@@ -42,53 +39,48 @@ public class MyDockerService extends DockerService {
     }
 
     @Override
+    public synchronized void stopAndRemoveContainer(DockerContainer dockerContainer) {
+        String containerId = dockerContainer.getContainerId();
+
+        Optional.ofNullable(PROXY_CONTAINER_CACHE.get(containerId)).ifPresent(
+                proxyContainer -> {
+                    PROXY_CONTAINER_CACHE.remove(containerId);
+                    super.stopAndRemoveContainer(proxyContainer);
+        });
+
+        super.stopAndRemoveContainer(dockerContainer);
+    }
+
+    @Override
     public DockerContainer startBrowserContainer(String dockerImage, String cacheKey, String browserVersion, boolean androidEnabled) {
-        DockerContainer browserContainer;
+        DockerContainer browserContainer = super.startBrowserContainer(dockerImage,
+                cacheKey,
+                browserVersion,
+                androidEnabled);
 
         if (dockerImage.contains("selenoid")) {
-            browserContainer = super.startBrowserContainer(dockerImage,
-                    cacheKey,
-                    browserVersion,
-                    androidEnabled);
-
             try {
-                Path proxyConfig = this.getProxyConfig("caddyfile");
-                DockerContainer proxyContainer = this.startProxyContainer(browserContainer, proxyConfig);
+                DockerContainer proxyContainer = this.startProxyContainer(browserContainer);
 
-                String port = this.getBindPort(proxyContainer.getContainerId(), String.format("%s/tcp", this.config.getDockerBrowserPort()));
-                String url = browserContainer.getContainerUrl().replaceAll(":[0-9]+/", String.format(":%s/", port));
+                String port = this.getBindPort(proxyContainer.getContainerId(),
+                        String.format("%s/tcp", this.config.getDockerBrowserPort()));
+
+                String url = browserContainer.getContainerUrl()
+                        .replaceAll(":[0-9]+/", String.format(":%s/", port));
 
                 browserContainer.setContainerUrl(url);
             } catch(URISyntaxException e){
                 throw new RuntimeException(e);
             }
-
-        } else {
-            browserContainer = super.startBrowserContainer(dockerImage,
-                    cacheKey,
-                    browserVersion,
-                    androidEnabled);
         }
 
-        LOGGER.info("Proxy container started");
         return browserContainer;
-    }
-
-    public Optional<DockerContainer> getProxyContainer(String browserContainerId) {
-        Optional<DockerContainer> maybeProxyContainer = Optional.ofNullable(
-                MyDockerService.PROXY_CONTAINER_CACHE.get(browserContainerId));
-
-        if (maybeProxyContainer.isPresent()) {
-            MyDockerService.PROXY_CONTAINER_CACHE.remove(browserContainerId);
-        }
-
-        return maybeProxyContainer;
     }
 
     //we can expose 7070 for selenoid devTools only here and configure caddy to route the traffic
     //but still augmenter needs to extract this port from container
     //and configure the client to trigger it
-    private DockerContainer startProxyContainer(DockerContainer browserContainer, Path proxyConfig) {
+    private DockerContainer startProxyContainer(DockerContainer browserContainer) throws URISyntaxException {
         String dockerImage = "caddy:2.8.4-alpine";
         String cacheKey = dockerImage.split(":")[0];
         String imageVersion = dockerImage.split(":")[1];
@@ -96,10 +88,14 @@ public class MyDockerService extends DockerService {
         this.pullImageIfNecessary(cacheKey, dockerImage, imageVersion);
 
         DockerContainer proxyContainer = DockerContainer.dockerBuilder(dockerImage)
-                .envs(List.of("BROWSER_CONTAINER_IP=" + browserContainer.getAddress(),
+                .envs(List.of(
+                        "BROWSER_CONTAINER_IP=" + browserContainer.getAddress(),
                         "BROWSER_CONTAINER_PORT=" + this.config.getDockerBrowserPort()))
                 .network(browserContainer.getNetwork().orElse(null))
-                .binds(List.of(String.format("%s:/etc/caddy/Caddyfile", proxyConfig)))
+                .binds(List.of(
+                        String.format(
+                                "%s:/etc/caddy/Caddyfile",
+                                this.getProxyConfig())))
                 .extraHosts(Arrays.stream(browserContainer.getExtraHosts()).toList())
                 .exposedPorts(List.of(String.valueOf(this.config.getDockerBrowserPort())))
                 .build();
@@ -110,12 +106,6 @@ public class MyDockerService extends DockerService {
         PROXY_CONTAINER_CACHE.putIfAbsent(browserContainer.getContainerId(), proxyContainer);
 
         return proxyContainer;
-    }
-
-    //does not work in jar
-    private Path getProxyConfig(String resourcePath) throws URISyntaxException {
-        URL resource = getClass().getClassLoader().getResource(resourcePath);
-        return new File(resource.toURI()).toPath();
     }
 
     private DockerContainer customize(DockerContainer dockerContainer) {
@@ -143,5 +133,11 @@ public class MyDockerService extends DockerService {
         copy.add(String.valueOf(port));
 
         return copy;
+    }
+
+    //does not work in jar
+    private Path getProxyConfig() throws URISyntaxException {
+        URL url = this.getClass().getClassLoader().getResource("caddyfile");
+        return new File(Objects.requireNonNull(url).toURI()).toPath();
     }
 }

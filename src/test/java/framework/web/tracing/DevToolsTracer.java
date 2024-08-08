@@ -1,8 +1,8 @@
 package framework.web.tracing;
 
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v124.log.Log;
-import org.openqa.selenium.devtools.v124.network.Network;
+import org.openqa.selenium.devtools.v127.log.Log;
+import org.openqa.selenium.devtools.v127.network.Network;
 
 import java.util.Optional;
 

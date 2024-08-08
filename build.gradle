@@ -10,30 +10,30 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0-M1'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.11.0-M2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0-RC1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.11.0-RC1'
 
     testImplementation 'io.github.glytching:junit-extensions:2.6.0'
 
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
-    testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.23.0'
+    testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.1'
 
     testImplementation 'org.slf4j:slf4j-api:2.0.12'
     testImplementation 'ch.qos.logback:logback-core:1.5.6'
     testImplementation 'ch.qos.logback:logback-classic:1.5.6'
     testImplementation 'org.slf4j:jul-to-slf4j:2.0.13'
 
-    testImplementation 'org.apache.commons:commons-lang3:3.14.0'
+    testImplementation 'org.apache.commons:commons-lang3:3.15.0'
     testImplementation 'org.aspectj:aspectjweaver:1.9.22'
 
-    testImplementation 'org.assertj:assertj-core:3.26.0'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'org.hamcrest:hamcrest:3.0'
 
-    testImplementation 'org.jsoup:jsoup:1.17.2'
+    testImplementation 'org.jsoup:jsoup:1.18.1'
 
-    testImplementation 'com.aventstack:extentreports:5.1.1'
+    testImplementation 'com.aventstack:extentreports:5.1.2'
 
-    testImplementation 'org.testcontainers:selenium:1.19.8'
+    testImplementation 'org.testcontainers:selenium:1.20.0'
 }
 
 configurations {

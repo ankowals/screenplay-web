@@ -2,8 +2,9 @@ package base;
 
 import framework.screenplay.actor.Actor;
 import framework.web.tracing.DevToolsTracer;
-import framework.web.tracing.DriverAugmenter;
+import framework.web.wdm.mutators.SelenoidCapabilitiesMutator;
 import io.github.bonigarcia.seljup.*;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -44,15 +46,15 @@ public class TestBase {
 
     //@DockerBrowser(type = CHROME, recording = true) WebDriver driver
     @BeforeEach
-    void beforeEach(WebDriver driver) throws IllegalAccessException {
-        DriverAugmenter driverAugmenter = new DriverAugmenter(seleniumJupiter.getConfig().getManager());
-
-        ((RemoteWebDriver) driver).getCapabilities().getCapabilityNames().forEach(System.out::println);
-
-        this.browser = driverAugmenter.augment(driver);
+    void beforeEach(WebDriver webDriver) throws IllegalAccessException {
+        this.browser = webDriver;
 
         if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
+            WebDriverManager webDriverManager = seleniumJupiter.getConfig().getManager();
+
             ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
+            new SelenoidCapabilitiesMutator(webDriverManager).mutate((RemoteWebDriver) this.browser);
+            this.browser = new Augmenter().augment(this.browser);
         }
 
         this.devTools = ((HasDevTools) this.browser).getDevTools();
@@ -67,6 +69,12 @@ public class TestBase {
     @BeforeEach
     void beforeEach(TestInfo testInfo) {
         this.browser = createRemoteWebDriver(testInfo);
+
+        if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
+            ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
+            new CapabilitiesMutator().mutate((RemoteWebDriver) this.browser);
+            this.browser = new Augmenter().augment(this.browser);
+        }
     }
 
     private RemoteWebDriver createRemoteWebDriver(TestInfo testInfo) {

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class BiDiTracer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ListenerRegistrar.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BiDiTracer.class);
 
     private final WebDriver webDriver;
 

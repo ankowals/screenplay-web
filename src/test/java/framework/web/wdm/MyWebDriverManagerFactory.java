@@ -1,6 +1,8 @@
 package framework.web.wdm;
 
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chromium.ChromiumOptions;
 
 import java.util.Map;
 
@@ -9,23 +11,29 @@ public class MyWebDriverManagerFactory {
     public static MyChromeDriverManager chrome() {
         MyChromeDriverManager myChromeDriverManager = new MyChromeDriverManager();
         myChromeDriverManager.capabilities(MyWebDriverManagerFactory.chromeOptions());
-        myChromeDriverManager.enableRecording();
+        myChromeDriverManager.disableTracing();
 
-        if (System.getenv("BROWSER_VERSION") != null)
-            myChromeDriverManager.browserVersion(System.getenv("BROWSER_VERSION"));
-
-        if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null)
+        if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null) {
             myChromeDriverManager.browserInDocker();
+            myChromeDriverManager.dockerScreenResolution("1920x1080x24");
+        }
 
         return myChromeDriverManager;
     }
 
-    private static ChromeOptions chromeOptions() {
-        return new ChromeOptions()
+    private static ChromiumOptions<?> chromeOptions() {
+        ChromiumOptions<?> chromiumOptions = new ChromeOptions()
+                .setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT)
                 .setExperimentalOption("prefs",
                         Map.of(
+                                "profile.default_content_setting_values.clipboard",
+                                1,
+                                "credentials_enable_service",
+                                false,
                                 "profile.managed_default_content_settings.geolocation",
-                                2 //switch off location services
+                                2, //switch off location services
+                                "autofill.profile_enabled",
+                                false //disable autofill banner
                         ))
                 .setExperimentalOption("excludeSwitches", new String[]{"enable-automation"})
                 .addArguments("disable-infobars",
@@ -35,10 +43,15 @@ public class MyWebDriverManagerFactory {
                         "--ignore-certificate-errors",
                         "--disable-popup-blocking",
                         "--disable-extensions",
+                        "--disable-notifications",
+                        "--disable-application-cache",
                         "--disable-dev-shm-usage",
-                        "--incognito",
+                        //"--incognito",
                         "--no-default-browser-check",
-                        "--disable-search-engine-choice-screen",
-                        "--window-size=1920,1080");
+                        "--disable-search-engine-choice-screen");
+
+        chromiumOptions.setCapability("webSocketUrl", true);
+
+        return chromiumOptions;
     }
 }

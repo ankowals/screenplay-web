@@ -1,9 +1,4 @@
 :4444 {
     reverse_proxy {$BROWSER_CONTAINER_IP}:{$BROWSER_CONTAINER_PORT}
-}
-
-http:// {
-    handle /se/file {
-        uri replace /se/file /file
-    }
+    uri replace /se/file /file
 }

@@ -16,11 +16,18 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
-To allow to run containers in for example Bitbucket we need to remove restricted options
-from container start command.
-To allow to use selenoid images and file uploads we need to re-write paths using reverse proxy.
-Client should trigger proxy and not browser container directly.
-We do not use host names so no need to setup a dedicated docker network.
+Customization done below allows us to run containers in BB pipelines and use features provided by DevTools driver in CI
+Following docker flags are restricted from usage in bitbucket pipelines
+   --privileged
+   --cap-add
+   --mount
+For details see https://support.atlassian.com/bitbucket-cloud/docs/run-docker-commands-in-bitbucket-pipelines/
+
+When Selenium wants to access a web app running bitbucket pipelines use host.docker.internal:port
+instead of localhost:port when calling webdriver.get(url)
+For details see https://community.atlassian.com/t5/Bitbucket-articles/Changes-to-make-your-containers-more-secure-on-Bitbucket/ba-p/998464
+For the browser to access files either mount bitbucket clone dir to the container and access them from there or use official selenium images and set FileDetector in driver
+More details under //https://github.com/aerokube/selenoid/issues/1079
 */
 public class MyDockerService extends DockerService {
 
@@ -66,7 +73,7 @@ public class MyDockerService extends DockerService {
                         String.format("%s/tcp", this.config.getDockerBrowserPort()));
 
                 String url = browserContainer.getContainerUrl()
-                        .replaceAll(":[0-9]+/", String.format(":%s/", port));
+                        .replaceAll(":\\d+/", String.format(":%s/", port));
 
                 browserContainer.setContainerUrl(url);
             } catch(URISyntaxException e){
@@ -135,6 +142,29 @@ public class MyDockerService extends DockerService {
         return copy;
     }
 
+    private List<String> addBitbucketCloneDir(List<String> originalBinds) {
+        List<String> binds = new ArrayList<>(originalBinds);
+
+        String bitBucketCloneDir = System.getenv("BITBUCKET_CLONE_DIR");
+
+        if (bitBucketCloneDir != null) {
+            binds.add(String.format("%s:/home/selenium/clone", bitBucketCloneDir));
+        }
+
+        return binds;
+    }
+
+    private List<String> addBitbucketHost(List<String> originalHosts) {
+        List<String> hosts = new ArrayList<>(originalHosts);
+
+        String bitBucketHost = System.getenv("BITBUCKET_DOCKER_HOST_INTERNAL");
+
+        if (bitBucketHost != null) {
+            hosts.add("host.docker.internal:" + bitBucketHost);
+        }
+
+        return hosts;
+    }
     //does not work in jar
     private Path getProxyConfig() throws URISyntaxException {
         URL url = this.getClass().getClassLoader().getResource("caddyfile");

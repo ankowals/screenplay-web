@@ -5,27 +5,29 @@ import org.openqa.selenium.*;
 
 public class InputImpl implements Input {
 
-    private final WebElement webElement;
+  private final WebElement webElement;
 
-    public InputImpl(WebElement webElement) {
-        this.webElement = webElement;
-    }
+  public InputImpl(WebElement webElement) {
+    this.webElement = webElement;
+  }
 
-    @Override
-    public void clear() { this.webElement.clear(); }
+  @Override
+  public void clear() {
+    this.webElement.clear();
+  }
 
-    @Override
-    public void insert(String text) {
-        this.clear();
-        this.webElement.sendKeys(text);
-    }
+  @Override
+  public void insert(String text) {
+    this.clear();
+    this.webElement.sendKeys(text);
+  }
 
-    @Override
-    public String getText() {
-        return this.webElement.getAttribute("value");
-    }
+  @Override
+  public String getText() {
+    return this.webElement.getAttribute("value");
+  }
 
-    public static InputImpl of(WebElement webElement) {
-        return new InputImpl(webElement);
-    }
+  public static InputImpl of(WebElement webElement) {
+    return new InputImpl(webElement);
+  }
 }

@@ -4,5 +4,5 @@ import framework.screenplay.Question;
 
 @FunctionalInterface
 public interface AsksQuestions {
-    <T> T asksFor(Question<T> question);
+  <T> T asksFor(Question<T> question);
 }

@@ -4,9 +4,7 @@ import framework.screenplay.Interaction;
 
 public class FindProductDetails {
 
-    public static Interaction of(String product) {
-        return actor -> actor.attemptsTo(
-                Search.forText(product),
-                ViewProductDetails.of(product));
-    }
+  public static Interaction of(String product) {
+    return actor -> actor.attemptsTo(Search.forText(product), ViewProductDetails.of(product));
+  }
 }

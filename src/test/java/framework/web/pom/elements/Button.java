@@ -1,6 +1,7 @@
 package framework.web.pom.elements;
 
 public interface Button {
-    void click();
-    String getText();
+  void click();
+
+  String getText();
 }

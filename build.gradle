@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id("io.freefair.aspectj.post-compile-weaving") version "8.10.2"
+    id 'io.freefair.aspectj.post-compile-weaving' version "8.11"
+    id 'com.diffplug.spotless' version "7.0.0.BETA4"
 }
 
 group 'com.github.ankowals'
@@ -8,21 +9,22 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.11.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.11.4'
 
     testImplementation 'io.github.glytching:junit-extensions:2.6.0'
-    testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
+    testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0'
 
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.26.0'
     testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.1'
 
-    testImplementation 'org.slf4j:slf4j-api:2.0.12'
-    testImplementation 'ch.qos.logback:logback-core:1.5.8'
-    testImplementation 'ch.qos.logback:logback-classic:1.5.8'
+    testImplementation 'org.slf4j:slf4j-api:2.0.16'
+    testImplementation 'ch.qos.logback:logback-core:1.5.15'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.15'
     testImplementation 'org.slf4j:jul-to-slf4j:2.0.16'
 
     testImplementation 'org.apache.commons:commons-lang3:3.17.0'
@@ -30,14 +32,14 @@ dependencies {
     testImplementation 'org.aspectj:aspectjweaver:1.9.22.1'
     runtimeOnly 'org.aspectj:aspectjrt:1.9.22.1'
 
-    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'org.assertj:assertj-core:3.27.0'
     testImplementation 'org.hamcrest:hamcrest:3.0'
 
-    testImplementation 'org.jsoup:jsoup:1.18.1'
+    testImplementation 'org.jsoup:jsoup:1.18.3'
 
     testImplementation 'com.aventstack:extentreports:5.1.2'
 
-    testImplementation 'org.testcontainers:selenium:1.20.2'
+    testImplementation 'org.testcontainers:selenium:1.20.4'
 }
 
 test {
@@ -46,9 +48,14 @@ test {
 
     //set env variables
     environment "WDM_DOCKERENABLERECORDING", "true"
-    //environment "WDM_CHROMEVERSION", "128"
-    //environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
+    environment "WDM_CHROMEVERSION", "128"
+    environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
 
     useJUnitPlatform()
 }
 
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}

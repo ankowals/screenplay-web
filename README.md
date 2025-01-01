@@ -115,6 +115,7 @@ kubectl get all
 * Access jaeger ui: http://localhost/jaeger
 
 ## 9 Run tests
+* Point webdriver to the grid `http://localhost:4444/wd/hub`
 * Grab logs: `kind export logs $(pwd) --name test-kind`
 
 ## 10 Remove grid

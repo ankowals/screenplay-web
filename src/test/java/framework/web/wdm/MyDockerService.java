@@ -30,6 +30,7 @@ More details under //https://github.com/aerokube/selenoid/issues/1079
 */
 public class MyDockerService extends DockerService {
 
+  @Deprecated
   private static final Map<String, DockerContainer> PROXY_CONTAINER_CACHE =
       new ConcurrentHashMap<>();
 
@@ -46,6 +47,7 @@ public class MyDockerService extends DockerService {
     return super.startContainer(this.customize(dockerContainer));
   }
 
+  @Deprecated
   @Override
   public synchronized void stopAndRemoveContainer(DockerContainer dockerContainer) {
     String containerId = dockerContainer.getContainerId();
@@ -60,6 +62,7 @@ public class MyDockerService extends DockerService {
     super.stopAndRemoveContainer(dockerContainer);
   }
 
+  @Deprecated
   @Override
   public DockerContainer startBrowserContainer(
       String dockerImage, String cacheKey, String browserVersion, boolean androidEnabled) {
@@ -90,6 +93,7 @@ public class MyDockerService extends DockerService {
   // we can expose 7070 for selenoid devTools only here and configure caddy to route the traffic
   // but still augmenter needs to extract this port from container
   // and configure the client to trigger it
+  @Deprecated
   private DockerContainer startProxyContainer(DockerContainer browserContainer)
       throws URISyntaxException {
     String dockerImage = "caddy:2.8.4-alpine";
@@ -139,6 +143,7 @@ public class MyDockerService extends DockerService {
         .orElse(null);
   }
 
+  @Deprecated
   private List<String> addPort(List<String> ports, int port) {
     List<String> copy = new ArrayList<>(ports);
     copy.add(String.valueOf(port));
@@ -147,6 +152,7 @@ public class MyDockerService extends DockerService {
   }
 
   // does not work in jar
+  @Deprecated
   private Path getProxyConfig() throws URISyntaxException {
     URL url = this.getClass().getClassLoader().getResource("caddyfile");
     return new File(Objects.requireNonNull(url).toURI()).toPath();

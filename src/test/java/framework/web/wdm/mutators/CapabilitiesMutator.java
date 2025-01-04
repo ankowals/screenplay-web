@@ -8,19 +8,24 @@ import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.TracedCommandExecutor;
 
+/**
+ * See AugmenterProvider implementations like DevToolsProvider or BiDiProvider to find capabilities
+ * that needs to be modified
+ */
 public class CapabilitiesMutator {
 
   public void mutate(RemoteWebDriver remoteWebDriver) throws IllegalAccessException {
     URL url = this.getHubUrl(remoteWebDriver);
 
-    String cdpUrl =
+    String wsSessionUrl =
         String.format(
-            "ws://%s:%s/session/%s/se/cdp",
+            "ws://%s:%s/session/%s",
             url.getHost(), url.getPort(), remoteWebDriver.getSessionId().toString());
 
     MutableCapabilities mutableCapabilities =
         (MutableCapabilities) remoteWebDriver.getCapabilities();
-    mutableCapabilities.setCapability("se:cdp", cdpUrl);
+    mutableCapabilities.setCapability("se:cdp", wsSessionUrl + "/se/cdp");
+    mutableCapabilities.setCapability("webSocketUrl", wsSessionUrl + "/se/bidi");
   }
 
   protected URL getHubUrl(RemoteWebDriver remoteWebDriver) throws IllegalAccessException {

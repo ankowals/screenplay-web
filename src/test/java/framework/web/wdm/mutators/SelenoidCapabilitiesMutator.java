@@ -7,6 +7,7 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 /** Selenoid browser container exposes devTools at port 7070 */
+@Deprecated
 public class SelenoidCapabilitiesMutator extends CapabilitiesMutator {
 
   private final WebDriverManager webDriverManager;

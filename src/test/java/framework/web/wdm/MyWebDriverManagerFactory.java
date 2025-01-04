@@ -12,10 +12,12 @@ public class MyWebDriverManagerFactory {
     myChromeDriverManager.capabilities(MyWebDriverManagerFactory.chromeOptions());
     myChromeDriverManager.disableTracing();
 
-    if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null) {
-      myChromeDriverManager.browserInDocker();
-      myChromeDriverManager.dockerScreenResolution("1920x1080x24");
-    }
+    //  if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null) {
+    myChromeDriverManager.browserInDocker();
+    myChromeDriverManager.dockerCustomImage(
+        String.format("selenium/standalone-chrome:%s", System.getenv("WDM_CHROMEVERSION")));
+    myChromeDriverManager.dockerScreenResolution("1920x1080x24");
+    //  }
 
     return myChromeDriverManager;
   }

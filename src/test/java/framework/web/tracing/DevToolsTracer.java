@@ -2,8 +2,8 @@ package framework.web.tracing;
 
 import java.util.Optional;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v128.log.Log;
-import org.openqa.selenium.devtools.v128.network.Network;
+import org.openqa.selenium.devtools.v131.log.Log;
+import org.openqa.selenium.devtools.v131.network.Network;
 
 public class DevToolsTracer {
 

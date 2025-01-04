@@ -19,7 +19,7 @@ dependencies {
     testImplementation 'io.github.glytching:junit-extensions:2.6.0'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.3.0'
 
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.26.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
     testImplementation 'io.github.bonigarcia:selenium-jupiter:5.1.1'
 
     testImplementation 'org.slf4j:slf4j-api:2.0.16'
@@ -48,7 +48,7 @@ test {
 
     //set env variables
     environment "WDM_DOCKERENABLERECORDING", "true"
-    environment "WDM_CHROMEVERSION", "128"
+    environment "WDM_CHROMEVERSION", "131.0"
     environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
 
     useJUnitPlatform()

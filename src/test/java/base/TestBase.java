@@ -5,9 +5,8 @@ import static framework.web.reporting.ExtentWebReportExtension.REPORT_FILE;
 import framework.screenplay.actor.Actor;
 import framework.web.tracing.DevToolsTracer;
 import framework.web.wdm.MyWebDriverManagerFactory;
-import framework.web.wdm.mutators.SelenoidCapabilitiesMutator;
+import framework.web.wdm.mutators.CapabilitiesMutator;
 import io.github.bonigarcia.seljup.*;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,10 +48,8 @@ public class TestBase {
     this.browser = webDriver;
 
     if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
-      WebDriverManager webDriverManager = seleniumJupiter.getConfig().getManager();
-
       ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
-      new SelenoidCapabilitiesMutator(webDriverManager).mutate((RemoteWebDriver) this.browser);
+      new CapabilitiesMutator().mutate((RemoteWebDriver) this.browser);
       this.browser = new Augmenter().augment(this.browser);
     }
 

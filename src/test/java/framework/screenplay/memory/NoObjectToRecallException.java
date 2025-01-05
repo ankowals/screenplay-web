@@ -1,7 +1,7 @@
-package framework.screenplay.exceptions;
+package framework.screenplay.memory;
 
-public class NoObjectToRecallException extends RuntimeException {
-  public NoObjectToRecallException(String name) {
+class NoObjectToRecallException extends RuntimeException {
+  NoObjectToRecallException(String name) {
     super(
         String.format(
             "Actor does not recall [%s]. Call remember() first to define this object in Actor's memory.",

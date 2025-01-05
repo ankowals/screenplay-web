@@ -1,15 +1,10 @@
 package framework.screenplay.actor;
 
 import framework.screenplay.Interaction;
+import framework.screenplay.Question;
 
 public interface PerformsInteractions {
-  PerformsInteractions attemptsTo(Interaction... interactions);
+  <T extends Interaction> void attemptsTo(T... interactions);
 
-  PerformsInteractions wasAbleTo(Interaction... interactions);
-
-  PerformsInteractions has(Interaction... interactions);
-
-  PerformsInteractions was(Interaction... interactions);
-
-  PerformsInteractions is(Interaction... interactions);
+  <T> T asksFor(Question<T> question);
 }

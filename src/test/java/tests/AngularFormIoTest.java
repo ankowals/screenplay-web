@@ -57,7 +57,6 @@ class AngularFormIoTest extends TestBase {
     }
   }
 
-  // refactor to use filters instead of routing
   private Routable createRouting() {
     return Route.combine(
         Route.matching(HttpPredicates.post("example.form.io/example/submission"))

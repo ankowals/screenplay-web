@@ -1,13 +1,12 @@
-package framework.screenplay.helpers;
+package framework.screenplay.actor;
 
 import framework.screenplay.Ability;
-import framework.screenplay.actor.Actor;
 
 public class UseAbility {
 
   private final Actor actor;
 
-  public UseAbility(Actor actor) {
+  private UseAbility(Actor actor) {
     this.actor = actor;
   }
 

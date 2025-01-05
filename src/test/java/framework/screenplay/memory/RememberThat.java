@@ -1,7 +1,8 @@
-package framework.screenplay.interactions;
+package framework.screenplay.memory;
 
 import framework.screenplay.Interaction;
 import framework.screenplay.Question;
+import framework.screenplay.actor.UseAbility;
 
 public class RememberThat {
 
@@ -18,11 +19,16 @@ public class RememberThat {
     }
 
     public Interaction is(T value) {
-      return actor -> actor.remembers(this.name, value);
+      return actor ->
+          UseAbility.of(actor).to(RememberThings.class).memory().remember(this.name, value);
     }
 
     public Interaction is(Question<?> question) {
-      return actor -> actor.remembers(this.name, question);
+      return actor ->
+          UseAbility.of(actor)
+              .to(RememberThings.class)
+              .memory()
+              .remember(this.name, question.answeredBy(actor));
     }
   }
 }

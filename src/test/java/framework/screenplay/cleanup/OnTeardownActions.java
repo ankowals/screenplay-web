@@ -1,23 +1,23 @@
-package framework.screenplay.hooks;
+package framework.screenplay.cleanup;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.commons.lang3.function.FailableRunnable;
 
-public class OnTeardown {
+public class OnTeardownActions {
 
   private final List<FailableRunnable<?>> runnables;
 
-  public OnTeardown() {
+  public OnTeardownActions() {
     this.runnables = new CopyOnWriteArrayList<>();
   }
 
-  public void defer(FailableRunnable<?> runnable) {
+  public void add(FailableRunnable<?> runnable) {
     this.runnables.add(runnable);
   }
 
-  public void run() {
+  public void runAll() {
     Collections.reverse(this.runnables);
     this.runnables.forEach(
         runnable -> {

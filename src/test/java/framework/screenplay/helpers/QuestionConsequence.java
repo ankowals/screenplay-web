@@ -1,4 +1,4 @@
-package framework.screenplay.interactions;
+package framework.screenplay.helpers;
 
 import framework.screenplay.Consequence;
 import framework.screenplay.Question;

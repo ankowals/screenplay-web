@@ -5,12 +5,10 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-public class DropDownImpl implements Dropdown {
-
-  private final WebElement webElement;
+public class DropDownImpl extends ElementImpl implements Dropdown {
 
   public DropDownImpl(WebElement webElement) {
-    this.webElement = webElement;
+    super(webElement);
   }
 
   @Override

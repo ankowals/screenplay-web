@@ -1,30 +1,25 @@
 package framework.web.pom.elements.common;
 
 import framework.web.pom.elements.Input;
+import java.util.Objects;
 import org.openqa.selenium.*;
 
-public class InputImpl implements Input {
-
-  private final WebElement webElement;
+@SuppressWarnings("NullableProblems")
+public class InputImpl extends ElementImpl implements Input {
 
   public InputImpl(WebElement webElement) {
-    this.webElement = webElement;
-  }
-
-  @Override
-  public void clear() {
-    this.webElement.clear();
+    super(webElement);
   }
 
   @Override
   public void insert(String text) {
-    this.clear();
-    this.webElement.sendKeys(text);
+    super.clear();
+    super.sendKeys(text);
   }
 
   @Override
   public String getText() {
-    return this.webElement.getAttribute("value");
+    return Objects.requireNonNull(super.getAttribute("value"));
   }
 
   public static InputImpl of(WebElement webElement) {

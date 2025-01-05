@@ -1,24 +1,19 @@
 package framework.web.pom.elements.common;
 
 import framework.web.pom.elements.Button;
+import java.util.Objects;
 import org.openqa.selenium.WebElement;
 
-public class ButtonImpl implements Button {
-
-  private final WebElement webElement;
+@SuppressWarnings("NullableProblems")
+public class ButtonImpl extends ElementImpl implements Button {
 
   public ButtonImpl(WebElement webElement) {
-    this.webElement = webElement;
-  }
-
-  @Override
-  public void click() {
-    this.webElement.click();
+    super(webElement);
   }
 
   @Override
   public String getText() {
-    return this.webElement.getAttribute("title");
+    return Objects.requireNonNull(super.getAttribute("title"));
   }
 
   public static ButtonImpl of(WebElement webElement) {

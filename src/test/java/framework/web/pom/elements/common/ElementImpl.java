@@ -2,8 +2,10 @@ package framework.web.pom.elements.common;
 
 import framework.web.pom.elements.Element;
 import java.util.List;
+import java.util.Optional;
 import org.openqa.selenium.*;
 
+@SuppressWarnings("NullableProblems")
 public class ElementImpl implements Element {
 
   protected final WebElement webElement;
@@ -81,7 +83,8 @@ public class ElementImpl implements Element {
 
   @Override
   public String getAttribute(String s) {
-    return this.webElement.getAttribute(s);
+    return Optional.ofNullable(this.webElement.getDomProperty(s))
+        .orElseGet(() -> this.webElement.getDomAttribute(s));
   }
 
   @Override

@@ -1,4 +1,4 @@
-package framework.screenplay.memory;
+package framework.screenplay.abilities.memory;
 
 class NoObjectToRecallException extends RuntimeException {
   NoObjectToRecallException(String name) {

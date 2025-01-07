@@ -1,8 +1,10 @@
 package framework.screenplay.actor;
 
-import org.hamcrest.Matcher;
+import framework.screenplay.Consequence;
+import org.assertj.core.api.AbstractObjectAssert;
 
-@SuppressWarnings("unchecked")
 public interface PerformsChecks {
-  <T> void checksThat(T actual, Matcher<? super T>... matchers);
+  <T, E extends AbstractObjectAssert<E, T>> E assertsThat(T actual);
+
+  void should(Consequence<Actor> consequence) throws Exception;
 }

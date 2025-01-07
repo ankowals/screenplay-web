@@ -1,4 +1,4 @@
-package framework.screenplay.memory;
+package framework.screenplay.abilities.memory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,9 +16,13 @@ public class Memory {
 
   @SuppressWarnings("unchecked")
   public <T> T recall(String name) {
-    if (this.memory.get(name) == null) throw new NoObjectToRecallException(name);
+    Object object = this.memory.get(name);
 
-    return (T) this.memory.get(name);
+    if (object == null) {
+      throw new NoObjectToRecallException(name);
+    }
+
+    return (T) object;
   }
 
   public void forget(String key) {

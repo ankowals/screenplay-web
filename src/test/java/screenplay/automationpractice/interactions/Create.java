@@ -1,13 +1,14 @@
 package screenplay.automationpractice.interactions;
 
 import framework.screenplay.Interaction;
+import framework.screenplay.actor.Actor;
 import framework.web.screenplay.BrowseTheWeb;
 import pom.automationpractice.models.HomePage;
 import testdata.AccountFormData;
 
-public class CreateAccount {
+public class Create {
 
-  public static Interaction with(AccountFormData accountFormData) {
+  public static Interaction<Actor> account(AccountFormData accountFormData) {
     return actor ->
         BrowseTheWeb.as(actor)
             .onPage(HomePage.class)

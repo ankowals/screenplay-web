@@ -2,15 +2,17 @@ package framework.screenplay.helpers;
 
 import framework.screenplay.Consequence;
 import framework.screenplay.Question;
+import framework.screenplay.actor.Actor;
 import org.hamcrest.Matcher;
 
 public class See {
 
-  public static <T> Consequence that(Question<T> question, Matcher<? super T> matcher) {
-    return new <T>QuestionConsequence<T>(question, matcher);
+  public static <T, U extends Actor> Consequence<U> that(
+      Question<T, U> question, Matcher<? super T> matcher) {
+    return actor -> actor.checksThat(question.answeredBy(actor), matcher);
   }
 
-  public static Consequence that(Consequence consequence) {
+  public static <T extends Actor> Consequence<T> that(Consequence<T> consequence) {
     return consequence;
   }
 
@@ -18,7 +20,7 @@ public class See {
     return actual;
   }
 
-  public static <T> Question<T> that(Question<T> question) {
+  public static <T, U extends Actor> Question<T, U> that(Question<T, U> question) {
     return question;
   }
 }

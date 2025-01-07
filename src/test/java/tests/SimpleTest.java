@@ -23,7 +23,7 @@ import pom.automationpractice.models.ProductDetailsPage;
 import pom.automationpractice.models.SearchResultsPage;
 import screenplay.Open;
 import screenplay.automationpractice.interactions.*;
-import screenplay.automationpractice.questions.PageProperties;
+import screenplay.automationpractice.questions.Page;
 import screenplay.automationpractice.questions.ProductDetails;
 import testdata.AccountFormData;
 
@@ -31,28 +31,26 @@ class SimpleTest extends TestBase {
 
   @ParameterizedTest
   @MethodSource("accountFormDataProvider")
-  void shouldCreateAccount(AccountFormData data) {
+  void shouldCreateAccount(AccountFormData data) throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
-    when(this.user).attemptsTo(Open.browser(AUTOMATION_PRACTICE_HOME), CreateAccount.with(data));
+    when(this.user).attemptsTo(Open.browser(AUTOMATION_PRACTICE_HOME), Create.account(data));
     then(this.user)
-        .should(
-            See.that(PageProperties.title(AccountPage.class), equalTo("My account - My Store")));
+        .should(See.that(Page.title(AccountPage.class), equalTo("My account - My Store")));
   }
 
   @Test
-  void shouldSearchForProduct() {
+  void shouldSearchForProduct() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user)
         .attemptsTo(
-            Open.browser(AUTOMATION_PRACTICE_HOME), FindProductDetails.of("Printed Chiffon Dress"));
+            Open.browser(AUTOMATION_PRACTICE_HOME), Find.productDetails("Printed Chiffon Dress"));
     then(this.user)
         .should(See.that(ProductDetails.get()))
-        .extracting(testdata.ProductDetails::getPrice)
-        .isEqualTo("$16.40");
+        .returns("$16.40", testdata.ProductDetails::getPrice);
   }
 
   @Test
-  void shouldSearchForProductButSmarter() {
+  void shouldSearchForProductButSmarter() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user)
         .attemptsTo(
@@ -60,12 +58,12 @@ class SimpleTest extends TestBase {
                 AUTOMATION_PRACTICE_HOME
                     + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=",
                 SearchResultsPage.class),
-            ViewProductDetails.of("Printed Chiffon Dress"));
+            View.productDetails("Printed Chiffon Dress"));
     then(this.user).should(See.that(ProductDetails.get(), hasProperty("price", equalTo("$17.40"))));
   }
 
   @Test
-  void shouldContainTableDataSheetInProductDetails() {
+  void shouldContainTableDataSheetInProductDetails() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user)
         .attemptsTo(

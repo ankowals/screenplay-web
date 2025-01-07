@@ -1,4 +1,4 @@
-package framework.screenplay.cleanup;
+package framework.screenplay.abilities.cleanup;
 
 import java.util.Collections;
 import java.util.List;

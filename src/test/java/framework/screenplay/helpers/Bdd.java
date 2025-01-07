@@ -7,11 +7,11 @@ public class Bdd {
     return t;
   }
 
-  public static Actor when(Actor actor) {
+  public static <T extends Actor> T when(T actor) {
     return actor;
   }
 
-  public static Actor then(Actor actor) {
+  public static <T extends Actor> T then(T actor) {
     return actor;
   }
 

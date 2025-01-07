@@ -22,7 +22,7 @@ class AngularFormIoTest extends TestBase {
 
   @Tag("short-circuit-demo")
   @Test
-  void shouldSubmitForm() {
+  void shouldSubmitForm() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user)
         .attemptsTo(
@@ -38,7 +38,7 @@ class AngularFormIoTest extends TestBase {
    */
   @Tag("short-circuit-demo")
   @Test
-  void shouldNotifyAboutSubmissionFailure() {
+  void shouldNotifyAboutSubmissionFailure() throws Exception {
     try (NetworkInterceptor interceptor =
         new NetworkInterceptor(this.browser, this.createRouting())) {
 

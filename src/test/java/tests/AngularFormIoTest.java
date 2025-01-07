@@ -15,7 +15,7 @@ import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
 import screenplay.Open;
 import screenplay.formio.ExampleForm;
-import screenplay.formio.FillExampleForm;
+import screenplay.formio.Fill;
 import screenplay.formio.Submit;
 
 class AngularFormIoTest extends TestBase {
@@ -27,7 +27,7 @@ class AngularFormIoTest extends TestBase {
     when(this.user)
         .attemptsTo(
             Open.browser(FORM_IO_DEMO),
-            FillExampleForm.firstName(RandomStringUtils.insecure().nextAlphabetic(8)),
+            Fill.exampleForm().firstName(RandomStringUtils.insecure().nextAlphabetic(8)),
             Submit.exampleForm());
     then(this.user)
         .should(See.that(ExampleForm.submitMessage(), containsString("Submission Complete")));
@@ -39,6 +39,8 @@ class AngularFormIoTest extends TestBase {
   @Tag("short-circuit-demo")
   @Test
   void shouldNotifyAboutSubmissionFailure() throws Exception {
+    String name = RandomStringUtils.insecure().nextAlphabetic(8);
+
     try (NetworkInterceptor interceptor =
         new NetworkInterceptor(this.browser, this.createRouting())) {
 
@@ -46,8 +48,7 @@ class AngularFormIoTest extends TestBase {
       when(this.user)
           .attemptsTo(
               Open.browser(FORM_IO_DEMO),
-              FillExampleForm.firstName(RandomStringUtils.insecure().nextAlphabetic(8)),
-              Submit.exampleForm());
+              Fill.exampleForm(formPage -> formPage.enterFirstName(name).clickSubmit()));
       then(this.user)
           .should(
               See.that(

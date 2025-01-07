@@ -2,7 +2,7 @@ package tests;
 
 import framework.screenplay.Question;
 import framework.screenplay.abilities.AssertSoftly;
-import framework.screenplay.abilities.UseAbility;
+import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.abilities.cleanup.DoTheCleanUp;
 import framework.screenplay.abilities.cleanup.OnTeardownActions;
 import framework.screenplay.abilities.memory.*;

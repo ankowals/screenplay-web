@@ -1,7 +1,7 @@
 package framework.screenplay.abilities.memory;
 
 import framework.screenplay.Ability;
-import framework.screenplay.abilities.UseAbility;
+import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 
 public record RememberThings(Memory memory) implements Ability {

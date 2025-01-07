@@ -1,7 +1,7 @@
 package framework.web.screenplay;
 
 import framework.screenplay.Ability;
-import framework.screenplay.abilities.UseAbility;
+import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 import framework.web.pom.page.PageFactory;
 import org.openqa.selenium.WebDriver;

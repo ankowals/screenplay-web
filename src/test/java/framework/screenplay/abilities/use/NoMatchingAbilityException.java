@@ -1,4 +1,4 @@
-package framework.screenplay.abilities;
+package framework.screenplay.abilities.use;
 
 class NoMatchingAbilityException extends RuntimeException {
   <T> NoMatchingAbilityException(Class<? extends T> ability) {

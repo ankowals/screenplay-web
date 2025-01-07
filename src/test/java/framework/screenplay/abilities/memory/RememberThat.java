@@ -2,7 +2,7 @@ package framework.screenplay.abilities.memory;
 
 import framework.screenplay.Interaction;
 import framework.screenplay.Question;
-import framework.screenplay.abilities.UseAbility;
+import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 
 public class RememberThat {

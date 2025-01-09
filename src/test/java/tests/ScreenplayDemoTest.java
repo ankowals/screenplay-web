@@ -28,7 +28,7 @@ class ScreenplayDemoTest {
     this.softAssertions = new SoftAssertions();
 
     this.actor = new Actor();
-    this.actor.can(RememberThings.with(sharedMemory), DoTheCleanUp.with(new OnTeardownActions()));
+    this.actor.can(RememberThings.with(sharedMemory), DoTheCleanUp.with(new OnTeardownActions()), AssertSoftly.with(this.softAssertions));
   }
 
   @AfterEach

@@ -30,5 +30,6 @@ public class OnShutdownActions {
           } catch (Throwable ignored) {
           }
         });
+    RUNNABLES.clear();
   }
 }

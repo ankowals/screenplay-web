@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -34,6 +35,26 @@ class SimpleTest extends TestBase {
   void shouldCreateAccount(AccountFormData data) throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user).attemptsTo(Open.browser(AUTOMATION_PRACTICE_HOME), Create.account(data));
+    then(this.user)
+        .should(See.that(Page.title(AccountPage.class), equalTo("My account - My Store")));
+  }
+
+  // better alternative
+  @Disabled("demo to show how to inline test data into test")
+  @ParameterizedTest
+  @MethodSource("accountFormDataProvider")
+  void shouldCreateSimplerAccount(AccountFormData accountFormData) throws Exception {
+    given(this.user).can(BrowseTheWeb.with(this.browser));
+    when(this.user)
+        .attemptsTo(
+            Open.browser(AUTOMATION_PRACTICE_HOME),
+            Create.account(
+                accountFormPage ->
+                    accountFormPage
+                        .enterIntoFirstNameInput(accountFormData.getFirstName())
+                        .enterIntoLastNameInput(accountFormData.getLastName())
+                        .enterIntoPasswordInput(accountFormData.getPassword())
+                        .clickRegisterButton()));
     then(this.user)
         .should(See.that(Page.title(AccountPage.class), equalTo("My account - My Store")));
   }

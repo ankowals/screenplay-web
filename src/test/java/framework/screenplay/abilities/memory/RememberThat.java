@@ -3,7 +3,6 @@ package framework.screenplay.abilities.memory;
 import framework.screenplay.Interaction;
 import framework.screenplay.Question;
 import framework.screenplay.abilities.use.UseAbility;
-import framework.screenplay.actor.Actor;
 
 public class RememberThat {
 
@@ -19,12 +18,12 @@ public class RememberThat {
       this.name = name;
     }
 
-    public Interaction<Actor> is(T value) {
+    public Interaction is(T value) {
       return actor ->
           UseAbility.of(actor).to(RememberThings.class).memory().remember(this.name, value);
     }
 
-    public Interaction<Actor> is(Question<?, Actor> question) {
+    public Interaction is(Question<?> question) {
       return actor ->
           UseAbility.of(actor)
               .to(RememberThings.class)

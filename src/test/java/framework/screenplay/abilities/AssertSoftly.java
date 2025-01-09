@@ -10,9 +10,11 @@ public record AssertSoftly(SoftAssertions softAssertions) implements Ability {
   public static SoftAssertions as(Actor actor) {
     return UseAbility.of(actor).to(AssertSoftly.class).softAssertions();
   }
+
   public static AssertSoftly with(SoftAssertions softAssertions) {
     return new AssertSoftly(softAssertions);
   }
+
   public void that(Consumer<SoftAssertions> softly) {
     SoftAssertions.assertSoftly(softly);
   }

@@ -6,5 +6,5 @@ import org.assertj.core.api.AbstractObjectAssert;
 public interface PerformsChecks {
   <T, E extends AbstractObjectAssert<E, T>> E assertsThat(T actual);
 
-  void should(Consequence<Actor> consequence) throws Exception;
+  void should(Consequence consequence) throws Exception;
 }

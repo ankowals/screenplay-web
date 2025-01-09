@@ -4,6 +4,10 @@ import java.util.Optional;
 import org.apache.commons.lang3.function.Failable;
 import org.apache.commons.lang3.function.FailableSupplier;
 
+/**
+ * Try.failable(() -> Get.account(account.id()).answeredBy(actor)).orElseGet(() ->
+ * Create.account(accountFormData).answeredBy(actor))
+ */
 public class Try<T> {
 
   private T t;
@@ -15,10 +19,6 @@ public class Try<T> {
     }
   }
 
-  /**
-   * Try.failable(() -> Get.account(account.id()).answeredBy(actor)).orElseGet(() ->
-   * Create.account(accountFormData).answeredBy(actor))
-   */
   public static <T> Try<T> failable(FailableSupplier<T, Throwable> failableSupplier) {
     return new Try<>(failableSupplier);
   }

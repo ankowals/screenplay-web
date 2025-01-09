@@ -10,8 +10,7 @@ import org.hamcrest.Matcher;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
 
-  @SuppressWarnings("rawtypes")
-  protected final Map<Class, Ability> abilities = new HashMap<>();
+  private final Map<Class<?>, Ability> abilities = new HashMap<>();
 
   @SafeVarargs
   @Override
@@ -19,22 +18,25 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
     Arrays.stream(doSomething).forEach(ability -> this.abilities.put(ability.getClass(), ability));
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public <T extends Ability> T usingAbilityTo(Class<? extends T> doSomething) {
-    return (T) this.abilities.get(doSomething);
+  public <T extends Ability> T usingAbilityTo(Class<T> doSomething) {
+    return doSomething.cast(this.abilities.get(doSomething));
   }
 
-  @SafeVarargs
   @Override
-  public final void attemptsTo(Interaction<Actor>... interactions) {
+  public final void attemptsTo(Interaction... interactions) {
     Failable.stream(Arrays.asList(interactions))
         .forEach(interaction -> interaction.performAs(this));
   }
 
   @Override
-  public <T> T asksFor(Question<T, Actor> question) throws Exception {
+  public <T> T asksFor(Question<T> question) throws Exception {
     return question.answeredBy(this);
+  }
+
+  @Override
+  public void should(Consequence consequence) throws Exception {
+    consequence.evaluateFor(this);
   }
 
   @SuppressWarnings("unchecked")
@@ -43,28 +45,19 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
     return (E) Assertions.assertThat(actual);
   }
 
-  @Override
-  public void should(Consequence<Actor> consequence) throws Exception {
-    consequence.evaluateFor(this);
-  }
-
-  @SafeVarargs
-  public final void wasAbleTo(Interaction<Actor>... interactions) {
+  public final void wasAbleTo(Interaction... interactions) {
     this.attemptsTo(interactions);
   }
 
-  @SafeVarargs
-  public final void has(Interaction<Actor>... interactions) {
+  public final void has(Interaction... interactions) {
     this.attemptsTo(interactions);
   }
 
-  @SafeVarargs
-  public final void was(Interaction<Actor>... interactions) {
+  public final void was(Interaction... interactions) {
     this.attemptsTo(interactions);
   }
 
-  @SafeVarargs
-  public final void is(Interaction<Actor>... interactions) {
+  public final void is(Interaction... interactions) {
     this.attemptsTo(interactions);
   }
 
@@ -74,14 +67,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
         .forEach(matcher -> this.assertsThat(actual).is(HamcrestCondition.matching(matcher)));
   }
 
-  @SafeVarargs
-  public final <T> void checksThat(Question<T, Actor> question, Matcher<? super T>... matchers)
-      throws Exception {
-    this.checksThat(question.answeredBy(this), matchers);
-  }
-
-  public <T, E extends AbstractObjectAssert<E, T>> E should(Question<T, Actor> question)
-      throws Exception {
+  public <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question) throws Exception {
     return this.should(question.answeredBy(this));
   }
 
@@ -89,7 +75,7 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
     return this.assertsThat(actual);
   }
 
-  public <T, E extends AbstractObjectAssert<E, T>> E assertsThat(Question<T, Actor> question)
+  public <T, E extends AbstractObjectAssert<E, T>> E assertsThat(Question<T> question)
       throws Exception {
     return this.assertsThat(question.answeredBy(this));
   }

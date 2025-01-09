@@ -1,14 +1,15 @@
 package screenplay.automationpractice.interactions;
 
 import framework.screenplay.Interaction;
-import framework.screenplay.actor.Actor;
 import framework.web.screenplay.BrowseTheWeb;
+import java.util.function.Consumer;
+import pom.automationpractice.models.AuthenticationPage;
 import pom.automationpractice.models.HomePage;
 import testdata.AccountFormData;
 
 public class Create {
 
-  public static Interaction<Actor> account(AccountFormData accountFormData) {
+  public static Interaction account(AccountFormData accountFormData) {
     return actor ->
         BrowseTheWeb.as(actor)
             .onPage(HomePage.class)
@@ -26,5 +27,10 @@ public class Create {
             .enterIntoMobilePhoneInput(accountFormData.getMobilePhone())
             .enterIntoAliasInput(accountFormData.getAlias())
             .clickRegisterButton();
+  }
+
+  public static Interaction account(Consumer<AuthenticationPage> customizer) {
+    return actor ->
+        customizer.accept(BrowseTheWeb.as(actor).onPage(HomePage.class).clickSignInButton());
   }
 }

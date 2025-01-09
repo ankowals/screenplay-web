@@ -1,7 +1,6 @@
 package screenplay.formio;
 
 import framework.screenplay.Interaction;
-import framework.screenplay.actor.Actor;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Consumer;
 import pom.formio.AngularFormExamplePage;
@@ -13,12 +12,12 @@ public class Fill {
   }
 
   // better alternative
-  public static Interaction<Actor> exampleForm(Consumer<AngularFormExamplePage> customizer) {
+  public static Interaction exampleForm(Consumer<AngularFormExamplePage> customizer) {
     return actor -> customizer.accept(BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class));
   }
 
   public static class FillExampleFormFactory {
-    public Interaction<Actor> firstName(String firstName) {
+    public Interaction firstName(String firstName) {
       return actor ->
           BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).enterFirstName(firstName);
     }

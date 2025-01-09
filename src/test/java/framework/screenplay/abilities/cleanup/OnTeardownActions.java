@@ -26,5 +26,6 @@ public class OnTeardownActions {
           } catch (Throwable ignored) {
           }
         });
+    this.runnables.clear();
   }
 }

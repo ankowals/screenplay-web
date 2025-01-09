@@ -1,7 +1,7 @@
 package framework.web.reporting;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.launcher.TestIdentifier;
@@ -40,13 +40,30 @@ class FqdnTestName {
   }
 
   private String toClassName(TestIdentifier testIdentifier) {
-    List<UniqueId.Segment> segments = testIdentifier.getUniqueIdObject().getSegments();
-    return segments.get(segments.size() - 2).getValue();
+    Optional<String> maybeClassSegment =
+        testIdentifier.getUniqueIdObject().getSegments().stream()
+            .filter(
+                segment ->
+                    segment.getType().equals("class") || segment.getType().equals("nested-class"))
+            .map(UniqueId.Segment::getValue)
+            .findFirst();
+
+    return maybeClassSegment.orElseThrow();
   }
 
   private String toMethodName(TestIdentifier testIdentifier) {
-    String method = testIdentifier.getUniqueIdObject().getLastSegment().getValue();
-    return method.substring(0, method.indexOf("("));
+    Optional<String> maybeMethodSegment =
+        testIdentifier.getUniqueIdObject().getSegments().stream()
+            .filter(
+                segment ->
+                    segment.getType().equals("method")
+                        || segment.getType().equals("test-template")
+                        || segment.getType().equals("dynamic-test"))
+            .map(UniqueId.Segment::getValue)
+            .findFirst();
+
+    String methodSegment = maybeMethodSegment.orElseThrow();
+    return methodSegment.substring(0, methodSegment.indexOf("("));
   }
 
   @Override

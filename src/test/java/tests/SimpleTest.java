@@ -28,6 +28,7 @@ import screenplay.automationpractice.questions.Page;
 import screenplay.automationpractice.questions.ProductDetails;
 import testdata.AccountFormData;
 
+@Disabled("Page not available any more")
 class SimpleTest extends TestBase {
 
   @ParameterizedTest
@@ -40,7 +41,6 @@ class SimpleTest extends TestBase {
   }
 
   // better alternative
-  @Disabled("demo to show how to inline test data into test")
   @ParameterizedTest
   @MethodSource("accountFormDataProvider")
   void shouldCreateSimplerAccount(AccountFormData accountFormData) throws Exception {

@@ -49,7 +49,7 @@ test {
     //set env variables
     environment "WDM_DOCKERENABLERECORDING", "true"
     environment "WDM_CHROMEVERSION", "131.0"
-    environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
+    //environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
 
     useJUnitPlatform()
 }

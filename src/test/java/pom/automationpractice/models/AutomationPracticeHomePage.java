@@ -4,12 +4,17 @@ import framework.web.pom.page.BasePage;
 import org.openqa.selenium.WebDriver;
 import pom.automationpractice.views.HomeView;
 
-public class HomePage extends BasePage {
+public class AutomationPracticeHomePage extends BasePage {
 
   private final HomeView view = new HomeView(this.driver);
 
-  public HomePage(WebDriver driver) {
+  public AutomationPracticeHomePage(WebDriver driver) {
     super(driver);
+  }
+
+  public AutomationPracticeHomePage open() {
+    this.open("http://automationpractice.com/index.php");
+    return this;
   }
 
   public AuthenticationPage clickSignInButton() {
@@ -17,7 +22,7 @@ public class HomePage extends BasePage {
     return new AuthenticationPage(this.driver);
   }
 
-  public HomePage enterIntoSearchInput(String text) {
+  public AutomationPracticeHomePage enterIntoSearchInput(String text) {
     this.view.getSearchInput().insert(text);
     return this;
   }

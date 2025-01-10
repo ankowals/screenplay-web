@@ -2,7 +2,7 @@ package tests;
 
 import static framework.screenplay.helpers.Bdd.*;
 import static org.hamcrest.CoreMatchers.containsString;
-import static screenplay.PageUrl.FORM_IO_DEMO;
+import static screenplay.Pages.FORM_IO_DEMO;
 
 import base.TestBase;
 import framework.screenplay.helpers.See;

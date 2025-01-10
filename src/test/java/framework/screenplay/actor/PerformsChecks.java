@@ -1,10 +1,10 @@
 package framework.screenplay.actor;
 
 import framework.screenplay.Consequence;
-import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.ObjectAssert;
 
 public interface PerformsChecks {
-  <T, E extends AbstractObjectAssert<E, T>> E assertsThat(T actual);
+  <T> ObjectAssert<T> assertsThat(T actual);
 
   void should(Consequence consequence) throws Exception;
 }

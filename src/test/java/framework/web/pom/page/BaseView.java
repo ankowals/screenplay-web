@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class BaseView {
+public abstract class BaseView {
 
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
   protected final WebDriver driver;

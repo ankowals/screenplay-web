@@ -1,20 +1,16 @@
 package framework.web.pom.conditions;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class AngularExpectedConditions {
-
-  public static List<ExpectedCondition<?>> contentLoaded() {
-    return List.of(
-        AngularExpectedConditions.stableTestabilities(),
-        AngularExpectedConditions.noPendingTasksAndRequests(),
-        ExpectedConditions.invisibilityOfElementLocated(By.xpath("//ngx-spinner/child::div")));
-  }
 
   public static ExpectedCondition<Boolean> noPendingTasksAndRequests() {
     return webDriver ->
@@ -34,6 +30,20 @@ public class AngularExpectedConditions {
                 "return window.getAllAngularTestabilities()"
                     + ".findIndex(x => !x.isStable()) === -1",
                 webDriver));
+  }
+
+  public static ExpectedCondition<Boolean> spinnerToBeGone() {
+    return webDriver -> {
+      try {
+        TimeUnit.MILLISECONDS.sleep(250);
+      } catch (InterruptedException ignored) {
+      }
+
+      Objects.requireNonNull(webDriver);
+      List<WebElement> elements = webDriver.findElements(By.xpath("//ngx-spinner/child::*"));
+
+      return ExpectedConditions.invisibilityOfAllElements(elements).apply(webDriver);
+    };
   }
 
   private static String executeScript(String script, WebDriver webDriver) {

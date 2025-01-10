@@ -3,9 +3,7 @@ package framework.screenplay.actor;
 import framework.screenplay.*;
 import java.util.*;
 import org.apache.commons.lang3.function.Failable;
-import org.assertj.core.api.AbstractObjectAssert;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.HamcrestCondition;
+import org.assertj.core.api.*;
 import org.hamcrest.Matcher;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
@@ -39,10 +37,9 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
     consequence.evaluateFor(this);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public <T, E extends AbstractObjectAssert<E, T>> E assertsThat(T actual) {
-    return (E) Assertions.assertThat(actual);
+  public <T> ObjectAssert<T> assertsThat(T actual) {
+    return Assertions.assertThat(actual);
   }
 
   public final void wasAbleTo(Interaction... interactions) {
@@ -67,16 +64,15 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
         .forEach(matcher -> this.assertsThat(actual).is(HamcrestCondition.matching(matcher)));
   }
 
-  public <T, E extends AbstractObjectAssert<E, T>> E should(Question<T> question) throws Exception {
+  public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
     return this.should(question.answeredBy(this));
   }
 
-  public <T, E extends AbstractObjectAssert<E, T>> E should(T actual) {
+  public <T> ObjectAssert<T> should(T actual) {
     return this.assertsThat(actual);
   }
 
-  public <T, E extends AbstractObjectAssert<E, T>> E assertsThat(Question<T> question)
-      throws Exception {
+  public <T> ObjectAssert<T> assertsThat(Question<T> question) throws Exception {
     return this.assertsThat(question.answeredBy(this));
   }
 }

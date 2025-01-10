@@ -4,7 +4,7 @@ import framework.screenplay.Interaction;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Consumer;
 import pom.automationpractice.models.AuthenticationPage;
-import pom.automationpractice.models.HomePage;
+import pom.automationpractice.models.AutomationPracticeHomePage;
 import testdata.AccountFormData;
 
 public class Create {
@@ -12,7 +12,7 @@ public class Create {
   public static Interaction account(AccountFormData accountFormData) {
     return actor ->
         BrowseTheWeb.as(actor)
-            .onPage(HomePage.class)
+            .onPage(AutomationPracticeHomePage.class)
             .clickSignInButton()
             .enterIntoEmailInput(accountFormData.getEmail())
             .clickCreateAccountButton()
@@ -31,6 +31,7 @@ public class Create {
 
   public static Interaction account(Consumer<AuthenticationPage> customizer) {
     return actor ->
-        customizer.accept(BrowseTheWeb.as(actor).onPage(HomePage.class).clickSignInButton());
+        customizer.accept(
+            BrowseTheWeb.as(actor).onPage(AutomationPracticeHomePage.class).clickSignInButton());
   }
 }

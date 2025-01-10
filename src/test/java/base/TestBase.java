@@ -34,7 +34,7 @@ public class TestBase {
   }
 
   @BeforeAll
-  static void beforeAll() {
+  static void testBaseBeforeAll() {
     seleniumJupiter.getConfig().setManager(MyWebDriverManagerFactory.chrome());
     seleniumJupiter.getConfig().setOutputFolderPerClass(true);
     seleniumJupiter.getConfig().setScreenshot(true);
@@ -44,7 +44,7 @@ public class TestBase {
 
   // @DockerBrowser(type = CHROME, recording = true) WebDriver driver
   @BeforeEach
-  void beforeEach(WebDriver webDriver) throws IllegalAccessException {
+  void testBaseBeforeEach(WebDriver webDriver) throws IllegalAccessException {
     this.browser = webDriver;
 
     if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {

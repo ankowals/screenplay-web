@@ -3,7 +3,7 @@ package framework.web.pom.page;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
-public class BasePage {
+public abstract class BasePage {
 
   protected final WebDriver driver;
   protected final JavascriptExecutor js;

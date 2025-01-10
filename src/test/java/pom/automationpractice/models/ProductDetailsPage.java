@@ -22,7 +22,6 @@ public class ProductDetailsPage extends BasePage {
     return this.view.getShortDescriptionElement().getText();
   }
 
-  // should be mapped to DataSheet object instead of List or rows
   public List<Map<String, String>> getDataSheet() {
     List<Map<String, String>> table = new ArrayList<>();
     String source = "<table>" + this.view.getDataSheetTable().getWebElementSource() + "</table>";

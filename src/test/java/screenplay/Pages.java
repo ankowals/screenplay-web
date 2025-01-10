@@ -4,10 +4,10 @@ import framework.web.pom.page.BasePage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import pom.automationpractice.models.HomePage;
+import pom.automationpractice.models.AutomationPracticeHomePage;
 import pom.formio.AngularFormExamplePage;
 
-public class PageUrl {
+public class Pages {
   public static final String AUTOMATION_PRACTICE_HOME = "http://automationpractice.com/index.php";
   public static final String FORM_IO_DEMO = "https://formio.github.io/angular-demo";
 
@@ -15,7 +15,7 @@ public class PageUrl {
 
   static {
     URL_MAPPING = new HashMap<>();
-    URL_MAPPING.put(AUTOMATION_PRACTICE_HOME, HomePage.class);
+    URL_MAPPING.put(AUTOMATION_PRACTICE_HOME, AutomationPracticeHomePage.class);
     URL_MAPPING.put(FORM_IO_DEMO, AngularFormExamplePage.class);
   }
 

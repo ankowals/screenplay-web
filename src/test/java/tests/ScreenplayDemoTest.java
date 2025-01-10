@@ -106,9 +106,8 @@ class ScreenplayDemoTest {
 
     Task.where(
             "Actor asserts things",
-            actor1 -> {
-              actor1.should(See.that(Remembered.valueOf("device", Device.class))).isNotNull();
-            })
+            actor1 ->
+                actor1.should(See.that(Remembered.valueOf("device", Device.class))).isNotNull())
         .performAs(taskActor);
   }
 

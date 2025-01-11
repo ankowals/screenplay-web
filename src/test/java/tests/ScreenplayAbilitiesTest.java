@@ -7,6 +7,7 @@ import framework.screenplay.abilities.memory.*;
 import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
+import framework.screenplay.helpers.Try;
 import framework.screenplay.helpers.task.RunTask;
 import framework.screenplay.helpers.task.Task;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -47,25 +48,29 @@ class ScreenplayAbilitiesTest {
         .onTeardownActions()
         .add(() -> Forget.everything().performAs(this.actor));
 
-    this.actor.attemptsTo(RememberThat.valueOf("otherActor").is(new Actor()));
-    this.actor.should(See.that(Remembered.valueOf("otherActor", Actor.class))).isNotNull();
+    this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
+    this.actor.should(See.that(Remembered.valueOf("message", String.class))).isNotNull();
   }
 
   @Test
   @Order(2)
   void shouldForgetEverything() {
     Assertions.assertThatThrownBy(
-            () -> Remembered.valueOf("otherActor", Actor.class).answeredBy(this.actor))
+            () -> Remembered.valueOf("message", String.class).answeredBy(this.actor))
         .hasMessage(
-            "Actor does not recall [otherActor]. Call remember() first to define this object in Actor's memory.");
+            "Actor does not recall [message]. Call remember() first to define this object in Actor's memory.");
   }
 
   @Test
   @Order(3)
-  void shouldAssertSoftly() throws Exception {
-    this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
-
-    String actual = Remembered.valueOf("message", String.class).answeredBy(this.actor);
+  void shouldAssertSoftly() {
+    String actual =
+        Try.failable(() -> Remembered.valueOf("message", String.class).answeredBy(this.actor))
+            .orElseGet(
+                () -> {
+                  this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
+                  return Remembered.valueOf("message", String.class).answeredBy(this.actor);
+                });
 
     UseAbility.of(this.actor)
         .to(AssertSoftly.class)

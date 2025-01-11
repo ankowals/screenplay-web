@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.HasDevTools;
@@ -58,6 +59,14 @@ public class TestBase {
     new DevToolsTracer(this.devTools).trace();
 
     this.user = new Actor();
+  }
+
+  private void cleanWebStorage(WebDriver driver) {
+    try {
+      ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
+    } catch (Exception ignored) {
+      // do nothing
+    }
   }
 
   // to use with test containers

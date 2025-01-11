@@ -21,7 +21,7 @@ public class CheckoutYourInformationPage extends BasePage {
 
   @Override
   public String getTitle() {
-    return this.headerView.getTitleElement().getText();
+    return this.headerView.titleElement().getText();
   }
 
   public CheckoutOverviewPage clickContinue() {

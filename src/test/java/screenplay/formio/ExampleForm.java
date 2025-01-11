@@ -7,7 +7,6 @@ import pom.formio.AngularFormExamplePage;
 public class ExampleForm {
 
   public static Question<String> submitMessage() {
-    return actor ->
-        BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).getSubmitMessageText();
+    return actor -> BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).getSubmitMessage();
   }
 }

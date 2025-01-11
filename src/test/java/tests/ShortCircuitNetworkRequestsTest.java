@@ -2,31 +2,28 @@ package tests;
 
 import static framework.screenplay.helpers.Bdd.*;
 import static org.hamcrest.CoreMatchers.containsString;
-import static screenplay.Pages.FORM_IO_DEMO;
 
 import base.TestBase;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
-import screenplay.Open;
 import screenplay.formio.ExampleForm;
 import screenplay.formio.Fill;
+import screenplay.formio.Open;
 import screenplay.formio.Submit;
 
-class AngularFormIoTest extends TestBase {
+class ShortCircuitNetworkRequestsTest extends TestBase {
 
-  @Tag("short-circuit-demo")
   @Test
   void shouldSubmitForm() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user)
         .attemptsTo(
-            Open.browser(FORM_IO_DEMO),
+            Open.browser(),
             Fill.exampleForm().firstName(RandomStringUtils.insecure().nextAlphabetic(8)),
             Submit.exampleForm());
     then(this.user)
@@ -36,7 +33,6 @@ class AngularFormIoTest extends TestBase {
   /*
   Use NetworkInterceptor to short-circuit backend requests
    */
-  @Tag("short-circuit-demo")
   @Test
   void shouldNotifyAboutSubmissionFailure() throws Exception {
     String name = RandomStringUtils.insecure().nextAlphabetic(8);
@@ -47,7 +43,7 @@ class AngularFormIoTest extends TestBase {
       given(this.user).can(BrowseTheWeb.with(this.browser));
       when(this.user)
           .attemptsTo(
-              Open.browser(FORM_IO_DEMO),
+              Open.browser(),
               Fill.exampleForm(formPage -> formPage.enterFirstName(name).clickSubmit()));
       then(this.user)
           .should(

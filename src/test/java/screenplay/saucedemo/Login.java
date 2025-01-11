@@ -14,4 +14,6 @@ public class Login {
             .enterPassword(credentials.password())
             .clickLogin();
   }
+
+  public record Credentials(String username, String password) {}
 }

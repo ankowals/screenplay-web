@@ -5,7 +5,7 @@ import framework.web.screenplay.BrowseTheWeb;
 import java.util.List;
 import java.util.Map;
 import pom.automationpractice.models.ProductDetailsPage;
-import testdata.Product;
+import screenplay.automationpractice.testdata.Product;
 
 public class TheProduct {
 

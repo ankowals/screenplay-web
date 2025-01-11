@@ -19,11 +19,11 @@ public class ProductsPage extends BasePage {
 
   @Override
   public String getTitle() {
-    return this.headerView.getTitleElement().getText();
+    return this.headerView.titleElement().getText();
   }
 
   public CartPage clickCartButton() {
-    this.headerView.getCartButton().click();
+    this.headerView.cartButton().click();
     return new CartPage(this.driver);
   }
 
@@ -34,7 +34,7 @@ public class ProductsPage extends BasePage {
 
   static class ProductsView extends BaseView {
 
-    public ProductsView(WebDriver driver) {
+    ProductsView(WebDriver driver) {
       super(driver);
     }
 

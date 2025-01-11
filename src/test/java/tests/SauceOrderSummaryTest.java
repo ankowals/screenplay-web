@@ -1,43 +1,43 @@
 package tests;
 
-import base.SingleSessionTestBase;
+import base.TestBase;
+import io.github.bonigarcia.seljup.SingleSession;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 import pom.saucedemo.*;
 
-import java.util.List;
-
+/**
+ * In parallel execution each method requires separate driver instance and with @SingleSession
+ * enabled we have a single instance shared for all tests. To run test configure parallel execution
+ * so that top-level classes run in parallel but methods in same thread.
+ *
+ * <p>junit.jupiter.execution.parallel.enabled=true
+ * junit.jupiter.execution.parallel.mode.default=same_thread
+ * junit.jupiter.execution.parallel.mode.classes.default=concurrent
+ *
+ * <p>Uses (<a href="http://xunitpatterns.com/Chained%20Tests.html">test chaining</a>)
+ */
+@SingleSession
 @DisableIfTestFails
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class SauceDemoTest extends SingleSessionTestBase {
+class SauceOrderSummaryTest extends TestBase {
 
-  LoginPage loginPage;
   ProductsPage productsPage;
   CartPage cartPage;
-
-  @BeforeEach
-  void beforeEach() {
-    this.loginPage = new LoginPage(this.browser);
-  }
+  CheckoutOverviewPage checkoutOverviewPage;
 
   @Test
   @Order(1)
-  void shouldSeeMessageUponWrongPasswordUsage() {
-    this.loginPage.open().enterUsername("standard_user").enterPassword("terefere").clickLogin();
-
-    String actual = this.loginPage.getErrorText();
-
-    Assertions.assertThat(actual)
-        .contains("Username and password do not match any user in this service");
-  }
-
-  @Test
-  @Order(2)
   void shouldLoginSuccessfully() {
     this.productsPage =
-        this.loginPage.enterUsername("standard_user").enterPassword("secret_sauce").clickLogin();
+        new LoginPage(this.browser)
+            .open()
+            .enterUsername("standard_user")
+            .enterPassword("secret_sauce")
+            .clickLogin();
 
     String actual = this.productsPage.getTitle();
 
@@ -45,9 +45,11 @@ class SauceDemoTest extends SingleSessionTestBase {
   }
 
   @Test
-  @Order(3)
+  @Order(2)
   void shouldAddToCart() {
-    this.cartPage = this.productsPage.clickAddToCart("Sauce Labs Bike Light")
+    this.cartPage =
+        this.productsPage
+            .clickAddToCart("Sauce Labs Bike Light")
             .clickAddToCart("Sauce Labs Backpack")
             .clickCartButton();
 
@@ -56,33 +58,42 @@ class SauceDemoTest extends SingleSessionTestBase {
   }
 
   @Test
-  @Order(4)
+  @Order(3)
   void shouldValidateItemInCart() {
-    CartPage.CartItem bikeLightItem = this.cartPage.getCartItems()
-            .stream()
+    CartPage.CartItem bikeLightItem =
+        this.cartPage.getCartItems().stream()
             .filter(item -> item.name().contains("Bike Light"))
             .findFirst()
             .orElseThrow();
 
     Assertions.assertThat(bikeLightItem)
-            .returns("Sauce Labs Bike Light", CartPage.CartItem::name)
-            .returns(1, CartPage.CartItem::quantity)
-            .returns("$9.99", CartPage.CartItem::price);
+        .returns("Sauce Labs Bike Light", CartPage.CartItem::name)
+        .returns(1, CartPage.CartItem::quantity)
+        .returns("$9.99", CartPage.CartItem::price);
 
     Assertions.assertThat(bikeLightItem.description()).contains("1 AAA battery included");
   }
 
   @Test
-  @Order(5)
-  void shouldSeeOrderSummary() {
-    CheckoutOverviewPage checkoutOverviewPage = this.cartPage.clickCheckout()
+  @Order(4)
+  void shouldCheckOrderSummary() {
+    this.checkoutOverviewPage =
+        this.cartPage
+            .clickCheckout()
             .enterFirstName("terefere")
             .enterLastName("hopsiasia")
             .enterPostalCode("123")
             .clickContinue();
 
-    String actual = checkoutOverviewPage.getTitle();
+    CheckoutOverviewPage.SummaryInfo actual = this.checkoutOverviewPage.getSummaryInfo();
 
-    Assertions.assertThat(actual).isEqualTo("Checkout: Overview");
+    Assertions.assertThat(actual)
+        .returns("SauceCard #31337", CheckoutOverviewPage.SummaryInfo::paymentInfo)
+        .returns("Free Pony Express Delivery!", CheckoutOverviewPage.SummaryInfo::shippingInfo);
+
+    Assertions.assertThat(actual.priceTotal())
+        .returns("$39.98", CheckoutOverviewPage.PriceTotal::itemTotal)
+        .returns("$3.20", CheckoutOverviewPage.PriceTotal::tax)
+        .returns("$43.18", CheckoutOverviewPage.PriceTotal::total);
   }
 }

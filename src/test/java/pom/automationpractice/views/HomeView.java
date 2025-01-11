@@ -17,18 +17,18 @@ public class HomeView extends BaseView {
     super(driver);
   }
 
-  public Button getSignInButton() {
+  public Button signInButton() {
     WebElement element = this.wait.until(elementToBeClickable(By.xpath("//a[@class='login']")));
     return ButtonImpl.of(element);
   }
 
-  public Button getSearchButton() {
+  public Button searchButton() {
     WebElement element =
         this.wait.until(elementToBeClickable(By.xpath("//button[@name='submit_search']")));
     return ButtonImpl.of(element);
   }
 
-  public Input getSearchInput() {
+  public Input searchInput() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//input[@id='search_query_top']")));
     return InputImpl.of(element);

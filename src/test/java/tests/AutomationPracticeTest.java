@@ -5,7 +5,6 @@ import static framework.screenplay.helpers.Bdd.then;
 import static framework.screenplay.helpers.Bdd.when;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
-import static screenplay.Pages.AUTOMATION_PRACTICE_HOME;
 
 import base.TestBase;
 import framework.screenplay.helpers.See;
@@ -22,21 +21,23 @@ import org.junit.jupiter.params.provider.MethodSource;
 import pom.automationpractice.models.AccountPage;
 import pom.automationpractice.models.ProductDetailsPage;
 import pom.automationpractice.models.SearchResultsPage;
-import screenplay.Open;
 import screenplay.automationpractice.interactions.*;
+import screenplay.automationpractice.interactions.Open;
 import screenplay.automationpractice.questions.ThePage;
 import screenplay.automationpractice.questions.TheProduct;
-import testdata.AccountFormData;
-import testdata.Product;
+import screenplay.automationpractice.testdata.AccountFormData;
+import screenplay.automationpractice.testdata.Product;
 
 @Disabled("Page not available any more")
 class AutomationPracticeTest extends TestBase {
+
+  static final String AUTOMATION_PRACTICE_HOME = "http://automationpractice.com/index.php";
 
   @ParameterizedTest
   @MethodSource("accountFormDataProvider")
   void shouldCreateAccount(AccountFormData data) throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
-    when(this.user).attemptsTo(Open.browser(AUTOMATION_PRACTICE_HOME), Create.account(data));
+    when(this.user).attemptsTo(Open.browser(), Create.account(data));
     then(this.user)
         .should(See.that(ThePage.title(AccountPage.class), equalTo("My account - My Store")));
   }
@@ -44,8 +45,7 @@ class AutomationPracticeTest extends TestBase {
   @Test
   void shouldSearchForProduct() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
-    when(this.user)
-        .attemptsTo(Open.browser(AUTOMATION_PRACTICE_HOME), Find.product("Printed Chiffon Dress"));
+    when(this.user).attemptsTo(Open.browser(), Find.product("Printed Chiffon Dress"));
     then(this.user).should(See.that(TheProduct.details())).returns("$16.40", Product::getPrice);
   }
 

@@ -18,17 +18,17 @@ public class AutomationPracticeHomePage extends BasePage {
   }
 
   public AuthenticationPage clickSignInButton() {
-    this.view.getSignInButton().click();
+    this.view.signInButton().click();
     return new AuthenticationPage(this.driver);
   }
 
   public AutomationPracticeHomePage enterIntoSearchInput(String text) {
-    this.view.getSearchInput().insert(text);
+    this.view.searchInput().insert(text);
     return this;
   }
 
   public SearchResultsPage clickSearchButton() {
-    this.view.getSearchButton().click();
+    this.view.searchButton().click();
     return new SearchResultsPage(this.driver);
   }
 }

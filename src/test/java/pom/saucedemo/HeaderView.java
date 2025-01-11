@@ -14,13 +14,13 @@ public class HeaderView extends BaseView {
     super(driver);
   }
 
-  Element getTitleElement() {
+  Element titleElement() {
     return ElementImpl.of(
         this.wait.until(
             ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@data-test='title']"))));
   }
 
-  Button getCartButton() {
+  Button cartButton() {
     return ButtonImpl.of(
         this.wait.until(
             ExpectedConditions.elementToBeClickable(

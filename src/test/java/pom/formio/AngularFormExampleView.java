@@ -14,25 +14,25 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class AngularFormExampleView extends BaseView {
+class AngularFormExampleView extends BaseView {
 
-  public AngularFormExampleView(WebDriver driver) {
+  AngularFormExampleView(WebDriver driver) {
     super(driver);
   }
 
-  public Input getFirstNameInput() {
+  Input firstNameInput() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//*[@name='data[firstName]']")));
     return InputImpl.of(element);
   }
 
-  public Button getSubmitButton() {
+  Button submitButton() {
     WebElement element =
         this.wait.until(elementToBeClickable(By.xpath("//*[@name='data[submit]']")));
     return ButtonImpl.of(element);
   }
 
-  public Element getSubmitMessage() {
+  Element submitMessage() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//*[@ref='buttonMessage']")));
     return ElementImpl.of(element);

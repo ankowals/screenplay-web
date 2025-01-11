@@ -13,7 +13,7 @@ public class SearchResultsPage extends BasePage {
   }
 
   public ProductDetailsPage clickProductLinkButton(String product) {
-    this.view.getProductLink(product).click();
+    this.view.productLink(product).click();
     return new ProductDetailsPage(this.driver);
   }
 }

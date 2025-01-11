@@ -11,17 +11,21 @@ public class AngularFormExamplePage extends BasePage {
     super(driver);
   }
 
-  public AngularFormExamplePage enterFirstName(String firstName) {
-    this.view.getFirstNameInput().insert(firstName);
+  public AngularFormExamplePage open() {
+    this.open("https://formio.github.io/angular-demo");
+    return this;
+  }
 
+  public AngularFormExamplePage enterFirstName(String firstName) {
+    this.view.firstNameInput().insert(firstName);
     return this;
   }
 
   public void clickSubmit() {
-    this.view.getSubmitButton().click();
+    this.view.submitButton().click();
   }
 
-  public String getSubmitMessageText() {
-    return this.view.getSubmitMessage().getText();
+  public String getSubmitMessage() {
+    return this.view.submitMessage().getText();
   }
 }

@@ -15,16 +15,16 @@ public class ProductDetailsPage extends BasePage {
   }
 
   public String getPrice() {
-    return this.view.getPriceElement().getText();
+    return this.view.priceElement().getText();
   }
 
   public String getShortDescription() {
-    return this.view.getShortDescriptionElement().getText();
+    return this.view.shortDescriptionElement().getText();
   }
 
   public List<Map<String, String>> getDataSheet() {
     List<Map<String, String>> table = new ArrayList<>();
-    String source = "<table>" + this.view.getDataSheetTable().getWebElementSource() + "</table>";
+    String source = "<table>" + this.view.dataSheetTable().getWebElementSource() + "</table>";
 
     Jsoup.parseBodyFragment(source)
         .select("tr")

@@ -1,4 +1,4 @@
-package testdata;
+package screenplay.automationpractice.testdata;
 
 import java.util.function.Consumer;
 

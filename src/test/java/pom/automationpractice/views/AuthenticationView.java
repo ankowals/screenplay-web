@@ -18,61 +18,61 @@ public class AuthenticationView extends BaseView {
     super(driver);
   }
 
-  public Input getEmailInput() {
+  public Input emailInput() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//input[@id='email_create']")));
     return InputImpl.of(element);
   }
 
-  public Button getCreateAccountButton() {
+  public Button createAccountButton() {
     WebElement element =
         this.wait.until(elementToBeClickable(By.xpath("//button[@id='SubmitCreate']")));
     return ButtonImpl.of(element);
   }
 
-  public Input getFirstNameInput() {
+  public Input firstNameInput() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//input[@id='customer_firstname']")));
     return InputImpl.of(element);
   }
 
-  public Input getLastNameInput() {
+  public Input lastNameInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='customer_lastname']")));
   }
 
-  public Input getPasswordInput() {
+  public Input passwordInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='passwd']")));
   }
 
-  public Input getAddressInput() {
+  public Input addressInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='address1']")));
   }
 
-  public Input getCityInput() {
+  public Input cityInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='city']")));
   }
 
-  public Input getPostcodeInput() {
+  public Input postcodeInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='postcode']")));
   }
 
-  public Input getMobilePhoneInput() {
+  public Input mobilePhoneInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='phone_mobile']")));
   }
 
-  public Input getAliasInput() {
+  public Input aliasInput() {
     return InputImpl.of(this.driver.findElement(By.xpath("//input[@id='alias']")));
   }
 
-  public Dropdown getStateSelect() {
+  public Dropdown stateSelect() {
     return DropDownImpl.of(this.driver.findElement(By.xpath("//select[@id='id_state']")));
   }
 
-  public Dropdown getCountrySelect() {
+  public Dropdown countrySelect() {
     return DropDownImpl.of(this.driver.findElement(By.xpath("//select[@id='id_country']")));
   }
 
-  public Button getRegisterButton() {
+  public Button registerButton() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//button[@id='submitAccount']")));
     return ButtonImpl.of(element);

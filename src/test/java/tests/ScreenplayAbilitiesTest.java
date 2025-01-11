@@ -9,30 +9,32 @@ import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
 import framework.screenplay.helpers.Task;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
+import org.junitpioneer.jupiter.DisableIfTestFails;
 
+@DisableIfTestFails
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ScreenplayTest {
+class ScreenplayAbilitiesTest {
 
   Actor actor;
   SoftAssertions softAssertions;
 
-  @BeforeEach
-  void setup() {
-    Memory sharedMemory = new Memory();
+  @BeforeAll
+  void beforeAll() {
     this.softAssertions = new SoftAssertions();
 
     this.actor = new Actor();
     this.actor.can(
-        RememberThings.with(sharedMemory),
+        RememberThings.with(new Memory()),
         DoTheCleanUp.with(new OnTeardownActions()),
         AssertSoftly.with(this.softAssertions));
   }
 
   @AfterEach
   void teardown() {
-    System.out.println("After each hook starts");
     DoTheCleanUp.as(this.actor).runAll();
   }
 
@@ -42,7 +44,7 @@ class ScreenplayTest {
     UseAbility.of(this.actor)
         .to(DoTheCleanUp.class)
         .onTeardownActions()
-        .add(() -> System.out.println("Print it on test teardown"));
+        .add(() -> Forget.everything().performAs(this.actor));
 
     this.actor.attemptsTo(RememberThat.valueOf("otherActor").is(new Actor()));
     this.actor.should(See.that(Remembered.valueOf("otherActor", Actor.class))).isNotNull();
@@ -50,6 +52,15 @@ class ScreenplayTest {
 
   @Test
   @Order(2)
+  void shouldForgetEverything() {
+    Assertions.assertThatThrownBy(
+            () -> Remembered.valueOf("otherActor", Actor.class).answeredBy(this.actor))
+        .hasMessage(
+            "Actor does not recall [otherActor]. Call remember() first to define this object in Actor's memory.");
+  }
+
+  @Test
+  @Order(3)
   void shouldSoftAssert() throws Exception {
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
 
@@ -61,7 +72,7 @@ class ScreenplayTest {
   }
 
   @Test
-  @Order(3)
+  @Order(4)
   void shouldRunTasks() throws Exception {
     Actor taskActor = new Actor();
     Customer customer = new Customer("Tequila123");
@@ -86,7 +97,7 @@ class ScreenplayTest {
   }
 
   @Test
-  @Order(4)
+  @Order(5)
   void shouldRunTasksInteractions() throws Exception {
     Actor taskActor = new Actor();
 

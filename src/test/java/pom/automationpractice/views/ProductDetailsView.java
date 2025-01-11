@@ -18,52 +18,52 @@ public class ProductDetailsView extends BaseView {
     super(driver);
   }
 
-  public Element getPriceElement() {
+  public Element priceElement() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//*[@id='our_price_display']")));
     return ElementImpl.of(element);
   }
 
-  public Element getOldPriceElement() {
+  public Element oldPriceElement() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//*[@id='old_price_display']")));
     return ElementImpl.of(element);
   }
 
-  public Element getReductionPercentElement() {
+  public Element reductionPercentElement() {
     WebElement element =
         this.wait.until(
             visibilityOfElementLocated(By.xpath("//*[@id='reduction_percent_display']")));
     return ElementImpl.of(element);
   }
 
-  public Element getReferenceElement() {
+  public Element referenceElement() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//*[@id='product_reference']")));
     return ElementImpl.of(element);
   }
 
-  public Element getConditionElement() {
+  public Element conditionElement() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//*[@id='product_condition']")));
     return ElementImpl.of(element);
   }
 
-  public Element getShortDescriptionElement() {
+  public Element shortDescriptionElement() {
     WebElement element =
         this.wait.until(
             visibilityOfElementLocated(By.xpath("//*[@id='short_description_content']/p")));
     return ElementImpl.of(element);
   }
 
-  public List<Element> getAvailableColorElements() {
+  public List<Element> availableColorElements() {
     List<WebElement> elements =
         this.wait.until(
             visibilityOfAllElementsLocatedBy(By.xpath("//*[@id='color_to_pick_list']/li")));
     return elements.stream().map(ElementImpl::of).collect(Collectors.toList());
   }
 
-  public Element getDataSheetTable() {
+  public Element dataSheetTable() {
     WebElement element =
         this.wait.until(visibilityOfElementLocated(By.xpath("//table[@class='table-data-sheet']")));
     return ElementImpl.of(element);

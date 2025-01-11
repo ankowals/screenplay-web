@@ -22,7 +22,7 @@ class SauceDemoScreenplayTest extends TestBase {
 
   @Test
   void shouldSeeMessageUponWrongPasswordUsage() throws Exception {
-    this.user.attemptsTo(Login.with(new Credentials("standard_user", "terefere")));
+    this.user.attemptsTo(Login.with(new Login.Credentials("standard_user", "terefere")));
 
     this.user.should(
         See.that(
@@ -32,7 +32,7 @@ class SauceDemoScreenplayTest extends TestBase {
 
   @Test
   void shouldLoginSuccessfully() throws Exception {
-    this.user.attemptsTo(Login.with(new Credentials("standard_user", "secret_sauce")));
+    this.user.attemptsTo(Login.with(new Login.Credentials("standard_user", "secret_sauce")));
 
     this.user.should(See.that(ThePage.title())).isEqualTo("Products");
   }
@@ -40,7 +40,7 @@ class SauceDemoScreenplayTest extends TestBase {
   @Test
   void shouldSeeOrderSummary() throws Exception {
     this.user.attemptsTo(
-        Login.with(new Credentials("standard_user", "secret_sauce")),
+        Login.with(new Login.Credentials("standard_user", "secret_sauce")),
         Add.toCart("Sauce Labs Bike Light"),
         Add.toCart("Sauce Labs Backpack"),
         Checkout.as(

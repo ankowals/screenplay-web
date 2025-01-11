@@ -32,6 +32,9 @@ dependencies {
     testImplementation 'org.aspectj:aspectjweaver:1.9.22.1'
     runtimeOnly 'org.aspectj:aspectjrt:1.9.22.1'
 
+    testCompileOnly 'org.projectlombok:lombok:1.18.36'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+
     testImplementation 'org.assertj:assertj-core:3.27.0'
     testImplementation 'org.hamcrest:hamcrest:3.0'
 

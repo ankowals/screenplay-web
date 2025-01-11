@@ -11,15 +11,9 @@ import framework.screenplay.helpers.Task;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
-import org.junitpioneer.jupiter.DisableIfTestFails;
 
-/*
-  used to build test chaining (http://xunitpatterns.com/Chained%20Tests.html),
-  useful if multiple actors should be involved in a complex test
-*/
-@DisableIfTestFails
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ScreenplayDemoTest {
+class ScreenplayTest {
 
   Actor actor;
   SoftAssertions softAssertions;
@@ -56,7 +50,7 @@ class ScreenplayDemoTest {
 
   @Test
   @Order(2)
-  void shouldSoftAssertion() throws Exception {
+  void shouldSoftAssert() throws Exception {
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
 
     String actual = Remembered.valueOf("message", String.class).answeredBy(this.actor);

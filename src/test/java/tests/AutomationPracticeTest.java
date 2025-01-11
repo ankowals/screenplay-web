@@ -37,7 +37,7 @@ class AutomationPracticeTest extends TestBase {
   @MethodSource("accountFormDataProvider")
   void shouldCreateAccount(AccountFormData data) throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
-    when(this.user).attemptsTo(Open.browser(), Create.account(data));
+    when(this.user).attemptsTo(Open.automationPractice(), Create.account(data));
     then(this.user)
         .should(See.that(ThePage.title(AccountPage.class), equalTo("My account - My Store")));
   }
@@ -45,7 +45,7 @@ class AutomationPracticeTest extends TestBase {
   @Test
   void shouldSearchForProduct() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
-    when(this.user).attemptsTo(Open.browser(), Find.product("Printed Chiffon Dress"));
+    when(this.user).attemptsTo(Open.automationPractice(), Find.product("Printed Chiffon Dress"));
     then(this.user).should(See.that(TheProduct.details())).returns("$16.40", Product::getPrice);
   }
 

@@ -7,7 +7,7 @@ import pom.automationpractice.models.AutomationPracticeHomePage;
 
 public class Open {
 
-  public static Interaction browser() {
+  public static Interaction automationPractice() {
     return actor -> BrowseTheWeb.as(actor).onPage(AutomationPracticeHomePage.class).open();
   }
 

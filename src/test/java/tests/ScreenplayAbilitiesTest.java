@@ -7,7 +7,8 @@ import framework.screenplay.abilities.memory.*;
 import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
-import framework.screenplay.helpers.Task;
+import framework.screenplay.helpers.task.RunTask;
+import framework.screenplay.helpers.task.Task;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -34,7 +35,7 @@ class ScreenplayAbilitiesTest {
   }
 
   @AfterEach
-  void teardown() {
+  void afterEach() {
     DoTheCleanUp.as(this.actor).runAll();
   }
 
@@ -61,7 +62,7 @@ class ScreenplayAbilitiesTest {
 
   @Test
   @Order(3)
-  void shouldSoftAssert() throws Exception {
+  void shouldAssertSoftly() throws Exception {
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
 
     String actual = Remembered.valueOf("message", String.class).answeredBy(this.actor);
@@ -98,10 +99,10 @@ class ScreenplayAbilitiesTest {
 
   @Test
   @Order(5)
-  void shouldRunTasksInteractions() throws Exception {
+  void shouldRunTaskInteractions() throws Exception {
     Actor taskActor = new Actor();
 
-    Task.where(
+    RunTask.where(
             "Actor remembers things",
             actor1 -> {
               actor1.can(RememberThings.with(new Memory()));
@@ -109,7 +110,7 @@ class ScreenplayAbilitiesTest {
             })
         .performAs(taskActor);
 
-    Task.where(
+    RunTask.where(
             "Actor asserts things",
             actor1 ->
                 actor1.should(See.that(Remembered.valueOf("device", Device.class))).isNotNull())

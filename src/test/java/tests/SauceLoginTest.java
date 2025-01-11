@@ -7,8 +7,8 @@ import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
 import org.junit.jupiter.api.*;
-import screenplay.saucedemo.ErrorMessage;
 import screenplay.saucedemo.Login;
+import screenplay.saucedemo.TheErrorMessage;
 
 class SauceLoginTest extends TestBase {
 
@@ -27,7 +27,7 @@ class SauceLoginTest extends TestBase {
 
     this.user.should(
         See.that(
-            ErrorMessage.uponLogin(),
+            TheErrorMessage.uponLogin(),
             containsString("Username and password do not match any user in this service")));
   }
 }

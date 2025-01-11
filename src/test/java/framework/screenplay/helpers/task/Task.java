@@ -1,8 +1,5 @@
-package framework.screenplay.helpers;
+package framework.screenplay.helpers.task;
 
-import framework.screenplay.Interaction;
-import framework.screenplay.actor.Actor;
-import org.testcontainers.shaded.org.apache.commons.lang3.function.FailableConsumer;
 import org.testcontainers.shaded.org.apache.commons.lang3.function.FailableRunnable;
 
 // ToDo: add entry to report for each task
@@ -18,13 +15,5 @@ public class Task {
       throws Exception {
     System.out.println(description);
     runnable.run();
-  }
-
-  public static Interaction where(
-      String description, FailableConsumer<Actor, Exception> customizer) {
-    return actor -> {
-      System.out.println(description);
-      customizer.accept(actor);
-    };
   }
 }

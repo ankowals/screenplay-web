@@ -12,6 +12,7 @@ import pom.saucedemo.CartPage;
 import pom.saucedemo.CheckoutOverviewPage;
 import screenplay.saucedemo.*;
 
+/** test from SauceOrderSummaryTest re-written using screenplay */
 @SingleSession
 @DisableIfTestFails
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

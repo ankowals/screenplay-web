@@ -19,14 +19,12 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
   @BeforeAll
   void beforeAll() {
     this.actor = new Actor();
-    this.actor.can(RememberThings.with(new Memory()));
     this.task = new Task(EXTENT_REPORT_EXTENSION);
   }
 
   @Test
   @Order(1)
   void shouldRunTasks(TestInfo testInfo) throws Exception {
-    Actor taskActor = new Actor();
     Customer customer = new Customer("Tequila123");
 
     this.task.where(
@@ -34,17 +32,17 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
         "Actor remembers things",
         () -> {
           Device virualDevice = Devices.virtualDevice();
-          taskActor.can(RememberThings.with(new Memory()));
-          taskActor.attemptsTo(RememberThat.valueOf("device").is(virualDevice));
-          taskActor.attemptsTo(RememberThat.valueOf("customer").is(customer));
+          this.actor.can(RememberThings.with(new Memory()));
+          this.actor.attemptsTo(RememberThat.valueOf("device").is(virualDevice));
+          this.actor.attemptsTo(RememberThat.valueOf("customer").is(customer));
         });
 
     this.task.where(
         new TestIdentifier(testInfo),
         "Actor asserts things",
         () -> {
-          taskActor.should(See.that(TheValue.rememberedAs("device", Device.class))).isNotNull();
-          taskActor
+          this.actor.should(See.that(TheValue.rememberedAs("device", Device.class))).isNotNull();
+          this.actor
               .should(See.that(TheValue.rememberedAs("customer", Customer.class)))
               .returns("Tequila123", Customer::name);
         });

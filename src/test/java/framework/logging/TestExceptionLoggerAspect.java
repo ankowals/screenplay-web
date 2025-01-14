@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 @Aspect
 public class TestExceptionLoggerAspect {
 
-  private static final Logger logger = LoggerFactory.getLogger(TestExceptionLoggerAspect.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestExceptionLoggerAspect.class);
 
   @Pointcut(
       "execution(@org.junit.jupiter.api.Test * *(..)) "
@@ -28,7 +28,7 @@ public class TestExceptionLoggerAspect {
 
   @AfterThrowing(pointcut = "combined()", throwing = "throwable")
   public void logException(JoinPoint jp, Throwable throwable) {
-    logger.error(this.convertToString(this.getMethod(jp)) + " caused " + throwable);
+    LOGGER.error("{} caused {}", this.convertToString(this.getMethod(jp)), throwable.toString());
   }
 
   private Method getMethod(JoinPoint jp) {

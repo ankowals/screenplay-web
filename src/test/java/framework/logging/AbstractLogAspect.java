@@ -1,7 +1,5 @@
 package framework.logging;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Stream;
@@ -53,7 +51,7 @@ public abstract class AbstractLogAspect {
       else if (this.isArray(arg)) params.append(",").append(this.asString(List.of((Array) arg)));
       else if (this.isStream(arg)) params.append(",").append(this.asString((Stream<?>) arg));
       else if (this.isBaseType(arg)) params.append(",").append(arg);
-      else params.append(",").append(this.toStringWithAttributes(arg, SHORT_PREFIX_STYLE));
+      else params.append(",").append(this.toStringWithAttributes(arg));
     }
 
     return params.toString().replaceFirst(",", "");
@@ -62,24 +60,19 @@ public abstract class AbstractLogAspect {
   private String asString(Collection<?> collection) {
     StringBuilder b = new StringBuilder().append(System.lineSeparator());
     collection.forEach(
-        e ->
-            b.append(this.toStringWithAttributes(e, SHORT_PREFIX_STYLE))
-                .append(System.lineSeparator()));
+        e -> b.append(this.toStringWithAttributes(e)).append(System.lineSeparator()));
     return b.toString();
   }
 
   private String asString(Stream<?> stream) {
     StringBuilder b = new StringBuilder().append(System.lineSeparator());
-    stream.forEach(
-        e ->
-            b.append(this.toStringWithAttributes(e, SHORT_PREFIX_STYLE))
-                .append(System.lineSeparator()));
+    stream.forEach(e -> b.append(this.toStringWithAttributes(e)).append(System.lineSeparator()));
     return b.toString();
   }
 
-  private String toStringWithAttributes(Object object, ToStringStyle style) {
+  private String toStringWithAttributes(Object object) {
     ReflectionToStringBuilder builder =
-        new ReflectionToStringBuilder(object, style) {
+        new ReflectionToStringBuilder(object, ToStringStyle.SHORT_PREFIX_STYLE) {
           @Override
           protected boolean accept(Field field) {
             try {

@@ -11,6 +11,6 @@ class MyVideo {
     String css = "width: 100% !important; height: auto !important;";
     this.video =
         Collections.singletonList(
-            "<video style=\"" + css + "\" src=\"" + path + "\" controls></video>");
+            String.format("<video style='%s' src='%s' controls></video>", css, path));
   }
 }

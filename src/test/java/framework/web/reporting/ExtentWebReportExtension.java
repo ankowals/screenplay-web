@@ -49,7 +49,9 @@ public class ExtentWebReportExtension implements TestExecutionListener {
 
   @Override
   public void executionStarted(TestIdentifier testIdentifier) {
-    if (!testIdentifier.isTest()) return;
+    if (!testIdentifier.isTest()) {
+      return;
+    }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
     ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString());
@@ -61,7 +63,9 @@ public class ExtentWebReportExtension implements TestExecutionListener {
 
   @Override
   public void executionSkipped(TestIdentifier testIdentifier, String reason) {
-    if (!testIdentifier.isTest()) return;
+    if (!testIdentifier.isTest()) {
+      return;
+    }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
     ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString()).skip(reason);
@@ -74,24 +78,29 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   @Override
   public void executionFinished(
       TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-    if (!testIdentifier.isTest()) return;
+    if (!testIdentifier.isTest()) {
+      return;
+    }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
     TestExecutionResult.Status status = testExecutionResult.getStatus();
     String cause = "Cause unknown";
 
-    if (testExecutionResult.getThrowable().isPresent())
+    if (testExecutionResult.getThrowable().isPresent()) {
       cause = testExecutionResult.getThrowable().get().toString();
+    }
 
     switch (status) {
       case SUCCESSFUL:
         this.testStatusMap.get(fqdnTestName).pass(status.name());
         break;
       case ABORTED:
-        this.testStatusMap.get(fqdnTestName).log(Status.WARNING, status.name() + ", " + cause);
+        this.testStatusMap
+            .get(fqdnTestName)
+            .log(Status.WARNING, String.format("%s, %s", status.name(), cause));
         break;
       case FAILED:
-        this.testStatusMap.get(fqdnTestName).fail(status.name() + ", " + cause);
+        this.testStatusMap.get(fqdnTestName).fail(String.format("%s, %s", status.name(), cause));
     }
   }
 }

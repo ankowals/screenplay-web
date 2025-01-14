@@ -17,7 +17,7 @@ Support may vary between different drivers
  */
 public class ListenerRegistrar {
 
-  private static final Logger log = LoggerFactory.getLogger(ListenerRegistrar.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListenerRegistrar.class);
 
   private final DevTools devTools;
 
@@ -31,7 +31,7 @@ public class ListenerRegistrar {
         entry -> {
           Request request = entry.getRequest();
           if (entry.getType().equals(Optional.of(ResourceType.FETCH))) {
-            log.info(this.createLogMessage(request));
+            LOGGER.info(this.createLogMessage(request));
           }
         });
 
@@ -47,9 +47,9 @@ public class ListenerRegistrar {
           if (entry.getType().equals(ResourceType.FETCH)
               || entry.getType().equals(ResourceType.XHR)) {
             if (response.getStatus() >= 400) {
-              log.error(this.createLogMessage(response, requestId));
+              LOGGER.error(this.createLogMessage(response, requestId));
             } else {
-              log.info(this.createLogMessage(response, requestId));
+              LOGGER.info(this.createLogMessage(response, requestId));
             }
           }
         });
@@ -62,7 +62,7 @@ public class ListenerRegistrar {
         Log.entryAdded(),
         entry -> {
           if (entry.getLevel().equals(LogEntry.Level.ERROR)) {
-            log.error(
+            LOGGER.error(
                 "Console log entry: {}{}{}",
                 entry.getText(),
                 System.lineSeparator(),
@@ -79,7 +79,7 @@ public class ListenerRegistrar {
         .events()
         .addJavascriptExceptionListener(
             e -> {
-              log.error("Java script exception: {}", e.getMessage());
+              LOGGER.error("Java script exception: {}", e.getMessage());
               e.printStackTrace();
             });
 

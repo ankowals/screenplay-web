@@ -95,7 +95,7 @@ public class ExtentReportExtension implements TestWatcher, BeforeTestExecutionCa
   }
 
   private List<String> extractSegments(String source) {
-    Pattern p = Pattern.compile("\\[(.*?)\\]");
+    Pattern p = Pattern.compile("\\[(.*?)]");
     Matcher m = p.matcher(source);
 
     List<String> segments = new ArrayList<>();

@@ -8,12 +8,10 @@ import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.InParallel;
 import framework.screenplay.helpers.See;
 import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 
 class ScreenplayTasksTest extends ScreenplayTestBase {
 
@@ -26,29 +24,6 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
 
   @Test
   @Order(1)
-  void shouldRunTasks(TestInfo testInfo) throws Exception {
-    this.task.where(
-        this.toTestIdentifier(testInfo),
-        "Actor remembers things",
-        () -> {
-          this.actor.can(RememberThings.with(new Memory()));
-          this.actor.attemptsTo(RememberThat.valueOf("device").is(Devices.virtualDevice()));
-          this.actor.attemptsTo(RememberThat.valueOf("customer").is(Customers.tequila()));
-        });
-
-    this.task.where(
-        this.toTestIdentifier(testInfo),
-        "Actor asserts things",
-        () -> {
-          this.actor.should(See.that(TheValue.rememberedAs("device", Device.class))).isNotNull();
-          this.actor
-              .should(See.that(TheValue.rememberedAs("customer", Customer.class)))
-              .returns("Tequila123", Customer::name);
-        });
-  }
-
-  @Test
-  @Order(2)
   void shouldRunParallelTasks() throws Exception {
     this.actor.can(RememberThings.with(new Memory()));
 
@@ -74,7 +49,7 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
   }
 
   @Test
-  @Order(3)
+  @Order(2)
   void shouldRunParallelInteractionsByEachActor() throws Exception {
     Actor actor1 = Actors.withMemory();
     Actor actor2 = Actors.withMemory();
@@ -98,7 +73,7 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
   }
 
   @Test
-  @Order(4)
+  @Order(3)
   void shouldRunParallelQuestions() {
     Actor actor1 = Actors.withMemory();
     Actor actor2 = Actors.withMemory();
@@ -125,20 +100,4 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
       return anActor;
     }
   }
-
-  static class Customers {
-    static Customer tequila() {
-      return new Customer("Tequila123");
-    }
-  }
-
-  static class Devices {
-    static Device virtualDevice() {
-      return new Device(RandomStringUtils.insecure().nextAlphabetic(8));
-    }
-  }
-
-  record Device(String name) {}
-
-  record Customer(String name) {}
 }

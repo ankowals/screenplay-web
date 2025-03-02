@@ -69,15 +69,15 @@ class FqdnTestName {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (o == null || this.getClass() != o.getClass()) return false;
     FqdnTestName that = (FqdnTestName) o;
-    return Objects.equals(fqdnName, that.fqdnName)
-        && Objects.equals(className, that.className)
-        && Objects.equals(methodName, that.methodName);
+    return Objects.equals(this.fqdnName, that.fqdnName)
+        && Objects.equals(this.className, that.className)
+        && Objects.equals(this.methodName, that.methodName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fqdnName, className, methodName);
+    return Objects.hash(this.fqdnName, this.className, this.methodName);
   }
 }

@@ -42,13 +42,11 @@ public class MyWebDriverManagerFactory {
             .addArguments(
                 "disable-infobars",
                 "--no-sandbox",
-                "--disable-gpu",
                 "--start-maximized",
                 "--ignore-certificate-errors",
                 "--disable-popup-blocking",
                 "--disable-extensions",
                 "--disable-notifications",
-                "--disable-application-cache",
                 "--disable-dev-shm-usage",
                 // "--incognito",
                 "--no-default-browser-check",

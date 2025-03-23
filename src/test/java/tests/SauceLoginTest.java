@@ -1,15 +1,23 @@
 package tests;
 
-import static org.hamcrest.Matchers.containsString;
-
 import base.TestBase;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
+import framework.web.visual.VisualAssertions;
+import io.github.bonigarcia.seljup.SingleSession;
+import java.io.IOException;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import org.junitpioneer.jupiter.DisableIfTestFails;
+import org.openqa.selenium.By;
 import screenplay.saucedemo.Login;
 import screenplay.saucedemo.TheErrorMessage;
 
+@SingleSession
+@DisableIfTestFails
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SauceLoginTest extends TestBase {
 
   Actor user;
@@ -28,6 +36,18 @@ class SauceLoginTest extends TestBase {
     this.user.should(
         See.that(
             TheErrorMessage.uponLogin(),
-            containsString("Username and password do not match any user in this service")));
+            Matchers.containsString(
+                "Username and password do not match any user in this service")));
+  }
+
+  /*
+  Needs to be run in container only, otherwise expect size mismatch exception
+   */
+  @Test
+  @Order(2)
+  void shouldDisplayLoginForm(TestInfo testInfo) throws IOException {
+    VisualAssertions.assertThat(this.writeImage(this.takeScreenshot(), testInfo))
+        .excluding(this.browser.findElement(By.id("user-name")))
+        .isEqualTo("screenshots/login_page_viewport.png");
   }
 }

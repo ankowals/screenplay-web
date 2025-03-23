@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 class MediaAttacher {
 
@@ -25,13 +24,14 @@ class MediaAttacher {
     testStatusMap.forEach(
         (fqdnTestName, extentTest) -> {
           screenshots.stream()
-              .filter(this.fileNamePrefixEquals(fqdnTestName.getMethodName()))
-              .max(Comparator.comparingLong(File::lastModified))
-              .ifPresent(
-                  screenshot -> extentTest.addScreenCaptureFromPath("./" + screenshot.getName()));
+              .filter(this.startsWith(fqdnTestName.getMethodName()))
+              .forEach(
+                  screenshot ->
+                      extentTest.addScreenCaptureFromPath(
+                          "./" + screenshot.getName(), screenshot.getName()));
 
           videos.stream()
-              .filter(this.fileNamePrefixEquals(fqdnTestName.getMethodName()))
+              .filter(this.startsWith(fqdnTestName.getMethodName()))
               .max(Comparator.comparingLong(File::lastModified))
               .ifPresent(
                   video -> {
@@ -61,20 +61,20 @@ class MediaAttacher {
                 List<File> screenshots = this.mediaFinder.getScreenshots(dir);
 
                 screenshots.stream()
-                    .filter(this.fileNamePrefixEquals(fqdnTestName.getMethodName()))
-                    .max(Comparator.comparingLong(File::lastModified))
-                    .ifPresent(
+                    .filter(this.startsWith(fqdnTestName.getMethodName()))
+                    .forEach(
                         screenshot ->
                             extentTest.addScreenCaptureFromPath(
                                 "./"
                                     + maybeMediaDirForTestClass.get().getName()
                                     + "/"
-                                    + screenshot.getName()));
+                                    + screenshot.getName(),
+                                screenshot.getName()));
 
                 List<File> videos = this.mediaFinder.getVideos(dir);
 
                 videos.stream()
-                    .filter(this.fileNamePrefixEquals(fqdnTestName.getMethodName()))
+                    .filter(this.startsWith(fqdnTestName.getMethodName()))
                     .max(Comparator.comparingLong(File::lastModified))
                     .ifPresent(
                         video -> {
@@ -103,18 +103,10 @@ class MediaAttacher {
         });
   }
 
-  private Predicate<File> fileNamePrefixEquals(String expectedPrefix) {
-    return file -> {
-      Optional<String> maybeValidInfix =
-          Stream.of("_arg0_", "_driver_")
-              .filter(infix -> file.getName().contains(infix))
-              .findFirst();
+  private Predicate<File> startsWith(String expectedPrefix) {
+    List<String> patterns =
+        List.of(expectedPrefix + "_arg0_", expectedPrefix + "_driver_", expectedPrefix + "-");
 
-      return maybeValidInfix
-          .filter(
-              infix ->
-                  file.getName().substring(0, file.getName().indexOf(infix)).equals(expectedPrefix))
-          .isPresent();
-    };
+    return file -> patterns.stream().anyMatch(p -> file.getName().startsWith(p));
   }
 }

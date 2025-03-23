@@ -25,6 +25,10 @@ public abstract class BasePage {
     return ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BYTES);
   }
 
+  public byte[] takeScreenshot(WebElement webElement) {
+    return webElement.getScreenshotAs(OutputType.BYTES);
+  }
+
   protected Actions createAction() {
     return new Actions(this.driver);
   }

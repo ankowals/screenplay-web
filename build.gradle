@@ -36,6 +36,7 @@ dependencies {
     testImplementation("org.jsoup:jsoup:1.18.3")
     testImplementation("com.aventstack:extentreports:5.1.2")
     testImplementation("org.testcontainers:selenium:1.20.5")
+    testImplementation("com.github.romankh3:image-comparison:4.4.0")
 }
 
 test {
@@ -44,8 +45,10 @@ test {
 
     //set env variables
     environment "WDM_DOCKERENABLERECORDING", "true"
-    environment "WDM_CHROMEVERSION", "133.0"
+    //environment "WDM_CHROMEVERSION", "133.0"
     //environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
+    //environment "VISUAL_ASSERTIONS_ENABLED", "true"
+    //environment "VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS", "true"
 
     useJUnitPlatform()
 }

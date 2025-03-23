@@ -37,8 +37,7 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   /*
   add screenshots for tests in report
 
-  restrictions: * only newest screenshot per method is attached
-                * junit 5 nested test class not supported
+  restrictions: * junit 5 nested test class not supported
    */
   @Override
   public void testPlanExecutionFinished(TestPlan testPlan) {

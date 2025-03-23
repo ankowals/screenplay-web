@@ -68,5 +68,5 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
     UseAbility.of(this.actor)
         .to(AssertSoftly.class)
         .that(softly -> softly.assertThat(actual).isEqualTo("Do nothing"));
-  } // NOSONAR
+  } // NOSONAR: assert all is called by ability
 }

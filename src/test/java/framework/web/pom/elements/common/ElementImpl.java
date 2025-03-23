@@ -108,18 +108,37 @@ public class ElementImpl implements Element {
   }
 
   @Override
-  public String getWebElementSource() {
+  public String getSource() {
     return (String) this.js.executeScript("return arguments[0].innerHTML;", this.webElement);
   }
 
   @Override
   public void scrollTo() {
-    this.js.executeScript("arguments[0].scrollIntoView(true);", this.webElement);
+    this.js.executeScript("arguments[0].scrollIntoViewIfNeeded();", this.webElement);
   }
 
   @Override
   public boolean isInsideFrame() {
     return this.js.executeScript("return window.frameElement") != null;
+  }
+
+  @Override
+  public boolean isVisibleInViewport() {
+    return (Boolean)
+        this.js.executeScript(
+            """
+                    var elem = arguments[0],
+                    box = elem.getBoundingClientRect(),
+                    cx = box.left + box.width / 2,
+                    cy = box.top + box.height / 2,
+                    e = document.elementFromPoint(cx, cy);
+                    for (; e; e = e.parentElement) {
+                      if (e === elem)
+                        return true;
+                    }
+                    return false;
+                    """,
+            this.webElement);
   }
 
   public static ElementImpl of(WebElement element) {

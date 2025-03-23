@@ -15,7 +15,7 @@ public class Try<T> {
   private Try(FailableSupplier<T, Throwable> failableSupplier) {
     try {
       this.t = Failable.asSupplier(failableSupplier).get();
-    } catch (Throwable ignored) {
+    } catch (Throwable ignored) { // NOSONAR
     }
   }
 

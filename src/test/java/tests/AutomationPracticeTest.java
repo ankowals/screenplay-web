@@ -23,10 +23,10 @@ import pom.automationpractice.models.ProductDetailsPage;
 import pom.automationpractice.models.SearchResultsPage;
 import screenplay.automationpractice.interactions.*;
 import screenplay.automationpractice.interactions.Open;
+import screenplay.automationpractice.model.AccountFormData;
+import screenplay.automationpractice.model.Product;
 import screenplay.automationpractice.questions.ThePage;
 import screenplay.automationpractice.questions.TheProduct;
-import screenplay.automationpractice.testdata.AccountFormData;
-import screenplay.automationpractice.testdata.Product;
 
 @Disabled("Page not available any more")
 class AutomationPracticeTest extends TestBase {
@@ -84,7 +84,7 @@ class AutomationPracticeTest extends TestBase {
     AccountFormData data =
         new AccountFormData.Builder()
             .with(
-                $ -> {
+                $ -> { // NOSONAR
                   $.email = randomStringUtils.nextAlphabetic(11) + "@terefere.terefere";
                   $.firstName = randomStringUtils.nextAlphabetic(3, 8);
                   $.lastName = randomStringUtils.nextAlphabetic(3, 8);

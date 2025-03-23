@@ -24,7 +24,7 @@ public class ProductDetailsPage extends BasePage {
 
   public List<Map<String, String>> getDataSheet() {
     List<Map<String, String>> table = new ArrayList<>();
-    String source = "<table>" + this.view.dataSheetTable().getWebElementSource() + "</table>";
+    String source = "<table>" + this.view.dataSheetTable().getSource() + "</table>";
 
     Jsoup.parseBodyFragment(source)
         .select("tr")

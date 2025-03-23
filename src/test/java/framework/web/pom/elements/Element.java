@@ -5,9 +5,11 @@ import org.openqa.selenium.WebElement;
 public interface Element extends WebElement {
   WebElement getWrappedWebElement();
 
-  String getWebElementSource();
+  String getSource();
 
   void scrollTo();
 
   boolean isInsideFrame();
+
+  boolean isVisibleInViewport();
 }

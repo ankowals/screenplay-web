@@ -35,8 +35,8 @@ public class AngularExpectedConditions {
   public static ExpectedCondition<Boolean> spinnerToBeGone() {
     return webDriver -> {
       try {
-        TimeUnit.MILLISECONDS.sleep(250);
-      } catch (InterruptedException ignored) {
+        TimeUnit.MILLISECONDS.sleep(250); // NOSONAR
+      } catch (InterruptedException ignored) { // NOSONAR
       }
 
       Objects.requireNonNull(webDriver);

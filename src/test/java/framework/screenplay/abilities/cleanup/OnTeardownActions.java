@@ -23,7 +23,7 @@ public class OnTeardownActions {
         runnable -> {
           try {
             runnable.run();
-          } catch (Throwable ignored) {
+          } catch (Throwable ignored) { // NOSONAR
           }
         });
     this.runnables.clear();

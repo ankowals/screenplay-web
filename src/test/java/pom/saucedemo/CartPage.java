@@ -37,7 +37,7 @@ public class CartPage extends BasePage {
   }
 
   public List<CartItem> getCartItems() {
-    String source = this.view.cartListElement().getWebElementSource();
+    String source = this.view.cartListElement().getSource();
 
     List<CartItem> items = new ArrayList<>();
 

@@ -1,4 +1,4 @@
-package screenplay.formio;
+package screenplay.formio.interactions;
 
 import framework.screenplay.Interaction;
 import framework.web.screenplay.BrowseTheWeb;

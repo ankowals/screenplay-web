@@ -5,7 +5,7 @@ import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Consumer;
 import pom.automationpractice.models.AuthenticationPage;
 import pom.automationpractice.models.AutomationPracticeHomePage;
-import screenplay.automationpractice.testdata.AccountFormData;
+import screenplay.automationpractice.model.AccountFormData;
 
 public class Create {
 

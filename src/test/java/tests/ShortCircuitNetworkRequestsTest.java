@@ -11,10 +11,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
-import screenplay.formio.ExampleForm;
-import screenplay.formio.Fill;
-import screenplay.formio.Open;
-import screenplay.formio.Submit;
+import screenplay.formio.interactions.Fill;
+import screenplay.formio.interactions.Open;
+import screenplay.formio.interactions.Submit;
+import screenplay.formio.questions.TheExampleForm;
 
 class ShortCircuitNetworkRequestsTest extends TestBase {
 
@@ -27,7 +27,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
             Fill.exampleForm().firstName(RandomStringUtils.insecure().nextAlphabetic(8)),
             Submit.exampleForm());
     then(this.user)
-        .should(See.that(ExampleForm.submitMessage(), containsString("Submission Complete")));
+        .should(See.that(TheExampleForm.submitMessage(), containsString("Submission Complete")));
   }
 
   /*
@@ -48,7 +48,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
       then(this.user)
           .should(
               See.that(
-                  ExampleForm.submitMessage(),
+                  TheExampleForm.submitMessage(),
                   containsString(
                       "Please check the form and correct all errors before submitting")));
     }

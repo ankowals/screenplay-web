@@ -10,7 +10,11 @@ import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 import pom.saucedemo.CartPage;
 import pom.saucedemo.CheckoutOverviewPage;
-import screenplay.saucedemo.*;
+import screenplay.saucedemo.interactions.Add;
+import screenplay.saucedemo.interactions.Checkout;
+import screenplay.saucedemo.interactions.Login;
+import screenplay.saucedemo.questions.TheItem;
+import screenplay.saucedemo.questions.TheOrder;
 
 /** test from SauceOrderSummaryTest re-written using screenplay */
 @SingleSession

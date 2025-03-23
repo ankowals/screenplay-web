@@ -11,8 +11,8 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 import org.openqa.selenium.By;
-import screenplay.saucedemo.Login;
-import screenplay.saucedemo.TheErrorMessage;
+import screenplay.saucedemo.interactions.Login;
+import screenplay.saucedemo.questions.TheErrorMessage;
 
 @SingleSession
 @DisableIfTestFails

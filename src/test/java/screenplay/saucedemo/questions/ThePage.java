@@ -1,4 +1,4 @@
-package screenplay.saucedemo;
+package screenplay.saucedemo.questions;
 
 import framework.screenplay.Question;
 import framework.web.screenplay.BrowseTheWeb;

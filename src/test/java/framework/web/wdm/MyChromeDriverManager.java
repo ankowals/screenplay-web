@@ -15,9 +15,7 @@ public class MyChromeDriverManager extends ChromeDriverManager {
   @Override
   public synchronized DockerService getDockerService() {
     if (this.dockerService == null) {
-      this.dockerService =
-          new BitbucketDockerService(
-              this.config(), this.getHttpClient(), this.getResolutionCache());
+      this.dockerService = new BitbucketDockerService(this.config(), this.getResolutionCache());
     }
 
     return this.dockerService;

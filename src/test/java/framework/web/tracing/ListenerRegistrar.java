@@ -5,10 +5,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v131.log.Log;
-import org.openqa.selenium.devtools.v131.log.model.LogEntry;
-import org.openqa.selenium.devtools.v131.network.Network;
-import org.openqa.selenium.devtools.v131.network.model.*;
+import org.openqa.selenium.devtools.v134.log.Log;
+import org.openqa.selenium.devtools.v134.log.model.LogEntry;
+import org.openqa.selenium.devtools.v134.network.Network;
+import org.openqa.selenium.devtools.v134.network.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,14 +3,18 @@ package tests;
 import base.TestBase;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
+import framework.web.accessibility.AccessibilityAssertions;
+import framework.web.reporting.ExtentWebReportExtension;
 import framework.web.screenplay.BrowseTheWeb;
 import framework.web.visual.VisualAssertions;
 import io.github.bonigarcia.seljup.SingleSession;
 import java.io.IOException;
+import java.text.ParseException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 import org.openqa.selenium.By;
+import pom.saucedemo.LoginPage;
 import screenplay.saucedemo.interactions.Login;
 import screenplay.saucedemo.questions.TheErrorMessage;
 
@@ -49,5 +53,14 @@ class SauceLoginTest extends TestBase {
     VisualAssertions.assertThat(this.writeImage(this.takeScreenshot(), testInfo))
         .excluding(this.browser.findElement(By.id("user-name")))
         .isEqualTo("screenshots/login_page_viewport.png");
+  }
+
+  @Test
+  @Order(3)
+  void shouldDisplayAccessibleLoginForm(TestInfo testInfo) throws IOException, ParseException {
+    new LoginPage(this.browser).open();
+    AccessibilityAssertions.assertThat(this.browser)
+        .reportAs(ExtentWebReportExtension.REPORT_FILE.getParentFile(), testInfo)
+        .isViolationFree();
   }
 }

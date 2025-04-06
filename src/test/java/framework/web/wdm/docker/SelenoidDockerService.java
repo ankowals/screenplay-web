@@ -3,7 +3,6 @@ package framework.web.wdm.docker;
 import io.github.bonigarcia.wdm.cache.ResolutionCache;
 import io.github.bonigarcia.wdm.config.Config;
 import io.github.bonigarcia.wdm.docker.DockerContainer;
-import io.github.bonigarcia.wdm.online.HttpClient;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,7 +15,7 @@ Customization below allows to use Selenoid images with devTools/BiDi and LocalFi
 Caddy is used as a proxy container which can modify paths when required
 */
 
-@Deprecated
+@Deprecated(forRemoval = true)
 public class SelenoidDockerService extends BitbucketDockerService {
 
   private static final Map<String, DockerContainer> PROXY_CONTAINER_CACHE =
@@ -24,9 +23,8 @@ public class SelenoidDockerService extends BitbucketDockerService {
 
   private final Config config;
 
-  public SelenoidDockerService(
-      Config config, HttpClient httpClient, ResolutionCache resolutionCache) {
-    super(config, httpClient, resolutionCache);
+  public SelenoidDockerService(Config config, ResolutionCache resolutionCache) {
+    super(config, resolutionCache);
     this.config = config;
   }
 
@@ -46,9 +44,9 @@ public class SelenoidDockerService extends BitbucketDockerService {
 
   @Override
   public DockerContainer startBrowserContainer(
-      String dockerImage, String cacheKey, String browserVersion, boolean androidEnabled) {
+      String dockerImage, String cacheKey, String browserVersion) {
     DockerContainer browserContainer =
-        super.startBrowserContainer(dockerImage, cacheKey, browserVersion, androidEnabled);
+        super.startBrowserContainer(dockerImage, cacheKey, browserVersion);
 
     try {
       DockerContainer proxyContainer = this.startProxyContainer(browserContainer);

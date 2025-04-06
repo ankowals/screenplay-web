@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+// can be used to return web elements of a page or conditions
 public abstract class BaseView {
 
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);

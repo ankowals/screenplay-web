@@ -6,7 +6,6 @@ import io.github.bonigarcia.wdm.cache.ResolutionCache;
 import io.github.bonigarcia.wdm.config.Config;
 import io.github.bonigarcia.wdm.docker.DockerContainer;
 import io.github.bonigarcia.wdm.docker.DockerService;
-import io.github.bonigarcia.wdm.online.HttpClient;
 import java.util.*;
 
 /*
@@ -23,9 +22,8 @@ For details see https://community.atlassian.com/t5/Bitbucket-articles/Changes-to
 */
 public class BitbucketDockerService extends DockerService {
 
-  public BitbucketDockerService(
-      Config config, HttpClient httpClient, ResolutionCache resolutionCache) {
-    super(config, httpClient, resolutionCache);
+  public BitbucketDockerService(Config config, ResolutionCache resolutionCache) {
+    super(config, resolutionCache);
   }
 
   @Override
@@ -40,6 +38,7 @@ public class BitbucketDockerService extends DockerService {
 
   protected DockerContainer.DockerBuilder toBuilder(DockerContainer dockerContainer) {
     return DockerContainer.dockerBuilder(dockerContainer.getImageId())
+        .containerName(dockerContainer.getContainerName().orElse(null))
         .binds(this.addBitbucketCloneDir(this.getBinds(dockerContainer)))
         .cmd(dockerContainer.getCmd().orElse(null))
         .envs(dockerContainer.getEnvs().orElse(null))

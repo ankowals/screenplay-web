@@ -1,16 +1,13 @@
 package framework.web.pom.page;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 
-public abstract class BasePage {
-
-  protected final WebDriver driver;
-  protected final JavascriptExecutor js;
+// can be used to represent particular page which can be open in the browser
+// can be composed of multiple page elements and views
+public abstract class BasePage extends BasePageElement {
 
   public BasePage(WebDriver driver) {
-    this.driver = driver;
-    this.js = (JavascriptExecutor) this.driver;
+    super(driver);
   }
 
   public String getTitle() {
@@ -23,14 +20,6 @@ public abstract class BasePage {
 
   public byte[] takeScreenshot() {
     return ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BYTES);
-  }
-
-  public byte[] takeScreenshot(WebElement webElement) {
-    return webElement.getScreenshotAs(OutputType.BYTES);
-  }
-
-  protected Actions createAction() {
-    return new Actions(this.driver);
   }
 
   protected WebDriver.Navigation navigate() {

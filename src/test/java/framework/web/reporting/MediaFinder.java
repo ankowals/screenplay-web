@@ -39,4 +39,19 @@ class MediaFinder {
         .filter(File::isDirectory)
         .toList();
   }
+
+  List<File> getTextFiles(File dir) {
+    return Arrays.stream(Objects.requireNonNull(dir.listFiles()))
+        .filter(
+            file ->
+                file.getName().endsWith(".txt")
+                    || file.getName().endsWith(".html")
+                    || file.getName().endsWith(".json")
+                    || file.getName().endsWith(".yaml"))
+        .toList();
+  }
+
+  List<File> getTextFiles() {
+    return this.getTextFiles(this.dir);
+  }
 }

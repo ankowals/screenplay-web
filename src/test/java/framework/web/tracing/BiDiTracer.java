@@ -1,8 +1,10 @@
 package framework.web.tracing;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.log.LogLevel;
 import org.openqa.selenium.bidi.module.LogInspector;
@@ -32,7 +34,13 @@ public class BiDiTracer {
   private void networkRequests() {
     try (Network network = new Network(this.webDriver)) {
       network.addIntercept(new AddInterceptParameters(InterceptPhase.BEFORE_REQUEST_SENT));
-      network.onBeforeRequestSent(event -> LOGGER.info(this.createLogMessage(event.getRequest())));
+      network.onBeforeRequestSent(
+          beforeRequestSent -> {
+            String requestId = beforeRequestSent.getRequest().getRequestId();
+            LOGGER.info(this.createLogMessage(beforeRequestSent.getRequest()));
+            network.continueRequest(new ContinueRequestParameters(requestId));
+          });
+
       network.onResponseCompleted(
           responseDetails -> LOGGER.info(this.createLogMessage(responseDetails.getResponseData())));
     }
@@ -71,6 +79,11 @@ public class BiDiTracer {
   }
 
   private String createLogMessage(ResponseData responseData) {
+    byte[] bytesReceived =
+        Base64.encodeBase64(BigInteger.valueOf(responseData.getBytesReceived()).toByteArray());
+    System.out.println(
+        "TEREFERE " + new String(java.util.Base64.getDecoder().decode(bytesReceived)));
+
     return String.format(
         "Response => url: %s, status code: %s%s%s%s%s%s",
         responseData.getUrl(),

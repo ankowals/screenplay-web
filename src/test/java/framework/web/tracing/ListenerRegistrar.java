@@ -1,5 +1,7 @@
 package framework.web.tracing;
 
+import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,6 +89,20 @@ public class ListenerRegistrar {
   }
 
   private String createLogMessage(Request request) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    Optional<List<PostDataEntry>> maybePostDataEntries = request.getPostDataEntries();
+
+    maybePostDataEntries.ifPresent(
+        postDataEntries ->
+            postDataEntries.forEach(
+                postDataEntry -> {
+                  Optional<String> maybeData = postDataEntry.getBytes();
+                  maybeData.ifPresent(stringBuilder::append);
+                }));
+
+    String postData = new String(Base64.getDecoder().decode(stringBuilder.toString()));
+
     return String.format(
         "Request => method: %s, url: %s%s%s%s%s%s",
         request.getMethod(),
@@ -95,7 +111,8 @@ public class ListenerRegistrar {
         this.convertToString(request.getHeaders()),
         System.lineSeparator(),
         System.lineSeparator(),
-        request.getPostData().orElse(""));
+        // request.getPostData().orElse("")
+        postData);
   }
 
   private String createLogMessage(Response response, RequestId requestId) {
@@ -119,7 +136,7 @@ public class ListenerRegistrar {
   private String getBody(RequestId requestId) {
     try {
       return this.devTools.send(Network.getResponseBody(requestId)).getBody();
-    } catch (WebDriverException ignored) {
+    } catch (WebDriverException ignored) { // NOSONAR
       return "";
     }
   }

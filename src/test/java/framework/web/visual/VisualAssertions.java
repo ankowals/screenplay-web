@@ -27,6 +27,7 @@ Otherwise, expect size mismatch errors.
 */
 
 // or use https://github.com/Visual-Regression-Tracker/Visual-Regression-Tracker
+// or use https://github.com/ngoanh2n/image-comparator
 public class VisualAssertions {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(VisualAssertions.class);

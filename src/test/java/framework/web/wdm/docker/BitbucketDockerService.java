@@ -50,14 +50,14 @@ public class BitbucketDockerService extends DockerService {
         .mounts(null);
   }
 
-  protected List<String> getBinds(DockerContainer dockerContainer) {
+  private List<String> getBinds(DockerContainer dockerContainer) {
     return dockerContainer
         .getBinds()
         .map(binds -> binds.stream().map(Bind::toString).toList())
         .orElse(null);
   }
 
-  protected List<String> addBitbucketCloneDir(List<String> originalBinds) {
+  private List<String> addBitbucketCloneDir(List<String> originalBinds) {
     List<String> binds = new ArrayList<>(originalBinds);
 
     String bitBucketCloneDir = System.getenv("BITBUCKET_CLONE_DIR");
@@ -69,7 +69,7 @@ public class BitbucketDockerService extends DockerService {
     return binds;
   }
 
-  protected List<String> addBitbucketHost(List<String> originalHosts) {
+  private List<String> addBitbucketHost(List<String> originalHosts) {
     List<String> hosts = new ArrayList<>(originalHosts);
 
     String bitBucketHost = System.getenv("BITBUCKET_DOCKER_HOST_INTERNAL");

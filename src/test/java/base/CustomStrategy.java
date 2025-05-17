@@ -15,7 +15,6 @@ import org.junit.platform.engine.support.hierarchical.ParallelExecutionConfigura
  junit.jupiter.execution.parallel.enabled = true
  junit.jupiter.execution.parallel.mode.default = concurrent
  junit.jupiter.execution.parallel.mode.classes.default = concurrent
- junit.jupiter.execution.parallel.config.strategy = fixed
  junit.jupiter.execution.parallel.config.strategy = custom
  junit.jupiter.execution.parallel.config.custom.class = base.CustomStrategy
 */
@@ -37,12 +36,12 @@ public class CustomStrategy
 
   @Override
   public int getMaxPoolSize() {
-    return NUMBER_OF_THREADS;
+    return this.getParallelism();
   }
 
   @Override
   public int getCorePoolSize() {
-    return NUMBER_OF_THREADS;
+    return this.getMaxPoolSize();
   }
 
   @Override

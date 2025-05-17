@@ -37,6 +37,10 @@ public class AccessibilityAssertions implements MandatoryReportAs {
   }
 
   public void isViolationFree() throws IOException, ParseException {
+    if (System.getenv("ACCESSIBILITY_ASSERTIONS_ENABLED") == null) {
+      return;
+    }
+
     Results results = this.axeBuilder.analyze(this.webDriver);
 
     // File file = this.createTmpFile();

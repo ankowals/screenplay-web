@@ -36,8 +36,11 @@ public class MyWebDriverManagerFactory {
                     "profile.managed_default_content_settings.geolocation",
                     2, // switch off location services
                     "autofill.profile_enabled",
-                    false // disable autofill banner
-                    ))
+                    false, // disable autofill banner,
+                    "profile.password_manager_enabled",
+                    false,
+                    "profile.password_manager_leak_detection",
+                    false))
             .setExperimentalOption("excludeSwitches", new String[] {"enable-automation"})
             .addArguments(
                 "disable-infobars",
@@ -50,9 +53,10 @@ public class MyWebDriverManagerFactory {
                 "--disable-dev-shm-usage",
                 // "--incognito",
                 "--no-default-browser-check",
-                "--disable-search-engine-choice-screen");
+                "--disable-search-engine-choice-screen",
+                "password-store=basic");
 
-    chromiumOptions.setCapability("webSocketUrl", true);
+    chromiumOptions.enableBiDi();
 
     return chromiumOptions;
   }

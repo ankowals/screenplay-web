@@ -40,12 +40,17 @@ test {
     targetCompatibility = 1.22
 
     //set env variables
-    environment "WDM_DOCKERENABLERECORDING", "true"
-    //environment "WDM_CHROMEVERSION", "133.0"
-    //environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "true"
-    //environment "VISUAL_ASSERTIONS_ENABLED", "true"
-    //environment "VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS", "true"
+    environment "WDM_DOCKERENABLERECORDING", "false"
+    environment "WDM_CHROMEVERSION", "136.0"
+
+    environment "ENABLE_BROWSER_IN_DOCKER_CONTAINER", "false"
+
     environment "ACCESSIBILITY_ASSERTIONS_ENABLED", "true"
+    environment "ENABLE_BROWSER_IN_HEADLESS_MODE", "false"
+
+    //requires to run tests in container
+    environment "VISUAL_ASSERTIONS_ENABLED", "false "
+    environment "VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS", "false"
 
     useJUnitPlatform()
 
@@ -53,6 +58,9 @@ test {
         def weaver = configurations.testRuntimeClasspath.find { it.name.contains("aspectjweaver") }
         jvmArgs += "-javaagent:$weaver"
         jvmArgs += "--add-opens=java.base/java.util=ALL-UNNAMED"
+        jvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
+        jvmArgs += "--add-opens=java.base/java.time=ALL-UNNAMED"
+        jvmArgs += "--add-opens=java.base/java.time.format=ALL-UNNAMED"
     }
 }
 

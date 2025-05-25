@@ -12,10 +12,10 @@ public class MyWebDriverManagerFactory {
     myChromeDriverManager.capabilities(MyWebDriverManagerFactory.chromeOptions());
     myChromeDriverManager.disableTracing();
 
-    if (System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER") != null) {
+    if (Boolean.parseBoolean(System.getenv("ENABLE_BROWSER_IN_DOCKER_CONTAINER"))) {
       myChromeDriverManager.browserInDocker();
       myChromeDriverManager.dockerCustomImage(
-          String.format("selenium/standalone-chrome:%s", System.getenv("WDM_CHROMEVERSION")));
+          String.format("selenium/standalone-chromium:%s", System.getenv("WDM_CHROMEVERSION")));
       myChromeDriverManager.dockerScreenResolution("1920x1080x24");
     }
 
@@ -55,6 +55,10 @@ public class MyWebDriverManagerFactory {
                 "--no-default-browser-check",
                 "--disable-search-engine-choice-screen",
                 "password-store=basic");
+
+    if (Boolean.parseBoolean(System.getenv("ENABLE_BROWSER_IN_HEADLESS_MODE"))) {
+      chromiumOptions.addArguments("--headless=new");
+    }
 
     chromiumOptions.enableBiDi();
 

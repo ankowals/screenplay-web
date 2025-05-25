@@ -37,7 +37,7 @@ public class AccessibilityAssertions implements MandatoryReportAs {
   }
 
   public void isViolationFree() throws IOException, ParseException {
-    if (System.getenv("ACCESSIBILITY_ASSERTIONS_ENABLED") == null) {
+    if (!Boolean.parseBoolean(System.getenv("ACCESSIBILITY_ASSERTIONS_ENABLED"))) {
       return;
     }
 

@@ -72,7 +72,7 @@ public class VisualAssertions {
   }
 
   public void isEqualTo(String resource) throws IOException {
-    if (System.getenv("VISUAL_ASSERTIONS_ENABLED") == null) {
+    if (!Boolean.parseBoolean(System.getenv("VISUAL_ASSERTIONS_ENABLED"))) {
       return;
     }
 
@@ -98,7 +98,7 @@ public class VisualAssertions {
     ImageComparisonResult imageComparisonResult =
         this.doCreateImageComparison(expectedImage, actualImage, diffFile).compareImages();
 
-    if (System.getenv("VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS") != null) {
+    if (Boolean.parseBoolean(System.getenv("VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS"))) {
       Path resourcePath = Paths.get(new File("src/test/resources").getAbsolutePath(), resource);
 
       Files.copy(this.actualFile.toPath(), resourcePath, StandardCopyOption.REPLACE_EXISTING);

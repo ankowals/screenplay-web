@@ -9,8 +9,8 @@
     <aspects>
         <!-- weave in just this aspects -->
         <concrete-aspect name="framework.logging.ConcreteLogAspect" extends="framework.logging.AbstractLogAspect">
-            <pointcut name="scope" expression="(execution(* pom..*(..)) AND !execution(* pom.framework..*(..)))
-            || (execution(* screenplay..*(..)) AND !execution(* screenplay.framework..*(..)))"/>
+            <pointcut name="scope" expression="execution(* framework.web.pom.page.BasePage+.*(..))
+                || execution(public framework.screenplay.* screenplay..*(..))"/>
         </concrete-aspect>
         <aspect name="framework.logging.TestExceptionLoggerAspect"/>
     </aspects>

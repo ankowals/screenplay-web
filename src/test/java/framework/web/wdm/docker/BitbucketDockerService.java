@@ -26,6 +26,14 @@ public class BitbucketDockerService extends DockerService {
     super(config, resolutionCache);
   }
 
+  // allow to use multiple instances of wdm
+  @Override
+  public void createDockerNetworkIfNotExists(String networkName) {
+    synchronized (BitbucketDockerService.class) {
+      super.createDockerNetworkIfNotExists(networkName);
+    }
+  }
+
   @Override
   public synchronized String startContainer(DockerContainer dockerContainer)
       throws DockerException {

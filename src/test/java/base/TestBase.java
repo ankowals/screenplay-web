@@ -101,45 +101,4 @@ public class TestBase {
       // do nothing
     }
   }
-
-  // to use with test containers
-  /*
-  @BeforeEach
-  void beforeEach(TestInfo testInfo) {
-      this.browser = createRemoteWebDriver(testInfo);
-
-      if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
-          ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
-          new CapabilitiesMutator().mutate((RemoteWebDriver) this.browser);
-          this.browser = new Augmenter().augment(this.browser);
-      }
-  }
-
-  private RemoteWebDriver createRemoteWebDriver(TestInfo testInfo) {
-      BrowserWebDriverContainer<?> container = new BrowserWebDriverContainer<>()
-              .withCapabilities(new ChromeOptions())
-              .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_ALL,
-                      REPORT_FILE.getParentFile().getAbsoluteFile(),
-                      VncRecordingContainer.VncRecordingFormat.MP4);
-
-      container.start();
-
-      container.afterTest(
-              new TestDescription() {
-                  @Override
-                  public String getTestId() {
-                      return getFilesystemFriendlyName();
-                  }
-
-                  @Override
-                  public String getFilesystemFriendlyName() {
-                      return testInfo.getTestMethod().orElse(null).getName();
-                  }
-              },
-              Optional.empty()
-      );
-
-      return container.getWebDriver();
-  }
-   */
 }

@@ -1,10 +1,6 @@
 package framework.web.tracing;
 
-import java.math.BigInteger;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.log.LogLevel;
 import org.openqa.selenium.bidi.module.LogInspector;
@@ -13,6 +9,8 @@ import org.openqa.selenium.bidi.network.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// does not work with chrome
+@Deprecated(forRemoval = false)
 public class BiDiTracer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BiDiTracer.class);
@@ -28,9 +26,6 @@ public class BiDiTracer {
     this.networkRequests();
   }
 
-  // request data is missing at the moment
-  // how to filter request triggered by different api calls? like fetch only??
-  // response content contains only response size at the moment
   private void networkRequests() {
     try (Network network = new Network(this.webDriver)) {
       network.addIntercept(new AddInterceptParameters(InterceptPhase.BEFORE_REQUEST_SENT));
@@ -69,42 +64,11 @@ public class BiDiTracer {
 
   private String createLogMessage(RequestData requestData) {
     return String.format(
-        "Request => method: %s, url: %s%s%s%s%s",
-        requestData.getMethod(),
-        requestData.getUrl(),
-        System.lineSeparator(),
-        this.convertToString(requestData.getHeaders()),
-        System.lineSeparator(),
-        System.lineSeparator());
+        "Request => method: %s, url: %s", requestData.getMethod(), requestData.getUrl());
   }
 
   private String createLogMessage(ResponseData responseData) {
-    byte[] bytesReceived =
-        Base64.encodeBase64(BigInteger.valueOf(responseData.getBytesReceived()).toByteArray());
-    System.out.println(
-        "TEREFERE " + new String(java.util.Base64.getDecoder().decode(bytesReceived)));
-
     return String.format(
-        "Response => url: %s, status code: %s%s%s%s%s%s",
-        responseData.getUrl(),
-        responseData.getStatus(),
-        System.lineSeparator(),
-        this.convertToString(responseData.getHeaders()),
-        System.lineSeparator(),
-        System.lineSeparator(),
-        responseData.getContent().orElse(0L));
-  }
-
-  private String convertToString(List<Header> headers) {
-    return headers.stream()
-        .map(Header::toMap)
-        // .map(Map::entrySet)
-        .map(
-            map ->
-                map.keySet().stream()
-                    .map(key -> key + "=" + map.get(key))
-                    .collect(Collectors.joining(", ", "{", "}")))
-        // .map(map -> String.format("%s: %s", e.getKey(), e.getValue()))
-        .collect(Collectors.joining(System.lineSeparator()));
+        "Response => url: %s, status code: %s", responseData.getUrl(), responseData.getStatus());
   }
 }

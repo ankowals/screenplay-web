@@ -1,16 +1,25 @@
 package framework.web.tracing;
 
+import framework.web.reporting.ExtentWebReportExtension;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v134.log.Log;
 import org.openqa.selenium.devtools.v134.log.model.LogEntry;
 import org.openqa.selenium.devtools.v134.network.Network;
 import org.openqa.selenium.devtools.v134.network.model.*;
+import org.openqa.selenium.devtools.v134.page.Page;
+import org.openqa.selenium.devtools.v134.page.model.ScreencastFrameMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +34,30 @@ public class ListenerRegistrar {
 
   ListenerRegistrar(DevTools devTools) {
     this.devTools = devTools;
+  }
+
+  public ListenerRegistrar addPageScreencastListener() {
+    this.devTools.addListener(
+        Page.screencastFrame(),
+        screencastFrame -> {
+          int sessionId = screencastFrame.getSessionId();
+          ScreencastFrameMetadata screencastFrameMetadata = screencastFrame.getMetadata();
+          String data = screencastFrame.getData();
+          byte[] bytes = Base64.getDecoder().decode(data);
+
+          try {
+            BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+            String name =
+                String.format(
+                    "%s_%s.png", sessionId, screencastFrameMetadata.getTimestamp().orElseThrow());
+            File file = Path.of(ExtentWebReportExtension.REPORT_FILE.getParent(), name).toFile();
+            ImageIO.write(img, "png", file);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        });
+
+    return this;
   }
 
   public ListenerRegistrar addNetworkRequestListener() {

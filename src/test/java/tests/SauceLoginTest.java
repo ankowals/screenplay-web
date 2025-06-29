@@ -32,6 +32,9 @@ class SauceLoginTest extends TestBase {
     this.user.can(BrowseTheWeb.with(this.browser));
   }
 
+  @AfterEach
+  void afterEach() {}
+
   @Test
   @Order(1)
   void shouldSeeMessageWhenPasswordIsWrong() throws Exception {
@@ -59,7 +62,7 @@ class SauceLoginTest extends TestBase {
   @Order(3)
   void shouldDisplayAccessibleLoginForm(TestInfo testInfo) throws IOException, ParseException {
     new LoginPage(this.browser).open();
-    AccessibilityAssertions.assertThat(this.browser)
+    AccessibilityAssertions.assertThatPage(this.browser)
         .reportAs(ExtentWebReportExtension.REPORT_FILE.getParentFile(), testInfo)
         .isViolationFree();
   }

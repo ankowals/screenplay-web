@@ -4,6 +4,7 @@ import framework.screenplay.actor.Actor;
 import framework.web.reporting.ExtentWebReportExtension;
 import framework.web.tracing.DevToolsTracer;
 import framework.web.wdm.MyWebDriverManagerFactory;
+import framework.web.wdm.RecordingEnabler;
 import framework.web.wdm.mutators.CapabilitiesMutator;
 import io.github.bonigarcia.seljup.*;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -43,10 +43,24 @@ public class TestBase {
 
   @BeforeAll
   static void testBaseBeforeAll() {
-    seleniumJupiter.getConfig().setManager(MyWebDriverManagerFactory.chrome());
-    seleniumJupiter.getConfig().setOutputFolderPerClass(true);
+    if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
+      seleniumJupiter
+          .getConfig()
+          .setManager(MyWebDriverManagerFactory.chrome().watch()); // recording works in headless
+    } else {
+      seleniumJupiter.getConfig().setManager(MyWebDriverManagerFactory.chrome());
+    }
+
+    seleniumJupiter
+        .getConfig()
+        .setOutputFolderPerClass(
+            true); // ToDo: BrowserWatcher recordings should respect this setting
     seleniumJupiter.getConfig().enableScreenshotWhenFailure();
-    seleniumJupiter.getConfig().setRecording(true);
+
+    if (Boolean.parseBoolean(System.getenv("WDM_DOCKERENABLERECORDING"))) {
+      seleniumJupiter.getConfig().setRecording(true);
+    }
+
     seleniumJupiter.getConfig().setOutputFolder(ExtentWebReportExtension.REPORT_FILE.getParent());
   }
 
@@ -58,7 +72,7 @@ public class TestBase {
     if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
       ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
       new CapabilitiesMutator().mutate((RemoteWebDriver) this.browser);
-      this.browser = new Augmenter().augment(this.browser);
+      new Augmenter().augment(this.browser);
     }
 
     this.devTools = ((HasDevTools) this.browser).getDevTools();
@@ -83,6 +97,26 @@ public class TestBase {
             UUID.randomUUID()));
   }
 
+  protected RecordingEnabler startRecording(WebDriver webDriver, TestInfo testInfo) {
+    return () ->
+        seleniumJupiter
+            .getConfig()
+            .getManager()
+            .startRecording(
+                webDriver,
+                "%s.%s"
+                    .formatted(this.getClass().getName(), testInfo.getDisplayName())
+                    .replace("(TestInfo)", ""));
+  }
+
+  protected void stopRecording(WebDriver webDriver) {
+    seleniumJupiter.getConfig().getManager().stopRecording(webDriver);
+  }
+
+  protected Path browserWatcherRecordingPath(WebDriver webDriver) {
+    return seleniumJupiter.getConfig().getManager().getRecordingPath(webDriver);
+  }
+
   private File doWrite(byte[] bytes, String name) throws IOException {
     if (!Files.exists(ExtentWebReportExtension.REPORT_FILE.getParentFile().toPath())) {
       ExtentWebReportExtension.REPORT_FILE.getParentFile().mkdir();
@@ -92,13 +126,5 @@ public class TestBase {
     Files.write(file.toPath(), bytes);
 
     return file;
-  }
-
-  private void cleanWebStorage(WebDriver driver) {
-    try {
-      ((JavascriptExecutor) driver).executeScript("window.localStorage.clear()");
-    } catch (Exception ignored) {
-      // do nothing
-    }
   }
 }

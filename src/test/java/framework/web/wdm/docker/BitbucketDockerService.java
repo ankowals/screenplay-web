@@ -71,7 +71,7 @@ public class BitbucketDockerService extends DockerService {
     String bitBucketCloneDir = System.getenv("BITBUCKET_CLONE_DIR");
 
     if (bitBucketCloneDir != null) {
-      binds.add(String.format("%s:/home/selenium/clone", bitBucketCloneDir));
+      binds.add(String.format("%s:/home/seluser/Downloads", bitBucketCloneDir));
     }
 
     return binds;

@@ -1,4 +1,4 @@
-package framework.screenplay.helpers;
+package framework.helpers;
 
 import framework.screenplay.Interaction;
 import framework.screenplay.actor.Actor;
@@ -38,15 +38,6 @@ public class InParallel {
               .toArray(new CompletableFuture[0]);
 
       CompletableFuture.allOf(completableFutures).join();
-
-      /*
-      CompletableFuture.runAsync(
-              () ->
-                  Streams.failableStream(Arrays.stream(failableRunnables).parallel())
-                      .forEach(FailableRunnable::run),
-              forkJoinPool)
-          .join();
-       */
     }
   }
 

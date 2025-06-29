@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v134.log.Log;
-import org.openqa.selenium.devtools.v134.log.model.LogEntry;
-import org.openqa.selenium.devtools.v134.network.Network;
-import org.openqa.selenium.devtools.v134.network.model.*;
-import org.openqa.selenium.devtools.v134.page.Page;
-import org.openqa.selenium.devtools.v134.page.model.ScreencastFrameMetadata;
+import org.openqa.selenium.devtools.v136.log.Log;
+import org.openqa.selenium.devtools.v136.log.model.LogEntry;
+import org.openqa.selenium.devtools.v136.network.Network;
+import org.openqa.selenium.devtools.v136.network.model.*;
+import org.openqa.selenium.devtools.v136.page.Page;
+import org.openqa.selenium.devtools.v136.page.model.ScreencastFrameMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

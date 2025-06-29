@@ -57,7 +57,7 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
   @Order(2)
   void shouldCheckOrderSummary() throws Exception {
     this.user.attemptsTo(
-        Checkout.as(
+        Checkout.completingForm(
             form ->
                 form.enterFirstName("terefere")
                     .enterLastName("hopsiasia")

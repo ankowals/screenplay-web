@@ -1,4 +1,4 @@
-package framework.screenplay.helpers;
+package framework.helpers;
 
 import java.util.Objects;
 import java.util.function.Predicate;

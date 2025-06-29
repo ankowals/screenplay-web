@@ -25,7 +25,7 @@ public class AccessibilityAssertions implements MandatoryReportAs {
     this.axeBuilder = axeBuilder;
   }
 
-  public static MandatoryReportAs assertThat(WebDriver webDriver) {
+  public static MandatoryReportAs assertThatPage(WebDriver webDriver) {
     return new AccessibilityAssertions(webDriver, new AxeBuilder());
   }
 

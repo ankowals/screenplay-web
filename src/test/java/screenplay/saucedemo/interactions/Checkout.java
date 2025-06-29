@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import pom.saucedemo.CheckoutYourInformationPage;
 
 public class Checkout {
-  public static Interaction as(Consumer<CheckoutYourInformationPage> checkoutFormData) {
+  public static Interaction completingForm(Consumer<CheckoutYourInformationPage> checkoutFormData) {
     return actor -> {
       actor.attemptsTo(GoTo.checkout());
       checkoutFormData.accept(BrowseTheWeb.as(actor).onPage(CheckoutYourInformationPage.class));

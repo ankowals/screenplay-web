@@ -12,6 +12,10 @@ public class PageFactory {
     this.driver = Objects.requireNonNull(driver);
   }
 
+  public WebDriver usingBrowser() {
+    return this.driver;
+  }
+
   public <T extends BasePage> T onPage(Class<T> clazz) {
     try {
       return this.init(clazz);

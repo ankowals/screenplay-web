@@ -1,4 +1,4 @@
-package framework.screenplay.helpers;
+package framework.helpers;
 
 import java.util.Optional;
 import org.apache.commons.lang3.function.Failable;
@@ -23,7 +23,7 @@ public class Try<T> {
     return new Try<>(failableSupplier);
   }
 
-  public T orElseGet(FailableSupplier<T, Throwable> failableSupplier) {
+  public T orElse(FailableSupplier<T, Throwable> failableSupplier) {
     return Optional.ofNullable(this.t).orElseGet(() -> Failable.asSupplier(failableSupplier).get());
   }
 }

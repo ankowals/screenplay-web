@@ -1,9 +1,10 @@
-package framework.screenplay.helpers;
+package framework.helpers;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.stream.Collectors;
+import org.apache.commons.io.IOUtils;
 
 public class ResourceLoader {
 
@@ -25,6 +26,12 @@ public class ResourceLoader {
       inputStream.transferTo(outputStream);
 
       return file;
+    }
+  }
+
+  public byte[] asBytes(String path) throws IOException {
+    try (InputStream inputStream = this.toInputStream(path)) {
+      return IOUtils.toByteArray(inputStream);
     }
   }
 

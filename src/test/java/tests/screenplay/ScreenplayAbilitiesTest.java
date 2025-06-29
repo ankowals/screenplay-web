@@ -1,5 +1,6 @@
 package tests.screenplay;
 
+import framework.helpers.Try;
 import framework.screenplay.abilities.AssertSoftly;
 import framework.screenplay.abilities.cleanup.DoTheCleanUp;
 import framework.screenplay.abilities.cleanup.OnTeardownActions;
@@ -7,7 +8,6 @@ import framework.screenplay.abilities.memory.*;
 import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
-import framework.screenplay.helpers.Try;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.*;
@@ -15,17 +15,14 @@ import org.junit.jupiter.api.*;
 class ScreenplayAbilitiesTest extends ScreenplayTestBase {
 
   Actor actor;
-  SoftAssertions softAssertions;
 
   @BeforeAll
   void beforeAll() {
-    this.softAssertions = new SoftAssertions();
-
     this.actor = new Actor();
     this.actor.can(
         RememberThings.with(new Memory()),
         DoTheCleanUp.with(new OnTeardownActions()),
-        AssertSoftly.with(this.softAssertions));
+        AssertSoftly.with(new SoftAssertions()));
   }
 
   @AfterEach
@@ -59,7 +56,7 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
   void shouldAssertSoftly() {
     String actual =
         Try.failable(() -> TheValue.rememberedAs("message", String.class).answeredBy(this.actor))
-            .orElseGet(
+            .orElse(
                 () -> {
                   this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
                   return TheValue.rememberedAs("message", String.class).answeredBy(this.actor);

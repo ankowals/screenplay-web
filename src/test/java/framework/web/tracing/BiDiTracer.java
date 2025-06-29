@@ -9,6 +9,7 @@ import org.openqa.selenium.bidi.network.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// wip
 // does not work with chrome
 @Deprecated(forRemoval = false)
 public class BiDiTracer {

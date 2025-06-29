@@ -32,7 +32,13 @@ class MediaAttacher {
                           "./" + screenshot.getName(), screenshot.getName()));
 
           videos.stream()
-              .filter(this.startsWith(fqdnTestName.getMethodName()))
+              .filter(
+                  this.startsWith(fqdnTestName.getMethodName())
+                      .or(
+                          file ->
+                              fqdnTestName
+                                  .asString()
+                                  .startsWith(file.getName().replace(".webm", ""))))
               .max(Comparator.comparingLong(File::lastModified))
               .ifPresent(
                   video -> {
@@ -94,7 +100,13 @@ class MediaAttacher {
                 List<File> videos = this.mediaFinder.getVideos(dir);
 
                 videos.stream()
-                    .filter(this.startsWith(fqdnTestName.getMethodName()))
+                    .filter(
+                        this.startsWith(fqdnTestName.getMethodName())
+                            .or(
+                                file ->
+                                    fqdnTestName
+                                        .getMethodName()
+                                        .startsWith(file.getName().replace(".webm", ""))))
                     .max(Comparator.comparingLong(File::lastModified))
                     .ifPresent(
                         video -> {

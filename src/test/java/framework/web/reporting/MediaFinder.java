@@ -25,7 +25,11 @@ class MediaFinder {
 
   List<File> getVideos(File dir) {
     return Arrays.stream(Objects.requireNonNull(dir.listFiles()))
-        .filter(file -> file.getName().endsWith(".mp4") || file.getName().endsWith(".flv"))
+        .filter(
+            file ->
+                file.getName().endsWith(".mp4")
+                    || file.getName().endsWith(".flv")
+                    || file.getName().endsWith(".webm"))
         .toList();
   }
 

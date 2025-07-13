@@ -32,9 +32,6 @@ class SauceLoginTest extends TestBase {
     this.user.can(BrowseTheWeb.with(this.browser));
   }
 
-  @AfterEach
-  void afterEach() {}
-
   @Test
   @Order(1)
   void shouldSeeMessageWhenPasswordIsWrong() throws Exception {

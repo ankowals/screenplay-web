@@ -51,10 +51,8 @@ public class TestBase {
       seleniumJupiter.getConfig().setManager(MyWebDriverManagerFactory.chrome());
     }
 
-    seleniumJupiter
-        .getConfig()
-        .setOutputFolderPerClass(
-            true); // ToDo: BrowserWatcher recordings should respect this setting
+    // ToDo: BrowserWatcher recordings should respect this setting
+    seleniumJupiter.getConfig().setOutputFolderPerClass(true);
     seleniumJupiter.getConfig().enableScreenshotWhenFailure();
 
     if (Boolean.parseBoolean(System.getenv("WDM_DOCKERENABLERECORDING"))) {

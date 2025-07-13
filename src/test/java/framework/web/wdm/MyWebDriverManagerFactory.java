@@ -24,6 +24,75 @@ public class MyWebDriverManagerFactory {
   }
 
   private static ChromiumOptions<?> chromeOptions() {
+    Map<String, Object> browserPreferences = MyWebDriverManagerFactory.getBrowserPreferences();
+
+    // https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
+    // map rendering component expects HW acceleration, when disabled "Something went
+    // wrong..." notification is shown
+    ChromiumOptions<?> chromiumOptions =
+        new ChromeOptions()
+            .setUnhandledPromptBehaviour(
+                UnexpectedAlertBehaviour.ACCEPT) // other ideas for example nicely summarized here
+            // https://github.com/webdriverio/webdriverio/discussions/7191 didn't work
+            // in container:/ alternatively we can use BiDi driver
+            // //https://github.com/SeleniumHQ/selenium/issues/15967
+            .setExperimentalOption(
+                "excludeSwitches", new String[] {"enable-automation", "disable-infobars"})
+            .setExperimentalOption("prefs", browserPreferences)
+            .addArguments(
+                // default chromium driver flags
+                // https://source.chromium.org/chromium/chromium/src/+/main:chrome/test/chromedriver/chrome_launcher.cc?q=f:chrome_launcher%20%20kDesktopSwitches&ss=chromium
+                // "disable-hang-monitor",
+                // "disable-prompt-on-repost",
+                // "disable-sync",
+                // "no-first-run",
+                // "disable-background-networking",
+                // "disable-client-side-phishing-detection",
+                // "disable-default-apps",
+                // "password-store=basic",
+                // "use-mock-keychain",
+                // "no-service-autorun"
+
+                "start-maximized",
+                "ignore-certificate-errors",
+                "no-default-browser-check",
+                "disable-field-trial-config",
+                "disable-back-forward-cache",
+                "disable-breakpad",
+                "disable-component-update",
+                "disable-component-extensions-with-background-pages",
+                "disable-popup-blocking",
+                "disable-notifications",
+                "disable-dev-shm-usage",
+                "disable-search-engine-choice-screen",
+                // https://github.com/bonigarcia/webdrivermanager/issues/1477
+                "disable-features=DisableLoadExtensionCommandLineSwitch,ImprovedCookieControls,LazyFrameLoading,GlobalMediaControls,DestroyProfileOnBrowserClose,MediaRouter,DialMediaRouteProvider,AcceptCHFrame,AutoExpandDetailsElement,CertificateTransparencyComponentUpdater,AvoidUnnecessaryBeforeUnloadCheckSync,Translate,InterestFeedContentSuggestions",
+                "disable-background-timer-throttling",
+                "disable-backgrounding-occluded-windows",
+                "disable-ipc-flooding-protection",
+                "disable-renderer-backgrounding",
+                "propagate-iph-for-testing",
+                "ash-no-nudges",
+                "enable-features=NetworkService,NetworkServiceInProcess",
+                "allow-pre-commit-input",
+                "force-color-profile=srgb",
+                "metrics-recording-only",
+                "mute-audio");
+
+    // visual assertions may require to also garb screenshots in headless
+    if (Boolean.parseBoolean(System.getenv("BROWSER_IN_HEADLESS_ENABLED"))) {
+      chromiumOptions.addArguments(
+          "window-size=1920,1080", // defaults to 800x600
+          "screen-info={1920x1080}", // https://issues.chromium.org/issues/422346607#comment4
+          "headless");
+    }
+
+    chromiumOptions.enableBiDi();
+
+    return chromiumOptions;
+  }
+
+  private static Map<String, Object> getBrowserPreferences() {
     Map<String, Object> browserPreferences = new HashMap<>();
     browserPreferences.put("profile.default_content_setting_values.clipboard", 1);
     browserPreferences.put("credentials_enable_service", false);
@@ -39,54 +108,6 @@ public class MyWebDriverManagerFactory {
       browserPreferences.put("download.default_directory", "/home/seluser/Downloads");
     }
 
-    // https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-    ChromiumOptions<?> chromiumOptions =
-        new ChromeOptions()
-            .setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.ACCEPT)
-            .setExperimentalOption("prefs", browserPreferences)
-            .setExperimentalOption("excludeSwitches", new String[] {"enable-automation"})
-            .addArguments(
-                "no-sandbox",
-                "start-maximized",
-                "ignore-gpu-blocklist",
-                "ignore-certificate-errors",
-                "in-process-gpu",
-                "disable-popup-blocking",
-                "disable-notifications",
-                "disable-dev-shm-usage",
-                "no-default-browser-check",
-                "no-first-run",
-                "disable-search-engine-choice-screen",
-                "disable-storage-reset",
-                "remote-debugging-port=9222",
-                "disable-background-networking",
-                "disable-client-side-phishing-detection",
-                "disable-default-apps",
-                // https://github.com/bonigarcia/webdrivermanager/issues/1477
-                "disable-features=DisableLoadExtensionCommandLineSwitch,Translate,InterestFeedContentSuggestions,BackForwardCache,AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync",
-                "allow-pre-commit-input",
-                "disable-background-networking",
-                "enable-features=NetworkServiceInProcess2",
-                "disable-background-timer-throttling",
-                "disable-backgrounding-occluded-windows",
-                "disable-client-side-phishing-detection",
-                "disable-hang-monitor",
-                "disable-ipc-flooding-protection",
-                "disable-prompt-on-repost",
-                "disable-renderer-backgrounding",
-                "disable-sync",
-                "force-color-profile=srgb",
-                "metrics-recording-only");
-
-    if (Boolean.parseBoolean(System.getenv("BROWSER_IN_HEADLESS_ENABLED"))) {
-      chromiumOptions.addArguments(
-          "headless",
-          "window-size=1920,1080", // defaults to 800x600
-          "force-device-scale-factor=0.7"); // WA because above setting alone does not work
-    }
-
-    chromiumOptions.enableBiDi();
-
-    return chromiumOptions;
+    return browserPreferences;
   }
 }

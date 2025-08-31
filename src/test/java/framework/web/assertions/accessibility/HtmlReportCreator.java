@@ -1,4 +1,4 @@
-package framework.web.accessibility;
+package framework.web.assertions.accessibility;
 
 import com.deque.html.axecore.results.*;
 import java.io.File;
@@ -93,36 +93,38 @@ public class HtmlReportCreator {
       findingsDiv.appendChild(this.createFindingDetailsDiv(rule));
 
       for (Node node : rule.getNodes()) {
-        Element elementNodes = new Element("div");
-        elementNodes.attr("class", "htmlTable");
-        findingsDiv.appendChild(elementNodes);
+        Element tableDiv = new Element("div");
+        tableDiv.attr("class", "htmlTable");
+        findingsDiv.appendChild(tableDiv);
 
-        Element htmlAndSelectorWrapper = new Element("div");
-        htmlAndSelectorWrapper
-            .attr("class", "emThree")
-            .text("Html:")
-            .appendChild(new Element("br"));
+        Element tableRowDiv = new Element("div");
+        tableRowDiv.attr("class", "emThree").text("Html:").appendChild(new Element("br"));
 
-        elementNodes.appendChild(htmlAndSelectorWrapper);
+        tableDiv.appendChild(tableRowDiv);
+        tableRowDiv.appendChild(this.createTableRowHtmlParagraph(node));
 
-        Element htmlAndSelector =
-            new Element("p").attr("class", "wrapOne").html(node.getHtml()).text(node.getHtml());
-        htmlAndSelectorWrapper.appendChild(htmlAndSelector);
-        htmlAndSelectorWrapper.appendText("Selector(s):");
-
-        htmlAndSelector = new Element("p");
-        htmlAndSelector.attr("class", "wrapTwo");
-
-        for (Object target : Collections.singletonList(node.getTarget())) {
-          String targetString = target.toString().replace("[", "").replace("]", "");
-          htmlAndSelector.text(targetString).html(targetString);
-        }
-
-        htmlAndSelectorWrapper.appendChild(htmlAndSelector);
+        tableRowDiv.appendText("Selector(s):");
+        tableRowDiv.appendChild(this.createTableRowSelectorParagraph(node));
       }
     }
 
     return sectionDiv;
+  }
+
+  private Element createTableRowHtmlParagraph(Node node) {
+    return new Element("p").attr("class", "wrapOne").html(node.getHtml()).text(node.getHtml());
+  }
+
+  private Element createTableRowSelectorParagraph(Node node) {
+    Element element = new Element("p");
+    element.attr("class", "wrapTwo");
+
+    for (Object target : Collections.singletonList(node.getTarget())) {
+      String targetString = target.toString().replace("[", "").replace("]", "");
+      element.text(targetString).html(targetString);
+    }
+
+    return element;
   }
 
   private String getDateFormat(String timestamp) throws ParseException {

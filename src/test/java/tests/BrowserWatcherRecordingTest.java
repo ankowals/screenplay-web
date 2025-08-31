@@ -19,7 +19,7 @@ import screenplay.saucedemo.questions.TheErrorMessage;
 
 class BrowserWatcherRecordingTest extends TestBase {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TestBase.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BrowserWatcherRecordingTest.class);
 
   Actor user;
 
@@ -42,7 +42,7 @@ class BrowserWatcherRecordingTest extends TestBase {
                 ExtentWebReportExtension.REPORT_FILE.getParentFile().getAbsolutePath(),
                 recordingPath.getFileName().toString()),
             StandardCopyOption.REPLACE_EXISTING);
-      } catch (NoSuchFileException e) {
+      } catch (NoSuchFileException _) {
         LOGGER.warn("Could not find file {}", recordingPath);
       }
     }

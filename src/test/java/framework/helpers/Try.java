@@ -5,7 +5,7 @@ import org.apache.commons.lang3.function.Failable;
 import org.apache.commons.lang3.function.FailableSupplier;
 
 /**
- * Try.failable(() -> Get.account(account.id()).answeredBy(actor)).orElseGet(() ->
+ * Try.failable(() -> Get.account(account.id()).answeredBy(actor)).orElse(() ->
  * Create.account(accountFormData).answeredBy(actor))
  */
 public class Try<T> {

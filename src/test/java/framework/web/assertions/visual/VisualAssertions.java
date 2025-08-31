@@ -1,4 +1,4 @@
-package framework.web.visual;
+package framework.web.assertions.visual;
 
 import com.github.romankh3.image.comparison.ImageComparison;
 import com.github.romankh3.image.comparison.model.ImageComparisonResult;

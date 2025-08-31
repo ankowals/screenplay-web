@@ -6,6 +6,7 @@ import org.apache.commons.lang3.function.Failable;
 import org.assertj.core.api.*;
 import org.hamcrest.Matcher;
 
+// ToDo: would be nice to always use awaitility for assertions to avoid flakiness in ui tests
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
 
   private final Map<Class<?>, Ability> abilities = new HashMap<>();

@@ -3,7 +3,9 @@ package framework.helpers;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 public class ResourceLoader {
@@ -18,14 +20,26 @@ public class ResourceLoader {
   }
 
   public File asFile(String path) throws IOException {
-    File file = Files.createTempFile("res-", ".tmp").toFile();
-    file.deleteOnExit();
+    File tmp = Files.createTempFile("", ".tmp").toFile();
+    tmp.deleteOnExit();
+
+    // preserve original file name
+    Path targetPath =
+        tmp.toPath()
+            .resolveSibling(
+                "%s.%s"
+                    .formatted(FilenameUtils.getBaseName(path), FilenameUtils.getExtension(path)));
+
+    File target = targetPath.toFile();
+    target.deleteOnExit();
+
+    Files.move(tmp.toPath(), target.toPath());
 
     try (InputStream inputStream = this.toInputStream(path);
-        OutputStream outputStream = new FileOutputStream(file, false)) {
+        OutputStream outputStream = new FileOutputStream(target, false)) {
       inputStream.transferTo(outputStream);
 
-      return file;
+      return target;
     }
   }
 

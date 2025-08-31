@@ -1,4 +1,4 @@
-package framework.web.accessibility;
+package framework.web.assertions.accessibility;
 
 import com.deque.html.axecore.results.Results;
 import com.deque.html.axecore.selenium.AxeBuilder;

@@ -2,11 +2,10 @@ package framework.web.tracing;
 
 import java.util.Optional;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v136.log.Log;
-import org.openqa.selenium.devtools.v136.network.Network;
+import org.openqa.selenium.devtools.v138.log.Log;
+import org.openqa.selenium.devtools.v138.network.Network;
 
-// ToDo: wip
-// add support for screencasting using devTools??
+// ToDo: add support for screencasting using devTools??
 public class DevToolsTracer {
 
   private final DevTools devTools;
@@ -17,23 +16,16 @@ public class DevToolsTracer {
 
   public void trace() {
     this.devTools.createSessionIfThereIsNotOne();
-    this.devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+    this.devTools.send(
+        Network.enable(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
     /*
-     client.send('Page.startScreencast', {
-    format: 'png',
-    quality: 100,
-    maxWidth: 1920,
-    maxHeight: 1080,
-    everyNthFrame: 1,
-     });
-
     this.devTools.send(
         Page.startScreencast(
-            Optional.of(Page.StartScreencastFormat.PNG),
-            Optional.of(100),
-            Optional.of(1920),
-            Optional.of(1080),
-            Optional.of(1)));
+            Optional.of(Page.StartScreencastFormat.PNG), //format
+            Optional.of(100), //quality
+            Optional.of(1920), //maxWidth
+            Optional.of(1080), //maxHeight
+            Optional.of(1))); //everyNthFrame
      */
     this.devTools.send(Log.enable());
 

@@ -1,4 +1,4 @@
-package framework.web.accessibility;
+package framework.web.assertions.accessibility;
 
 import java.io.File;
 import org.junit.jupiter.api.TestInfo;

@@ -70,7 +70,7 @@ public class TestBase {
     if (this.browser.getClass().isAssignableFrom(RemoteWebDriver.class)) {
       ((RemoteWebDriver) this.browser).setFileDetector(new LocalFileDetector());
       new CapabilitiesMutator().mutate((RemoteWebDriver) this.browser);
-      new Augmenter().augment(this.browser);
+      this.browser = new Augmenter().augment(this.browser);
     }
 
     this.devTools = ((HasDevTools) this.browser).getDevTools();

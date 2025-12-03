@@ -2,11 +2,14 @@ package framework.screenplay.actor;
 
 import framework.screenplay.*;
 import java.util.*;
+import java.util.function.Supplier;
 import org.apache.commons.lang3.function.Failable;
+import org.apache.commons.lang3.function.FailableSupplier;
 import org.assertj.core.api.*;
+import org.awaitility.Awaitility;
+import org.awaitility.core.ConditionFactory;
 import org.hamcrest.Matcher;
 
-// ToDo: would be nice to always use awaitility for assertions to avoid flakiness in ui tests
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
 
   private final Map<Class<?>, Ability> abilities = new HashMap<>();
@@ -75,5 +78,15 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
 
   public <T> ObjectAssert<T> assertsThat(Question<T> question) throws Exception {
     return this.assertsThat(question.answeredBy(this));
+  }
+
+  public void expects(FailableSupplier<Assert<?, ?>, Throwable> assertSupplier) {
+    this.expects(assertSupplier, () -> Awaitility.await().ignoreExceptions());
+  }
+
+  public void expects(
+      FailableSupplier<Assert<?, ?>, Throwable> assertSupplier,
+      Supplier<ConditionFactory> customizer) {
+    customizer.get().untilAsserted(assertSupplier::get);
   }
 }

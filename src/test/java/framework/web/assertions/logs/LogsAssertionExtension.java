@@ -3,7 +3,7 @@ package framework.web.assertions.logs;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-//ToDo: add implementation
+// ToDo: add implementation
 public class LogsAssertionExtension implements AfterTestExecutionCallback {
 
   @Override

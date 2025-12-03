@@ -8,6 +8,7 @@ import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
@@ -34,7 +35,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
   Use NetworkInterceptor to short-circuit backend requests
    */
   @Test
-  void shouldNotifyAboutSubmissionFailure() throws Exception {
+  void shouldNotifyAboutSubmissionFailure() {
     String name = RandomStringUtils.insecure().nextAlphabetic(8);
 
     try (NetworkInterceptor interceptor =
@@ -45,12 +46,12 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
           .attemptsTo(
               Open.browser(),
               Fill.exampleForm(formPage -> formPage.enterFirstName(name).clickSubmit()));
+
       then(this.user)
-          .should(
-              See.that(
-                  TheExampleForm.submitMessage(),
-                  containsString(
-                      "Please check the form and correct all errors before submitting")));
+          .expects(
+              () ->
+                  Assertions.assertThat(TheExampleForm.submitMessage().answeredBy(this.user))
+                      .contains("Please check the form and correct all errors before submitting"));
     }
   }
 

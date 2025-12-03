@@ -8,8 +8,11 @@ import framework.screenplay.abilities.memory.*;
 import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
+import java.time.Duration;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
+import org.awaitility.Awaitility;
+import org.awaitility.core.ConditionTimeoutException;
 import org.junit.jupiter.api.*;
 
 class ScreenplayAbilitiesTest extends ScreenplayTestBase {
@@ -66,4 +69,15 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
         .to(AssertSoftly.class)
         .that(softly -> softly.assertThat(actual).isEqualTo("Do nothing"));
   } // NOSONAR: assert all is called by ability
+
+  @Test
+  @Order(4)
+  void shouldAssertRepeatedly() {
+    Assertions.assertThatExceptionOfType(ConditionTimeoutException.class)
+        .isThrownBy(
+            () ->
+                this.actor.expects(
+                    () -> Assertions.assertThat(new Object()).isEqualTo("terefere"),
+                    () -> Awaitility.await().atMost(Duration.ofSeconds(1))));
+  }
 }

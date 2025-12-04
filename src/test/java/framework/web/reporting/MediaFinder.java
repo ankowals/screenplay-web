@@ -49,6 +49,7 @@ class MediaFinder {
         .filter(
             file ->
                 file.getName().endsWith(".txt")
+                    || file.getName().endsWith(".log")
                     || file.getName().endsWith(".html")
                     || file.getName().endsWith(".json")
                     || file.getName().endsWith(".yaml"))

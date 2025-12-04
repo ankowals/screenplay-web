@@ -25,7 +25,9 @@ class MediaAttacher {
     testStatusMap.forEach(
         (fqdnTestName, extentTest) -> {
           screenshots.stream()
-              .filter(this.startsWith(fqdnTestName.getMethodName()))
+              .filter(
+                  this.startsWith(
+                      "%s.%s".formatted(fqdnTestName.getClassName(), fqdnTestName.getMethodName())))
               .forEach(
                   screenshot ->
                       extentTest.addScreenCaptureFromPath(
@@ -33,7 +35,9 @@ class MediaAttacher {
 
           videos.stream()
               .filter(
-                  this.startsWith(fqdnTestName.getMethodName())
+                  this.startsWith(
+                          "%s.%s"
+                              .formatted(fqdnTestName.getClassName(), fqdnTestName.getMethodName()))
                       .or(
                           file ->
                               fqdnTestName
@@ -52,7 +56,9 @@ class MediaAttacher {
                   });
 
           txtFiles.stream()
-              .filter(this.startsWith(fqdnTestName.getMethodName()))
+              .filter(
+                  this.startsWith(
+                      "%s.%s".formatted(fqdnTestName.getClassName(), fqdnTestName.getMethodName())))
               .forEach(
                   txtFile -> {
                     switch (extentTest.getStatus()) {
@@ -162,8 +168,7 @@ class MediaAttacher {
   }
 
   private Predicate<File> startsWith(String expectedPrefix) {
-    List<String> patterns =
-        List.of(expectedPrefix + "_arg0_", expectedPrefix + "_driver_", expectedPrefix + "-");
+    List<String> patterns = List.of(expectedPrefix + "_", expectedPrefix + "-");
 
     return file -> patterns.stream().anyMatch(p -> file.getName().startsWith(p));
   }

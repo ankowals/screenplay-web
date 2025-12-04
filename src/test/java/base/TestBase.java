@@ -54,6 +54,7 @@ public class TestBase {
     // ToDo: BrowserWatcher recordings should respect this setting
     seleniumJupiter.getConfig().setOutputFolderPerClass(true);
     seleniumJupiter.getConfig().enableScreenshotWhenFailure();
+    seleniumJupiter.getConfig().setScreenshotFormat("png");
 
     if (Boolean.parseBoolean(System.getenv("WDM_DOCKERENABLERECORDING"))) {
       seleniumJupiter.getConfig().setRecording(true);

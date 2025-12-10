@@ -40,16 +40,17 @@ test {
     sourceCompatibility = 1.22
     targetCompatibility = 1.22
 
-    //set env variables
-    environment "WDM_DOCKERENABLERECORDING", "false"
-    environment "WDM_CHROMEVERSION", "142"
+    //environment "WDM_CHROMEVERSION", "142.0"
 
     environment "BROWSER_IN_DOCKER_ENABLED", "false"
     environment "BROWSER_IN_HEADLESS_ENABLED", "false"
 
-    //recording works in headless in container
+    //recording via container
+    environment "WDM_DOCKERENABLERECORDING", "false"
+
+    //recording via extension works in headless in container
     //when in use switch off recording via container
-    environment "BROWSER_WATCHER_ENABLED", "true"
+    environment "BROWSER_WATCHER_ENABLED", "false"
 
     environment "ACCESSIBILITY_ASSERTIONS_ENABLED", "true"
 

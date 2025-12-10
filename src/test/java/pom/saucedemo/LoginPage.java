@@ -28,6 +28,7 @@ public class LoginPage extends BasePage {
 
   public LoginPage open() {
     this.open("https://www.saucedemo.com/");
+    this.awaitUntilLoaded();
     return this;
   }
 
@@ -44,6 +45,10 @@ public class LoginPage extends BasePage {
 
   public String getErrorText() {
     return this.view.getErrorElement().getText();
+  }
+
+  private void awaitUntilLoaded() {
+    this.view.getUsernameInput();
   }
 
   static class LoginView extends BaseView {

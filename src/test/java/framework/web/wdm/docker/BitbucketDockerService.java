@@ -22,8 +22,17 @@ For details see https://community.atlassian.com/t5/Bitbucket-articles/Changes-to
 */
 public class BitbucketDockerService extends DockerService {
 
-  public BitbucketDockerService(Config config, ResolutionCache resolutionCache) {
+  public static final String DOWNLOADS_DIR = "/home/seluser/Downloads";
+  public static final String BROWSER_WATCHER_DIR = "/home/seluser/watcher";
+
+  // we need to mount extensions if we want to install them in container, chrome does not support
+  // passing them as base64 encoded string
+  private final String browserWatcherDir;
+
+  public BitbucketDockerService(
+      Config config, ResolutionCache resolutionCache, String browserWatcherDir) {
     super(config, resolutionCache);
+    this.browserWatcherDir = browserWatcherDir;
   }
 
   // allow to use multiple instances of wdm
@@ -45,9 +54,15 @@ public class BitbucketDockerService extends DockerService {
   }
 
   protected DockerContainer.DockerBuilder toBuilder(DockerContainer dockerContainer) {
+    Bind bitBucketCloneDirBind =
+        new Bind(System.getenv("BITBUCKET_CLONE_DIR"), new Volume(DOWNLOADS_DIR));
+    Bind browserWatcherDirBind = new Bind(this.browserWatcherDir, new Volume(BROWSER_WATCHER_DIR));
+
     return DockerContainer.dockerBuilder(dockerContainer.getImageId())
         .containerName(dockerContainer.getContainerName().orElse(null))
-        .binds(this.addBitbucketCloneDir(this.getBinds(dockerContainer)))
+        .binds(
+            this.addBinds(
+                this.getBinds(dockerContainer), bitBucketCloneDirBind, browserWatcherDirBind))
         .cmd(dockerContainer.getCmd().orElse(null))
         .envs(dockerContainer.getEnvs().orElse(null))
         .exposedPorts(dockerContainer.getExposedPorts())
@@ -65,18 +80,6 @@ public class BitbucketDockerService extends DockerService {
         .orElse(null);
   }
 
-  private List<String> addBitbucketCloneDir(List<String> originalBinds) {
-    List<String> binds = new ArrayList<>(originalBinds);
-
-    String bitBucketCloneDir = System.getenv("BITBUCKET_CLONE_DIR");
-
-    if (bitBucketCloneDir != null) {
-      binds.add(String.format("%s:/home/seluser/Downloads", bitBucketCloneDir));
-    }
-
-    return binds;
-  }
-
   private List<String> addBitbucketHost(List<String> originalHosts) {
     List<String> hosts = new ArrayList<>(originalHosts);
 
@@ -87,5 +90,19 @@ public class BitbucketDockerService extends DockerService {
     }
 
     return hosts;
+  }
+
+  private List<String> addBinds(List<String> originalBinds, Bind... binds) {
+    List<String> copyBinds = new ArrayList<>(originalBinds);
+
+    Arrays.stream(binds)
+        .forEach(
+            bind -> {
+              if (bind.getPath() != null) {
+                copyBinds.add(bind.toString());
+              }
+            });
+
+    return copyBinds;
   }
 }

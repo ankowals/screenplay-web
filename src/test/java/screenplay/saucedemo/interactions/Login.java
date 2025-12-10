@@ -3,7 +3,6 @@ package screenplay.saucedemo.interactions;
 import framework.screenplay.Interaction;
 import framework.web.screenplay.BrowseTheWeb;
 import framework.web.wdm.RecordingEnabler;
-import java.util.concurrent.TimeUnit;
 import pom.saucedemo.LoginPage;
 
 public class Login {
@@ -12,7 +11,6 @@ public class Login {
       BrowseTheWeb.as(actor).onPage(LoginPage.class).open();
 
       recordingEnabler.start(); // starts recording with BrowserWatcher
-      TimeUnit.MILLISECONDS.sleep(1500); // NOSONAR, extension needs a bit time to warm up
 
       BrowseTheWeb.as(actor)
           .onPage(LoginPage.class)

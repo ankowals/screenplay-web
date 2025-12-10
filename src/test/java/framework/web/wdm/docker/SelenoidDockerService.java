@@ -24,7 +24,7 @@ public class SelenoidDockerService extends BitbucketDockerService {
   private final Config config;
 
   public SelenoidDockerService(Config config, ResolutionCache resolutionCache) {
-    super(config, resolutionCache);
+    super(config, resolutionCache, null);
     this.config = config;
   }
 

@@ -4,13 +4,12 @@ import base.TestBase;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
+import java.util.concurrent.TimeUnit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import screenplay.saucedemo.interactions.Login;
 import screenplay.saucedemo.questions.TheErrorMessage;
-
-import java.util.concurrent.TimeUnit;
 
 class BrowserWatcherRecordingTest extends TestBase {
 

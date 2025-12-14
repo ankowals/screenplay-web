@@ -1,15 +1,12 @@
 package framework.web.wdm;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import java.nio.file.Paths;
 import org.openqa.selenium.chromium.ChromiumOptions;
 
 public class MyWebDriverManagerFactory {
 
   public static WebDriverManager chrome(ChromiumOptions<?> chromiumOptions) {
-    WebDriverManager wdm =
-        new BitbucketChromeDriverManager(
-            Paths.get("src", "test", "resources", "browserwatcher-2.1.0"));
+    WebDriverManager wdm = new BitbucketChromeDriverManager();
 
     if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
       wdm.watch(); // install browser watcher extension the classic way

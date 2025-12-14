@@ -6,12 +6,19 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.docker.DockerService;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import io.github.bonigarcia.wdm.webdriver.WebDriverBrowser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.webextension.ExtensionPath;
 import org.openqa.selenium.bidi.webextension.InstallExtensionParameters;
 import org.openqa.selenium.bidi.webextension.WebExtension;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.io.Zip;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -20,8 +27,8 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
 
   private final String browserWatcherExtensionPath;
 
-  public BitbucketChromeDriverManager(Path browserWatcherExtensionPath) {
-    this.browserWatcherExtensionPath = browserWatcherExtensionPath.toAbsolutePath().toString();
+  public BitbucketChromeDriverManager() {
+    this.browserWatcherExtensionPath = this.unpackBrowserWatcher().toAbsolutePath().toString();
   }
 
   @Override
@@ -94,7 +101,9 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
   private void installBrowserWatcherExtension(WebDriver webDriver) {
     if (this.dockerEnabled) {
       new WebExtension(webDriver)
-          .install(new InstallExtensionParameters(new ExtensionPath("/home/seluser/watcher")));
+          .install(
+              new InstallExtensionParameters(
+                  new ExtensionPath(BitbucketDockerService.BROWSER_WATCHER_DIR)));
     } else {
       new WebExtension(webDriver)
           .install(
@@ -112,5 +121,36 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
         webDriverBrowser.setDriver(newWebDriver);
       }
     }
+  }
+
+  private Path unpackBrowserWatcher() {
+    File targetDir;
+
+    try {
+      Path crxPackagePath = super.getBrowserWatcherAsPath();
+
+      // would be better to set "java.io.tmpDir" system property at runtime
+      File target =
+          new File(
+                  BitbucketChromeDriverManager.class
+                      .getProtectionDomain()
+                      .getCodeSource()
+                      .getLocation()
+                      .getPath())
+              .getParentFile();
+
+      targetDir = Files.createTempDirectory(target.toPath(), "browserwatcher").toFile();
+
+      try (InputStream inputStream = new FileInputStream(crxPackagePath.toFile())) {
+        Zip.unzip(inputStream, targetDir);
+      }
+
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> FileHandler.delete(targetDir)));
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
+    return targetDir.toPath();
   }
 }

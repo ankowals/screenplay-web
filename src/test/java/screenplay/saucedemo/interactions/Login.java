@@ -2,15 +2,20 @@ package screenplay.saucedemo.interactions;
 
 import framework.screenplay.Interaction;
 import framework.web.screenplay.BrowseTheWeb;
-import framework.web.wdm.RecordingEnabler;
+import framework.web.screenplay.ManageBrowsers;
 import pom.saucedemo.LoginPage;
 
 public class Login {
-  public static Interaction with(Credentials credentials, RecordingEnabler recordingEnabler) {
+  public static Interaction with(Credentials credentials) {
     return actor -> {
       BrowseTheWeb.as(actor).onPage(LoginPage.class).open();
 
-      recordingEnabler.start(); // starts recording with BrowserWatcher
+      if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
+        actor
+            .usingAbilityTo(ManageBrowsers.class)
+            .webDriverManager()
+            .startRecording(actor.usingAbilityTo(BrowseTheWeb.class).driver());
+      }
 
       BrowseTheWeb.as(actor)
           .onPage(LoginPage.class)
@@ -18,16 +23,6 @@ public class Login {
           .enterPassword(credentials.password())
           .clickLogin();
     };
-  }
-
-  public static Interaction with(Credentials credentials) {
-    return actor ->
-        BrowseTheWeb.as(actor)
-            .onPage(LoginPage.class)
-            .open()
-            .enterUsername(credentials.username())
-            .enterPassword(credentials.password())
-            .clickLogin();
   }
 
   public record Credentials(String username, String password) {}

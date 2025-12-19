@@ -76,7 +76,7 @@ public class ChromeOptionsFactory {
 
     // assume we're running in container when bb runner detected
     // set default download dir to the build directory of a runner
-    if (Boolean.parseBoolean(System.getenv("BROWSER_IN_DOCKER_ENABLED"))) {
+    if (Boolean.parseBoolean(System.getenv("BITBUCKET_CLONE_DIR"))) {
       browserPreferences.put("download.default_directory", BitbucketDockerService.DOWNLOADS_DIR);
     }
 

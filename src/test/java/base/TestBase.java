@@ -2,10 +2,11 @@ package base;
 
 import framework.screenplay.actor.Actor;
 import framework.web.reporting.ExtentWebReportExtension;
+import framework.web.screenplay.BrowseTheWeb;
+import framework.web.screenplay.ManageBrowsers;
 import framework.web.tracing.DevToolsTracer;
 import framework.web.wdm.ChromeOptionsFactory;
 import framework.web.wdm.MyWebDriverManagerFactory;
-import framework.web.wdm.RecordingEnabler;
 import io.github.bonigarcia.seljup.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
@@ -58,7 +59,6 @@ public class TestBase {
     SELENIUM_JUPITER.getConfig().setOutputFolder(ExtentWebReportExtension.REPORT_FILE.getParent());
   }
 
-  // @DockerBrowser(type = CHROME, recording = true) WebDriver driver
   @BeforeEach
   void testBaseBeforeEach(WebDriver webDriver) {
     this.browser = webDriver;
@@ -69,26 +69,29 @@ public class TestBase {
       new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
     }
 
+    // to support screenplay
     this.user = new Actor();
+    this.user.can(BrowseTheWeb.with(this.browser));
+    this.user.can(ManageBrowsers.with(SELENIUM_JUPITER.getConfig().getManager()));
   }
 
   @AfterEach
   void testBaseAfterEach(TestInfo testInfo) throws IOException {
     if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
-      File recording = this.stopRecording(this.browser, testInfo);
+      this.stopRecording(this.browser, testInfo);
     }
   }
 
-  protected byte[] takeScreenshot() {
-    return ((TakesScreenshot) this.browser).getScreenshotAs(OutputType.BYTES);
+  protected File takeScreenshot(TestInfo testInfo) throws IOException {
+    return this.writeImage(this.takeScreenshot(), testInfo);
   }
 
-  protected File writeImage(byte[] bytes, TestInfo testInfo) throws IOException {
+  private File writeImage(byte[] bytes, TestInfo testInfo) throws IOException {
     return this.doWrite(bytes, this.formatFilePath(testInfo, "png"));
   }
 
-  protected RecordingEnabler startRecording(WebDriver webDriver) {
-    return () -> SELENIUM_JUPITER.getConfig().getManager().startRecording(webDriver);
+  private byte[] takeScreenshot() {
+    return ((TakesScreenshot) this.browser).getScreenshotAs(OutputType.BYTES);
   }
 
   private File stopRecording(WebDriver webDriver, TestInfo testInfo) throws IOException {

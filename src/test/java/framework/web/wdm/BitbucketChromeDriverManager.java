@@ -2,7 +2,6 @@ package framework.web.wdm;
 
 import framework.web.wdm.docker.BitbucketDockerService;
 import framework.web.wdm.mutators.CapabilitiesMutator;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.docker.DockerService;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import io.github.bonigarcia.wdm.webdriver.WebDriverBrowser;
@@ -29,18 +28,6 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
 
   public BitbucketChromeDriverManager() {
     this.browserWatcherExtensionPath = this.unpackBrowserWatcher().toAbsolutePath().toString();
-  }
-
-  @Override
-  public WebDriverManager watch() {
-    this.watchEnabled = true;
-    return this;
-  }
-
-  @Override
-  public WebDriverManager browserInDocker() {
-    this.dockerEnabled = true;
-    return this;
   }
 
   @Override

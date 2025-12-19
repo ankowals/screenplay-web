@@ -1,9 +1,7 @@
 package tests;
 
 import base.TestBase;
-import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
-import framework.web.screenplay.BrowseTheWeb;
 import io.github.bonigarcia.seljup.SingleSession;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.*;
@@ -22,14 +20,6 @@ import screenplay.saucedemo.questions.TheOrder;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SauceOrderSummaryScreenplayTest extends TestBase {
-
-  Actor user;
-
-  @BeforeEach
-  void beforeEach() {
-    this.user = new Actor();
-    this.user.can(BrowseTheWeb.with(this.browser));
-  }
 
   @Test
   @Order(1)

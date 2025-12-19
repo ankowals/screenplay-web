@@ -1,12 +1,10 @@
 package tests;
 
 import base.TestBase;
-import framework.screenplay.actor.Actor;
 import framework.screenplay.helpers.See;
 import framework.web.assertions.accessibility.AccessibilityAssertions;
 import framework.web.assertions.visual.VisualAssertions;
 import framework.web.reporting.ExtentWebReportExtension;
-import framework.web.screenplay.BrowseTheWeb;
 import io.github.bonigarcia.seljup.SingleSession;
 import java.io.IOException;
 import java.text.ParseException;
@@ -23,14 +21,6 @@ import screenplay.saucedemo.questions.TheErrorMessage;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SauceLoginTest extends TestBase {
-
-  Actor user;
-
-  @BeforeEach
-  void beforeEach() {
-    this.user = new Actor();
-    this.user.can(BrowseTheWeb.with(this.browser));
-  }
 
   @Test
   @Order(1)
@@ -50,7 +40,7 @@ class SauceLoginTest extends TestBase {
   @Test
   @Order(2)
   void shouldDisplayLoginForm(TestInfo testInfo) throws IOException {
-    VisualAssertions.assertThat(this.writeImage(this.takeScreenshot(), testInfo))
+    VisualAssertions.assertThat(this.takeScreenshot(testInfo))
         .excluding(this.browser.findElement(By.id("user-name")))
         .isEqualTo("screenshots/login_page_viewport.png");
   }

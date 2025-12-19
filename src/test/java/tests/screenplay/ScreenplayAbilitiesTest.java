@@ -42,14 +42,14 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
         .add(() -> Forget.everything().performAs(this.actor));
 
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
-    this.actor.should(See.that(TheValue.rememberedAs("message", String.class))).isNotNull();
+    this.actor.should(See.that(TheRemembered.value("message", String.class))).isNotNull();
   }
 
   @Test
   @Order(2)
   void shouldForgetEverything() {
     Assertions.assertThatThrownBy(
-            () -> TheValue.rememberedAs("message", String.class).answeredBy(this.actor))
+            () -> TheRemembered.value("message", String.class).answeredBy(this.actor))
         .hasMessage(
             "Actor does not recall [message]. Call remember() first to define this object in Actor's memory.");
   }
@@ -58,11 +58,11 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
   @Order(3)
   void shouldAssertSoftly() {
     String actual =
-        Try.failable(() -> TheValue.rememberedAs("message", String.class).answeredBy(this.actor))
+        Try.failable(() -> TheRemembered.value("message", String.class).answeredBy(this.actor))
             .orElse(
                 () -> {
                   this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
-                  return TheValue.rememberedAs("message", String.class).answeredBy(this.actor);
+                  return TheRemembered.value("message", String.class).answeredBy(this.actor);
                 });
 
     UseAbility.of(this.actor)

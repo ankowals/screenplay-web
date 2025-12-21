@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 import org.openqa.selenium.By;
 import pom.saucedemo.LoginPage;
@@ -39,6 +40,7 @@ class SauceLoginTest extends TestBase {
    */
   @Test
   @Order(2)
+  @EnabledIfEnvironmentVariable(named = "BROWSER_IN_DOCKER_ENABLED", matches = "true")
   void shouldDisplayLoginForm(TestInfo testInfo) throws IOException {
     VisualAssertions.assertThat(this.takeScreenshot(testInfo))
         .excluding(this.browser.findElement(By.id("user-name")))

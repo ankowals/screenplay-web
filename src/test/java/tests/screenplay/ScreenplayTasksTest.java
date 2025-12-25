@@ -25,11 +25,11 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
         () ->
             RememberThat.valueOf("thread3").is(Thread.currentThread().getName()).performAs(actor));
 
-    actor.should(See.that(TheRemembered.value("thread1", String.class))).isNotNull();
-    actor.should(See.that(TheRemembered.value("thread3", String.class))).isNotNull();
+    actor.should(See.that(TheRemembered.valueOf("thread1", String.class))).isNotNull();
+    actor.should(See.that(TheRemembered.valueOf("thread3", String.class))).isNotNull();
     actor
-        .should(See.that(TheRemembered.value("thread1", String.class)))
-        .isNotEqualTo(TheRemembered.value("thread3", String.class).answeredBy(actor));
+        .should(See.that(TheRemembered.valueOf("thread1", String.class)))
+        .isNotEqualTo(TheRemembered.valueOf("thread3", String.class).answeredBy(actor));
   }
 
   @Test
@@ -48,12 +48,12 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
     InParallel.actors(actor1, actor2, actor3, actor4, actor5, actor6, actor7, actor8, actor9)
         .eachAttemptsTo(() -> RememberThat.valueOf("thread").is(Thread.currentThread().getName()));
 
-    actor1.should(See.that(TheRemembered.value("thread", String.class))).isNotNull();
-    actor3.should(See.that(TheRemembered.value("thread", String.class))).isNotNull();
+    actor1.should(See.that(TheRemembered.valueOf("thread", String.class))).isNotNull();
+    actor3.should(See.that(TheRemembered.valueOf("thread", String.class))).isNotNull();
 
     actor1
-        .should(See.that(TheRemembered.value("thread", String.class)))
-        .isNotEqualTo(TheRemembered.value("thread", String.class).answeredBy(actor3));
+        .should(See.that(TheRemembered.valueOf("thread", String.class)))
+        .isNotEqualTo(TheRemembered.valueOf("thread", String.class).answeredBy(actor3));
   }
 
   @Test
@@ -73,14 +73,14 @@ class ScreenplayTasksTest extends ScreenplayTestBase {
 
     List<String> threads =
         InParallel.performAndGet(
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor1),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor2),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor3),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor4),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor5),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor6),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor7),
-            () -> TheRemembered.value("thread", String.class).answeredBy(actor8));
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor1),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor2),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor3),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor4),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor5),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor6),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor7),
+            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor8));
 
     Assertions.assertThat(threads).isNotEmpty().hasSize(8);
     Assertions.assertThat(threads.getFirst()).isNotEqualTo(threads.getLast());

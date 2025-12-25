@@ -1,4 +1,4 @@
-package framework.web.reporting;
+package framework.reporting;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.markuputils.MarkupHelper;

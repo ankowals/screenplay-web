@@ -1,4 +1,4 @@
-package framework.web.reporting;
+package framework.reporting;
 
 import java.io.File;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package framework.web.wdm.session;
+package framework.web.wdm.session.storage;
 
 import org.openqa.selenium.WebDriver;
 

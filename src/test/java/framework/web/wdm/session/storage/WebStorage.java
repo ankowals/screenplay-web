@@ -1,4 +1,4 @@
-package framework.web.wdm.session;
+package framework.web.wdm.session.storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ public abstract class WebStorage {
   private final JavascriptExecutor jsExecutor;
   private final String type;
 
-  public WebStorage(WebDriver webDriver, String type) {
+  WebStorage(WebDriver webDriver, String type) {
     this.jsExecutor = (JavascriptExecutor) webDriver;
     this.storage = this.getAll();
     this.type = type;

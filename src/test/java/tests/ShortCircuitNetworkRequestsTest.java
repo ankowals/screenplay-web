@@ -1,14 +1,13 @@
 package tests;
 
 import static framework.screenplay.helpers.Bdd.*;
-import static org.hamcrest.CoreMatchers.containsString;
 
 import base.TestBase;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.assertj.core.api.Assertions;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
@@ -28,14 +27,16 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
             Fill.exampleForm().firstName(RandomStringUtils.insecure().nextAlphabetic(8)),
             Submit.exampleForm());
     then(this.user)
-        .should(See.that(TheExampleForm.submitMessage(), containsString("Submission Complete")));
+        .should(
+            See.thatEventually(
+                TheExampleForm.submitMessage(), Matchers.containsString("Submission Complete")));
   }
 
   /*
   Use NetworkInterceptor to short-circuit backend requests
    */
   @Test
-  void shouldNotifyAboutSubmissionFailure() {
+  void shouldNotifyAboutSubmissionFailure() throws Exception {
     String name = RandomStringUtils.insecure().nextAlphabetic(8);
 
     try (NetworkInterceptor interceptor =
@@ -46,13 +47,14 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
           .attemptsTo(
               Open.browser(),
               Fill.exampleForm(formPage -> formPage.enterFirstName(name).clickSubmit()));
-
-      then(this.user)
-          .expects(
-              () ->
-                  Assertions.assertThat(TheExampleForm.submitMessage().answeredBy(this.user))
-                      .contains("Please check the form and correct all errors before submitting"));
     }
+
+    then(this.user)
+        .should(
+            See.thatEventually(
+                TheExampleForm.submitMessage(),
+                Matchers.containsString(
+                    "Please check the form and correct all errors before submitting")));
   }
 
   private Routable createRouting() {

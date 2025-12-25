@@ -2,12 +2,8 @@ package framework.screenplay.actor;
 
 import framework.screenplay.*;
 import java.util.*;
-import java.util.function.Supplier;
 import org.apache.commons.lang3.function.Failable;
-import org.apache.commons.lang3.function.FailableSupplier;
 import org.assertj.core.api.*;
-import org.awaitility.Awaitility;
-import org.awaitility.core.ConditionFactory;
 import org.hamcrest.Matcher;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
@@ -78,15 +74,5 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
 
   public <T> ObjectAssert<T> assertsThat(Question<T> question) throws Exception {
     return this.assertsThat(question.answeredBy(this));
-  }
-
-  public void expects(FailableSupplier<Assert<?, ?>, Throwable> assertSupplier) {
-    this.expects(assertSupplier, () -> Awaitility.await().ignoreExceptions());
-  }
-
-  public void expects(
-      FailableSupplier<Assert<?, ?>, Throwable> assertSupplier,
-      Supplier<ConditionFactory> customizer) {
-    customizer.get().untilAsserted(assertSupplier::get);
   }
 }

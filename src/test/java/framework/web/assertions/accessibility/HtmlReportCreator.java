@@ -27,13 +27,19 @@ public class HtmlReportCreator {
     this.htmlTemplateProvider = new HtmlTemplateProvider();
   }
 
-  public void create(String destination, String title) throws IOException, ParseException {
+  public void create(String destination, String title) {
     Document doc = Jsoup.parse(this.htmlTemplateProvider.provide(title));
     Element body = doc.body();
 
     body.appendChild(new Element("h1").text("Accessibility test report " + title));
     body.appendChild(new Element("h3").text("Test environment"));
-    body.appendChild(this.createTestEnvironmentDiv(this.results));
+
+    try {
+      body.appendChild(this.createTestEnvironmentDiv(this.results));
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
+
     body.appendChild(new Element("h3").appendText("Summary:"));
     body.appendChild(this.createSummaryDiv(this.resultsCounter));
 
@@ -73,7 +79,12 @@ public class HtmlReportCreator {
     }
 
     body.appendChild(element);
-    FileUtils.writeStringToFile(new File(destination), doc.outerHtml(), StandardCharsets.UTF_8);
+
+    try {
+      FileUtils.writeStringToFile(new File(destination), doc.outerHtml(), StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private Element getReadableAxeResults(List<Rule> rules, String type) {

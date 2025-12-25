@@ -1,13 +1,13 @@
 package tests;
 
 import base.TestBase;
+import framework.reporting.ExtentWebReportExtension;
 import framework.screenplay.helpers.See;
-import framework.web.assertions.accessibility.AccessibilityAssertions;
-import framework.web.assertions.visual.VisualAssertions;
-import framework.web.reporting.ExtentWebReportExtension;
+import framework.web.assertions.accessibility.AccessibilityAssert;
+import framework.web.assertions.visual.VisualAssert;
 import io.github.bonigarcia.seljup.SingleSession;
-import java.io.IOException;
-import java.text.ParseException;
+import java.io.File;
+import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -16,6 +16,7 @@ import org.openqa.selenium.By;
 import pom.saucedemo.LoginPage;
 import screenplay.saucedemo.interactions.Login;
 import screenplay.saucedemo.questions.TheErrorMessage;
+import screenplay.saucedemo.questions.TheScreenshot;
 
 @SingleSession
 @DisableIfTestFails
@@ -29,7 +30,7 @@ class SauceLoginTest extends TestBase {
     this.user.attemptsTo(Login.with(new Login.Credentials("standard_user", "terefere")));
 
     this.user.should(
-        See.that(
+        See.thatEventually(
             TheErrorMessage.uponLogin(),
             Matchers.containsString(
                 "Username and password do not match any user in this service")));
@@ -41,18 +42,39 @@ class SauceLoginTest extends TestBase {
   @Test
   @Order(2)
   @EnabledIfEnvironmentVariable(named = "BROWSER_IN_DOCKER_ENABLED", matches = "true")
-  void shouldDisplayLoginForm(TestInfo testInfo) throws IOException {
-    VisualAssertions.assertThat(this.takeScreenshot(testInfo))
-        .excluding(this.browser.findElement(By.id("user-name")))
-        .isEqualTo("screenshots/login_page_viewport.png");
+  void shouldDisplayLoginForm(TestInfo testInfo) throws Exception {
+    this.user.should(
+        See.thatEventually(
+            TheScreenshot.takenFor(testInfo),
+            screenshot ->
+                VisualAssert.assertThat(screenshot)
+                    .excluding(this.browser.findElement(By.id("user-name")))
+                    .isEqualTo("screenshots/login_page_viewport.png")));
   }
 
   @Test
   @Order(3)
-  void shouldDisplayAccessibleLoginForm(TestInfo testInfo) throws IOException, ParseException {
+  void shouldDisplayAccessibleLoginForm(TestInfo testInfo) {
     new LoginPage(this.browser).open();
-    AccessibilityAssertions.assertThatPage(this.browser)
-        .reportAs(ExtentWebReportExtension.REPORT_FILE.getParentFile(), testInfo)
+    AccessibilityAssert.assertThatPage(this.browser)
+        .reportAs(this.destination(testInfo), this.title(testInfo))
         .isViolationFree();
+  }
+
+  private File destination(TestInfo testInfo) {
+    return new File(
+        "%s/%s/%s-axe-%s.html"
+            .formatted(
+                ExtentWebReportExtension.REPORT_FILE.getParentFile(),
+                testInfo.getTestClass().orElseThrow().getSimpleName(),
+                testInfo.getTestMethod().orElseThrow().getName(),
+                UUID.randomUUID()));
+  }
+
+  private String title(TestInfo testInfo) {
+    return "%s.%s"
+        .formatted(
+            testInfo.getTestClass().orElseThrow().getSimpleName(),
+            testInfo.getTestMethod().orElseThrow().getName());
   }
 }

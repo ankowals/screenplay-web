@@ -1,4 +1,4 @@
-package framework.web.reporting;
+package framework.reporting;
 
 import java.util.Collections;
 import java.util.List;

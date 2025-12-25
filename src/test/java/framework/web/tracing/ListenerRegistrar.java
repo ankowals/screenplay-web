@@ -1,6 +1,6 @@
 package framework.web.tracing;
 
-import framework.web.reporting.ExtentWebReportExtension;
+import framework.reporting.ExtentWebReportExtension;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;

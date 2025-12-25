@@ -1,4 +1,4 @@
-package framework.web.reporting;
+package framework.reporting;
 
 import java.util.Objects;
 import java.util.Optional;

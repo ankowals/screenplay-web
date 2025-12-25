@@ -1,7 +1,7 @@
 package base;
 
+import framework.reporting.ExtentWebReportExtension;
 import framework.screenplay.actor.Actor;
-import framework.web.reporting.ExtentWebReportExtension;
 import framework.web.screenplay.BrowseTheWeb;
 import framework.web.screenplay.ManageBrowsers;
 import framework.web.tracing.DevToolsTracer;
@@ -115,11 +115,11 @@ public class TestBase {
   }
 
   private String formatFilePath(TestInfo testInfo, String type) {
-    return String.format(
-        "%s/%s-%s.%s",
-        testInfo.getTestClass().orElseThrow().getName(),
-        testInfo.getTestMethod().orElseThrow().getName(),
-        UUID.randomUUID(),
-        type);
+    return "%s/%s-%s.%s"
+        .formatted(
+            testInfo.getTestClass().orElseThrow().getSimpleName(),
+            testInfo.getTestMethod().orElseThrow().getName(),
+            UUID.randomUUID(),
+            type);
   }
 }

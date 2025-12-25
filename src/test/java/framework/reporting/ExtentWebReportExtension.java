@@ -1,4 +1,4 @@
-package framework.web.reporting;
+package framework.reporting;
 
 /*
    Launched in a declarative way via ServiceLauncher

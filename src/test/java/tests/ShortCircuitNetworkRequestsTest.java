@@ -28,7 +28,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
             Submit.exampleForm());
     then(this.user)
         .should(
-            See.thatEventually(
+            See.eventually(
                 TheExampleForm.submitMessage(), Matchers.containsString("Submission Complete")));
   }
 
@@ -51,7 +51,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
 
     then(this.user)
         .should(
-            See.thatEventually(
+            See.eventually(
                 TheExampleForm.submitMessage(),
                 Matchers.containsString(
                     "Please check the form and correct all errors before submitting")));

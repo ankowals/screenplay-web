@@ -78,7 +78,7 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
         .isThrownBy(
             () ->
                 this.actor.should(
-                    See.thatEventually(
+                    See.eventually(
                         () -> Assertions.assertThat(new Object()).isEqualTo("terefere"),
                         () -> Awaitility.await().atMost(Duration.ofSeconds(1)))));
   }
@@ -90,7 +90,7 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
         .isThrownBy(
             () ->
                 this.actor.should(
-                    See.thatEventually(
+                    See.eventually(
                         TheRemembered.valueOf("message", String.class), Matchers.is("terefere"))));
   }
 
@@ -101,7 +101,7 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
         .isThrownBy(
             () ->
                 this.actor.should(
-                    See.thatEventually(
+                    See.eventually(
                         () -> Assertions.assertThat(new Object()).isEqualTo("terefere"))));
   }
 
@@ -112,7 +112,7 @@ class ScreenplayAbilitiesTest extends ScreenplayTestBase {
         .isThrownBy(
             () ->
                 this.actor.should(
-                    See.thatEventually(
+                    See.eventually(
                         TheRemembered.valueOf("message", String.class),
                         msg -> Assertions.assertThat(msg).isEqualTo("terefere"))));
   }

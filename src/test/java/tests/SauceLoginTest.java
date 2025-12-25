@@ -30,7 +30,7 @@ class SauceLoginTest extends TestBase {
     this.user.attemptsTo(Login.with(new Login.Credentials("standard_user", "terefere")));
 
     this.user.should(
-        See.thatEventually(
+        See.eventually(
             TheErrorMessage.uponLogin(),
             Matchers.containsString(
                 "Username and password do not match any user in this service")));
@@ -44,7 +44,7 @@ class SauceLoginTest extends TestBase {
   @EnabledIfEnvironmentVariable(named = "BROWSER_IN_DOCKER_ENABLED", matches = "true")
   void shouldDisplayLoginForm(TestInfo testInfo) throws Exception {
     this.user.should(
-        See.thatEventually(
+        See.eventually(
             TheScreenshot.takenFor(testInfo),
             screenshot ->
                 VisualAssert.assertThat(screenshot)

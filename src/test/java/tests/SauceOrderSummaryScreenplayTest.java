@@ -3,6 +3,7 @@ package tests;
 import base.TestBase;
 import framework.screenplay.helpers.See;
 import io.github.bonigarcia.seljup.SingleSession;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
@@ -54,17 +55,23 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
                     .enterPostalCode("123")
                     .clickContinue()));
 
-    CheckoutOverviewPage.SummaryInfo summaryInfo = this.user.asksFor(TheOrder.summaryInfo());
+    this.user.should(
+        See.eventually(
+            TheOrder.summaryInfo(),
+            summaryInfo ->
+                Assertions.assertThat(summaryInfo)
+                    .returns("SauceCard #31337", CheckoutOverviewPage.SummaryInfo::paymentInfo)
+                    .returns(
+                        "Free Pony Express Delivery!",
+                        CheckoutOverviewPage.SummaryInfo::shippingInfo)));
 
-    this.user
-        .should(See.that(summaryInfo))
-        .returns("SauceCard #31337", CheckoutOverviewPage.SummaryInfo::paymentInfo)
-        .returns("Free Pony Express Delivery!", CheckoutOverviewPage.SummaryInfo::shippingInfo);
-
-    this.user
-        .should(See.that(summaryInfo.priceTotal()))
-        .returns("$39.98", CheckoutOverviewPage.PriceTotal::itemTotal)
-        .returns("$3.20", CheckoutOverviewPage.PriceTotal::tax)
-        .returns("$43.18", CheckoutOverviewPage.PriceTotal::total);
+    this.user.should(
+        See.eventually(
+            TheOrder.summaryInfo(),
+            summaryInfo ->
+                Assertions.assertThat(summaryInfo.priceTotal())
+                    .returns("$39.98", CheckoutOverviewPage.PriceTotal::itemTotal)
+                    .returns("$3.20", CheckoutOverviewPage.PriceTotal::tax)
+                    .returns("$43.18", CheckoutOverviewPage.PriceTotal::total)));
   }
 }

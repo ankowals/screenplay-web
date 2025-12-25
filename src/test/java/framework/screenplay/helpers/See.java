@@ -36,11 +36,11 @@ public class See {
     return question;
   }
 
-  public static <T> Consequence thatEventually(Question<T> question, Matcher<? super T> matcher) {
-    return See.thatEventually(question, matcher, DEFAULT_CONDITION_FACTORY);
+  public static <T> Consequence eventually(Question<T> question, Matcher<? super T> matcher) {
+    return See.eventually(question, matcher, DEFAULT_CONDITION_FACTORY);
   }
 
-  public static <T> Consequence thatEventually(
+  public static <T> Consequence eventually(
       Question<T> question, Matcher<? super T> matcher, Supplier<ConditionFactory> customizer) {
     return actor ->
         customizer
@@ -52,24 +52,24 @@ public class See {
                         .is(HamcrestCondition.matching(matcher)));
   }
 
-  public static <T> Consequence thatEventually(
+  public static <T> Consequence eventually(
       Question<T> question, Consumer<? super T> assertConsumer) {
-    return See.thatEventually(question, assertConsumer, DEFAULT_CONDITION_FACTORY);
+    return See.eventually(question, assertConsumer, DEFAULT_CONDITION_FACTORY);
   }
 
-  public static <T> Consequence thatEventually(
+  public static <T> Consequence eventually(
       Question<T> question,
       Consumer<? super T> assertConsumer,
       Supplier<ConditionFactory> customizer) {
     return actor -> customizer.get().untilAsserted(() -> actor.asksFor(question), assertConsumer);
   }
 
-  public static Consequence thatEventually(
+  public static Consequence eventually(
       FailableSupplier<Assert<?, ?>, Throwable> assertSupplier) {
-    return See.thatEventually(assertSupplier, DEFAULT_CONDITION_FACTORY);
+    return See.eventually(assertSupplier, DEFAULT_CONDITION_FACTORY);
   }
 
-  public static Consequence thatEventually(
+  public static Consequence eventually(
       FailableSupplier<Assert<?, ?>, Throwable> assertSupplier,
       Supplier<ConditionFactory> customizer) {
     return actor -> customizer.get().untilAsserted(assertSupplier::get);

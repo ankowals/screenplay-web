@@ -1,14 +1,32 @@
 package tests;
 
 import base.TestBase;
+import domain.saucedemo.interactions.Login;
+import domain.saucedemo.questions.TheErrorMessage;
+import framework.screenplay.actor.Actor;
+import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
+import framework.web.screenplay.BrowseTheWeb;
+import framework.web.screenplay.ManageBrowsers;
 import java.util.concurrent.TimeUnit;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import screenplay.saucedemo.interactions.Login;
-import screenplay.saucedemo.questions.TheErrorMessage;
 
 class BrowserWatcherRecordingTest extends TestBase {
+
+  private Actor user;
+
+  @BeforeEach
+  void beforeEach() {
+    this.user = Actors.withAbilities();
+    this.user.can(BrowseTheWeb.with(this.browser));
+    this.user.can(
+        ManageBrowsers.with(
+            SELENIUM_JUPITER
+                .getConfig()
+                .getManager())); // to support video recording via Login interaction
+  }
 
   // recording has to be started after opening url in the browser
   // active tab is recorded

@@ -1,10 +1,17 @@
 package tests;
 
 import base.TestBase;
+import domain.saucedemo.interactions.Login;
+import domain.saucedemo.pom.LoginPage;
+import domain.saucedemo.questions.TheErrorMessage;
+import domain.saucedemo.questions.TheScreenshot;
 import framework.reporting.ExtentWebReportExtension;
+import framework.screenplay.actor.Actor;
+import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
 import framework.web.assertions.accessibility.AccessibilityAssert;
 import framework.web.assertions.visual.VisualAssert;
+import framework.web.screenplay.BrowseTheWeb;
 import io.github.bonigarcia.seljup.SingleSession;
 import java.io.File;
 import java.util.UUID;
@@ -13,16 +20,20 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 import org.openqa.selenium.By;
-import pom.saucedemo.LoginPage;
-import screenplay.saucedemo.interactions.Login;
-import screenplay.saucedemo.questions.TheErrorMessage;
-import screenplay.saucedemo.questions.TheScreenshot;
 
 @SingleSession
 @DisableIfTestFails
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SauceLoginTest extends TestBase {
+
+  private Actor user;
+
+  @BeforeEach
+  void beforeEach() {
+    this.user = Actors.withAbilities();
+    this.user.can(BrowseTheWeb.with(this.browser));
+  }
 
   @Test
   @Order(1)
@@ -66,7 +77,7 @@ class SauceLoginTest extends TestBase {
         "%s/%s/%s-axe-%s.html"
             .formatted(
                 ExtentWebReportExtension.REPORT_FILE.getParentFile(),
-                testInfo.getTestClass().orElseThrow().getSimpleName(),
+                testInfo.getTestClass().orElseThrow().getName(),
                 testInfo.getTestMethod().orElseThrow().getName(),
                 UUID.randomUUID()));
   }

@@ -1,19 +1,22 @@
 package tests;
 
 import base.TestBase;
+import domain.saucedemo.interactions.Add;
+import domain.saucedemo.interactions.Checkout;
+import domain.saucedemo.interactions.Login;
+import domain.saucedemo.pom.CartPage;
+import domain.saucedemo.pom.CheckoutOverviewPage;
+import domain.saucedemo.questions.TheItem;
+import domain.saucedemo.questions.TheOrder;
+import framework.screenplay.actor.Actor;
+import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
+import framework.web.screenplay.BrowseTheWeb;
 import io.github.bonigarcia.seljup.SingleSession;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
-import pom.saucedemo.CartPage;
-import pom.saucedemo.CheckoutOverviewPage;
-import screenplay.saucedemo.interactions.Add;
-import screenplay.saucedemo.interactions.Checkout;
-import screenplay.saucedemo.interactions.Login;
-import screenplay.saucedemo.questions.TheItem;
-import screenplay.saucedemo.questions.TheOrder;
 
 /** test from SauceOrderSummaryTest re-written using screenplay */
 @SingleSession
@@ -21,6 +24,14 @@ import screenplay.saucedemo.questions.TheOrder;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SauceOrderSummaryScreenplayTest extends TestBase {
+
+  private Actor user;
+
+  @BeforeEach
+  void beforeEach() {
+    this.user = Actors.withAbilities();
+    this.user.can(BrowseTheWeb.with(this.browser));
+  }
 
   @Test
   @Order(1)

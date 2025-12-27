@@ -22,7 +22,7 @@ public class InParallel {
   }
 
   /**
-   * InParallel.perform( () -> actor1.attemptsTo(Buy.product("Dress")), () ->
+   * InParallel.perform(() -> actor1.attemptsTo(Buy.product("Dress")), () ->
    * actor2.attemptsTo(Buy.product("Other Dress")));
    */
   public static void perform(FailableRunnable<?>... failableRunnables) {

@@ -1,8 +1,7 @@
 <aspectj>
     <weaver>
         <!-- only weave classes in our application-specific packages -->
-        <include within="pom..*" />
-        <include within="screenplay..*" />
+        <include within="domain..*" />
         <include within="tests..*" />
         <include within="framework.logging..*" />
     </weaver>
@@ -10,7 +9,7 @@
         <!-- weave in just this aspects -->
         <concrete-aspect name="framework.logging.ConcreteLogAspect" extends="framework.logging.AbstractLogAspect">
             <pointcut name="scope" expression="execution(* framework.web.pom.page.BasePage+.*(..))
-                || execution(public framework.screenplay.* screenplay..*(..))"/>
+                || execution(public framework.screenplay.* domain..*(..))"/>
         </concrete-aspect>
         <aspect name="framework.logging.TestExceptionLoggerAspect"/>
     </aspects>

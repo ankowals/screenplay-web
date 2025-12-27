@@ -4,14 +4,13 @@ import framework.screenplay.*;
 import java.util.*;
 import org.apache.commons.lang3.function.Failable;
 import org.assertj.core.api.*;
-import org.hamcrest.Matcher;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
 
   private final Map<Class<?>, Ability> abilities = new HashMap<>();
 
-  @SafeVarargs
   @Override
+  @SafeVarargs
   public final <T extends Ability> void can(T... doSomething) {
     Arrays.stream(doSomething).forEach(ability -> this.abilities.put(ability.getClass(), ability));
   }
@@ -33,13 +32,14 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
   }
 
   @Override
-  public void should(Consequence consequence) throws Exception {
-    consequence.evaluateFor(this);
+  public void should(Consequence... consequences) throws Exception {
+    Failable.stream(Arrays.asList(consequences))
+        .forEach(consequence -> consequence.evaluateFor(this));
   }
 
   @Override
-  public <T> ObjectAssert<T> assertsThat(T actual) {
-    return Assertions.assertThat(actual);
+  public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
+    return Assertions.assertThat(question.answeredBy(this));
   }
 
   public final void wasAbleTo(Interaction... interactions) {
@@ -56,23 +56,5 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
 
   public final void is(Interaction... interactions) {
     this.attemptsTo(interactions);
-  }
-
-  @SafeVarargs
-  public final <T> void checksThat(T actual, Matcher<? super T>... matchers) {
-    Arrays.asList(matchers)
-        .forEach(matcher -> this.assertsThat(actual).is(HamcrestCondition.matching(matcher)));
-  }
-
-  public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
-    return this.should(question.answeredBy(this));
-  }
-
-  public <T> ObjectAssert<T> should(T actual) {
-    return this.assertsThat(actual);
-  }
-
-  public <T> ObjectAssert<T> assertsThat(Question<T> question) throws Exception {
-    return this.assertsThat(question.answeredBy(this));
   }
 }

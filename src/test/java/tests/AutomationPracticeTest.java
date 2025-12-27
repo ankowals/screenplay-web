@@ -3,33 +3,43 @@ package tests;
 import static framework.screenplay.helpers.Bdd.given;
 import static framework.screenplay.helpers.Bdd.then;
 import static framework.screenplay.helpers.Bdd.when;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
 
 import base.TestBase;
+import domain.automationpractice.interactions.*;
+import domain.automationpractice.interactions.Open;
+import domain.automationpractice.model.AccountFormData;
+import domain.automationpractice.model.Product;
+import domain.automationpractice.pom.models.AccountPage;
+import domain.automationpractice.pom.models.ProductDetailsPage;
+import domain.automationpractice.pom.models.SearchResultsPage;
+import domain.automationpractice.questions.ThePage;
+import domain.automationpractice.questions.TheProduct;
+import framework.screenplay.actor.Actor;
+import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import pom.automationpractice.models.AccountPage;
-import pom.automationpractice.models.ProductDetailsPage;
-import pom.automationpractice.models.SearchResultsPage;
-import screenplay.automationpractice.interactions.*;
-import screenplay.automationpractice.interactions.Open;
-import screenplay.automationpractice.model.AccountFormData;
-import screenplay.automationpractice.model.Product;
-import screenplay.automationpractice.questions.ThePage;
-import screenplay.automationpractice.questions.TheProduct;
 
 @Disabled("Page not available any more")
 class AutomationPracticeTest extends TestBase {
+
+  private Actor user;
+
+  @BeforeEach
+  void beforeEach() {
+    this.user = Actors.withAbilities();
+    this.user.can(BrowseTheWeb.with(this.browser));
+  }
 
   static final String AUTOMATION_PRACTICE_HOME = "http://automationpractice.com/index.php";
 
@@ -39,7 +49,8 @@ class AutomationPracticeTest extends TestBase {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user).attemptsTo(Open.automationPractice(), Create.account(data));
     then(this.user)
-        .should(See.that(ThePage.title(AccountPage.class), equalTo("My account - My Store")));
+        .should(
+            See.that(ThePage.title(AccountPage.class), Matchers.equalTo("My account - My Store")));
   }
 
   @Test
@@ -59,7 +70,10 @@ class AutomationPracticeTest extends TestBase {
                     + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=",
                 SearchResultsPage.class),
             View.product("Printed Chiffon Dress"));
-    then(this.user).should(See.that(TheProduct.details(), hasProperty("price", equalTo("$17.40"))));
+    then(this.user)
+        .should(
+            See.that(
+                TheProduct.details(), Matchers.hasProperty("price", Matchers.equalTo("$17.40"))));
   }
 
   @Test

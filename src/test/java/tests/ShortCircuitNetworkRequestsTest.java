@@ -3,20 +3,31 @@ package tests;
 import static framework.screenplay.helpers.Bdd.*;
 
 import base.TestBase;
+import domain.formio.interactions.Fill;
+import domain.formio.interactions.Open;
+import domain.formio.interactions.Submit;
+import domain.formio.questions.TheExampleForm;
+import framework.screenplay.actor.Actor;
+import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
 import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
-import screenplay.formio.interactions.Fill;
-import screenplay.formio.interactions.Open;
-import screenplay.formio.interactions.Submit;
-import screenplay.formio.questions.TheExampleForm;
 
 class ShortCircuitNetworkRequestsTest extends TestBase {
+
+  private Actor user;
+
+  @BeforeEach
+  void beforeEach() {
+    this.user = Actors.withAbilities();
+    this.user.can(BrowseTheWeb.with(this.browser));
+  }
 
   @Test
   void shouldSubmitForm() throws Exception {

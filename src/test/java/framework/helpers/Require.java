@@ -6,13 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Require {
 
-  public static <T> T notNull(T input) {
+  public static <T> T nonNull(T input) {
     new Validator<>(Objects::isNull, "Null input not allowed!").test(input);
     return input;
   }
 
   public static String notEmpty(String input) {
-    Require.notNull(input);
+    Require.nonNull(input);
     new Validator<>(StringUtils::isEmpty, "Empty input not allowed!").test(input);
     return input;
   }

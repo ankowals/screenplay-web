@@ -1,9 +1,6 @@
 package base;
 
 import framework.reporting.ExtentWebReportExtension;
-import framework.screenplay.actor.Actor;
-import framework.web.screenplay.BrowseTheWeb;
-import framework.web.screenplay.ManageBrowsers;
 import framework.web.tracing.DevToolsTracer;
 import framework.web.wdm.ChromeOptionsFactory;
 import framework.web.wdm.MyWebDriverManagerFactory;
@@ -31,10 +28,10 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 @ExtendWith({WatcherExtension.class})
 public class TestBase {
 
-  @RegisterExtension static final SeleniumJupiter SELENIUM_JUPITER = new SeleniumJupiter();
+  @RegisterExtension
+  protected static final SeleniumJupiter SELENIUM_JUPITER = new SeleniumJupiter();
 
   protected WebDriver browser;
-  protected Actor user;
 
   static {
     SLF4JBridgeHandler.install(); // required to bridge jul over slf4j
@@ -68,11 +65,6 @@ public class TestBase {
     if (!Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
       new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
     }
-
-    // to support screenplay
-    this.user = new Actor();
-    this.user.can(BrowseTheWeb.with(this.browser));
-    this.user.can(ManageBrowsers.with(SELENIUM_JUPITER.getConfig().getManager()));
   }
 
   @AfterEach
@@ -117,7 +109,7 @@ public class TestBase {
   private String formatFilePath(TestInfo testInfo, String type) {
     return "%s/%s-%s.%s"
         .formatted(
-            testInfo.getTestClass().orElseThrow().getSimpleName(),
+            testInfo.getTestClass().orElseThrow().getName(),
             testInfo.getTestMethod().orElseThrow().getName(),
             UUID.randomUUID(),
             type);

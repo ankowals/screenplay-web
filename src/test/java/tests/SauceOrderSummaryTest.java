@@ -1,12 +1,15 @@
 package tests;
 
 import base.TestBase;
+import domain.saucedemo.pom.CartPage;
+import domain.saucedemo.pom.CheckoutOverviewPage;
+import domain.saucedemo.pom.LoginPage;
+import domain.saucedemo.pom.ProductsPage;
 import io.github.bonigarcia.seljup.SingleSession;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
-import pom.saucedemo.*;
 
 /**
  * In parallel execution each method requires separate driver instance and with @SingleSession

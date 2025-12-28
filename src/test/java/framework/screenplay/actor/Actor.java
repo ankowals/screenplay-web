@@ -41,20 +41,4 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
   public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
     return Assertions.assertThat(question.answeredBy(this));
   }
-
-  public final void wasAbleTo(Interaction... interactions) {
-    this.attemptsTo(interactions);
-  }
-
-  public final void has(Interaction... interactions) {
-    this.attemptsTo(interactions);
-  }
-
-  public final void was(Interaction... interactions) {
-    this.attemptsTo(interactions);
-  }
-
-  public final void is(Interaction... interactions) {
-    this.attemptsTo(interactions);
-  }
 }

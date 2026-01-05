@@ -2,6 +2,7 @@ package domain.saucedemo.interactions;
 
 import domain.saucedemo.pom.LoginPage;
 import framework.screenplay.Interaction;
+import framework.screenplay.actor.use.UseAbility;
 import framework.web.screenplay.BrowseTheWeb;
 import framework.web.screenplay.ManageBrowsers;
 import framework.web.wdm.session.Cookies;
@@ -38,10 +39,10 @@ public class Login {
       }
 
       if (isBrowserWatcherEnabled) {
-        actor
-            .usingAbilityTo(ManageBrowsers.class)
+        UseAbility.of(actor)
+            .to(ManageBrowsers.class)
             .webDriverManager()
-            .startRecording(actor.usingAbilityTo(BrowseTheWeb.class).driver());
+            .startRecording(UseAbility.of(actor).to(BrowseTheWeb.class).driver());
       }
 
       // devTools does not work with extensions installation via bidi
@@ -60,7 +61,7 @@ public class Login {
       // remember new session
       // it works only if login was successful otherwise exception can be thrown when getting
       // storage
-      WebDriver webDriver = actor.usingAbilityTo(BrowseTheWeb.class).driver();
+      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).driver();
 
       SESSION_CACHE.put(
           credentials.username(),
@@ -74,10 +75,10 @@ public class Login {
       BrowseTheWeb.as(actor).onPage(LoginPage.class).open();
 
       if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
-        actor
-            .usingAbilityTo(ManageBrowsers.class)
+        UseAbility.of(actor)
+            .to(ManageBrowsers.class)
             .webDriverManager()
-            .startRecording(actor.usingAbilityTo(BrowseTheWeb.class).driver());
+            .startRecording(UseAbility.of(actor).to(BrowseTheWeb.class).driver());
       }
 
       BrowseTheWeb.as(actor)

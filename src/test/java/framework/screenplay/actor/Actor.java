@@ -39,6 +39,6 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
 
   @Override
   public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
-    return Assertions.assertThat(question.answeredBy(this));
+    return Assertions.assertThat(this.asksFor(question));
   }
 }

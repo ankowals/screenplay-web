@@ -3,6 +3,7 @@ package framework.screenplay.helpers;
 import framework.screenplay.Consequence;
 import framework.screenplay.Question;
 import framework.screenplay.abilities.AwaitPatiently;
+import framework.screenplay.actor.use.UseAbility;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -46,8 +47,8 @@ public class See {
 
   public static <T> Consequence eventually(Question<T> question, Matcher<? super T> matcher) {
     return actor ->
-        actor
-            .usingAbilityTo(AwaitPatiently.class)
+        UseAbility.of(actor)
+            .to(AwaitPatiently.class)
             .conditionFactory()
             .untilAsserted(
                 () ->
@@ -59,16 +60,17 @@ public class See {
   public static <T> Consequence eventually(
       Question<T> question, Consumer<? super T> assertConsumer) {
     return actor ->
-        actor
-            .usingAbilityTo(AwaitPatiently.class)
+        UseAbility.of(actor)
+            .to(AwaitPatiently.class)
             .conditionFactory()
             .untilAsserted(() -> actor.asksFor(question), assertConsumer);
   }
 
-  public static Consequence eventually(FailableSupplier<Assert<?, ?>, Throwable> assertSupplier) {
+  public static <T> Consequence eventually(
+      FailableSupplier<Assert<?, T>, Throwable> assertSupplier) {
     return actor ->
-        actor
-            .usingAbilityTo(AwaitPatiently.class)
+        UseAbility.of(actor)
+            .to(AwaitPatiently.class)
             .conditionFactory()
             .untilAsserted(assertSupplier::get);
   }

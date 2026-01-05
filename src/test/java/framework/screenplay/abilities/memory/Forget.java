@@ -1,7 +1,7 @@
 package framework.screenplay.abilities.memory;
 
 import framework.screenplay.Interaction;
-import framework.screenplay.abilities.use.UseAbility;
+import framework.screenplay.actor.use.UseAbility;
 
 public class Forget {
   public static Interaction valueOf(String name, Class<?> type) {

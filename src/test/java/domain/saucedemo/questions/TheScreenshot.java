@@ -2,7 +2,7 @@ package domain.saucedemo.questions;
 
 import framework.reporting.ExtentWebReportExtension;
 import framework.screenplay.Question;
-import framework.screenplay.abilities.use.UseAbility;
+import framework.screenplay.actor.use.UseAbility;
 import framework.web.screenplay.BrowseTheWeb;
 import java.io.File;
 import java.nio.file.Files;

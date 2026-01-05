@@ -4,9 +4,9 @@ import framework.helpers.Try;
 import framework.screenplay.abilities.AssertSoftly;
 import framework.screenplay.abilities.cleanup.DoTheCleanUp;
 import framework.screenplay.abilities.memory.*;
-import framework.screenplay.abilities.use.UseAbility;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
+import framework.screenplay.actor.use.UseAbility;
 import framework.screenplay.helpers.See;
 import org.assertj.core.api.Assertions;
 import org.awaitility.core.ConditionTimeoutException;
@@ -72,7 +72,7 @@ class AbilitiesTest {
   @Order(4)
   void shouldEventuallyEvaluateConsequence() {
     Assertions.assertThatExceptionOfType(ConditionTimeoutException.class)
-        .isThrownBy(
+        .isThrownBy( // NOSONAR
             () ->
                 this.actor.should(
                     See.eventually(
@@ -83,7 +83,7 @@ class AbilitiesTest {
   @Order(5)
   void shouldEventuallyAssertQuestion() {
     Assertions.assertThatExceptionOfType(ConditionTimeoutException.class)
-        .isThrownBy(
+        .isThrownBy( // NOSONAR
             () ->
                 this.actor.should(
                     See.eventually(
@@ -95,7 +95,7 @@ class AbilitiesTest {
   @Order(6)
   void shouldEventuallyAssert() {
     Assertions.assertThatExceptionOfType(ConditionTimeoutException.class)
-        .isThrownBy(
+        .isThrownBy( // NOSONAR
             () ->
                 this.actor.should(
                     See.eventually(

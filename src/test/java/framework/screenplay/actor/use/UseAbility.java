@@ -1,4 +1,4 @@
-package framework.screenplay.abilities.use;
+package framework.screenplay.actor.use;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;
@@ -23,9 +23,5 @@ public class UseAbility {
     }
 
     return ability;
-  }
-
-  public <T extends Ability> T that(Class<T> doSomething) {
-    return this.to(doSomething);
   }
 }

@@ -1,6 +1,7 @@
 package tests;
 
 import base.TestBase;
+import domain.BrowseTheWeb;
 import domain.saucedemo.interactions.Add;
 import domain.saucedemo.interactions.Checkout;
 import domain.saucedemo.interactions.Login;
@@ -11,7 +12,6 @@ import domain.saucedemo.questions.TheOrder;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
-import framework.web.screenplay.BrowseTheWeb;
 import io.github.bonigarcia.seljup.SingleSession;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;

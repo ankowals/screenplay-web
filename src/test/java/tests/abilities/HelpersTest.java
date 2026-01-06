@@ -1,10 +1,10 @@
 package tests.abilities;
 
-import framework.helpers.InParallel;
 import framework.screenplay.abilities.memory.RememberThat;
 import framework.screenplay.abilities.memory.TheRemembered;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
+import framework.screenplay.helpers.InParallel;
 import framework.screenplay.helpers.See;
 import java.util.List;
 import org.assertj.core.api.Assertions;

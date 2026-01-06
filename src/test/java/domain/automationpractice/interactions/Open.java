@@ -1,9 +1,9 @@
 package domain.automationpractice.interactions;
 
+import domain.BrowseTheWeb;
 import domain.automationpractice.pom.models.AutomationPracticeHomePage;
 import framework.screenplay.Interaction;
 import framework.web.pom.page.BasePage;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class Open {
 

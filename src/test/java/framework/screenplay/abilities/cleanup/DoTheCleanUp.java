@@ -2,7 +2,7 @@ package framework.screenplay.abilities.cleanup;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 
 public record DoTheCleanUp(OnTeardownActions onTeardownActions) implements Ability {
   public static OnTeardownActions as(Actor actor) {

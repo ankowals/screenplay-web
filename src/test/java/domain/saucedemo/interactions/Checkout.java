@@ -1,8 +1,8 @@
 package domain.saucedemo.interactions;
 
+import domain.BrowseTheWeb;
 import domain.saucedemo.pom.CheckoutYourInformationPage;
 import framework.screenplay.Interaction;
-import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Consumer;
 
 public class Checkout {

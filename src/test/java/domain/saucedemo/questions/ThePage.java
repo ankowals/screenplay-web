@@ -1,8 +1,8 @@
 package domain.saucedemo.questions;
 
+import domain.BrowseTheWeb;
 import domain.saucedemo.pom.ProductsPage;
 import framework.screenplay.Question;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class ThePage {
   public static Question<String> title() {

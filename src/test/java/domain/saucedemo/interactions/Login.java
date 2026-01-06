@@ -1,10 +1,10 @@
 package domain.saucedemo.interactions;
 
+import domain.BrowseTheWeb;
+import domain.ManageBrowsers;
 import domain.saucedemo.pom.LoginPage;
 import framework.screenplay.Interaction;
-import framework.screenplay.actor.use.UseAbility;
-import framework.web.screenplay.BrowseTheWeb;
-import framework.web.screenplay.ManageBrowsers;
+import framework.screenplay.helpers.use.UseAbility;
 import framework.web.wdm.session.Cookies;
 import framework.web.wdm.session.Session;
 import framework.web.wdm.session.storage.LocalStorage;

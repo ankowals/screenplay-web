@@ -1,8 +1,8 @@
 package domain.automationpractice.interactions;
 
+import domain.BrowseTheWeb;
 import domain.automationpractice.pom.models.SearchResultsPage;
 import framework.screenplay.Interaction;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class View {
 

@@ -2,7 +2,7 @@ package framework.screenplay.abilities;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 import java.util.function.Consumer;
 import org.assertj.core.api.SoftAssertions;
 

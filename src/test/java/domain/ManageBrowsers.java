@@ -1,8 +1,8 @@
-package framework.web.screenplay;
+package domain;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public record ManageBrowsers(WebDriverManager webDriverManager) implements Ability {

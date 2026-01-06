@@ -1,13 +1,13 @@
 package tests;
 
 import base.TestBase;
+import domain.BrowseTheWeb;
+import domain.ManageBrowsers;
 import domain.saucedemo.interactions.Login;
 import domain.saucedemo.questions.TheErrorMessage;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
-import framework.web.screenplay.BrowseTheWeb;
-import framework.web.screenplay.ManageBrowsers;
 import java.util.concurrent.TimeUnit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

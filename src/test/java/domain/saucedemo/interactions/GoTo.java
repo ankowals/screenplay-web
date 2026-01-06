@@ -1,9 +1,9 @@
 package domain.saucedemo.interactions;
 
+import domain.BrowseTheWeb;
 import domain.saucedemo.pom.CartPage;
 import domain.saucedemo.pom.ProductsPage;
 import framework.screenplay.Interaction;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class GoTo {
   public static Interaction cart() {

@@ -1,4 +1,4 @@
-package framework.helpers;
+package framework.screenplay.helpers;
 
 import framework.screenplay.Interaction;
 import framework.screenplay.actor.Actor;

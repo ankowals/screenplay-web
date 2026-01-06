@@ -1,9 +1,9 @@
 package domain.saucedemo.questions;
 
+import domain.BrowseTheWeb;
 import domain.saucedemo.interactions.GoTo;
 import domain.saucedemo.pom.CartPage;
 import framework.screenplay.Question;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class TheItem {
   public static Question<CartPage.CartItem> inCart(String name) {

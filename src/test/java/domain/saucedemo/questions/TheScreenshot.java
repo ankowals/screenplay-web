@@ -1,9 +1,9 @@
 package domain.saucedemo.questions;
 
+import domain.BrowseTheWeb;
 import framework.reporting.ExtentWebReportExtension;
 import framework.screenplay.Question;
-import framework.screenplay.actor.use.UseAbility;
-import framework.web.screenplay.BrowseTheWeb;
+import framework.screenplay.helpers.use.UseAbility;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;

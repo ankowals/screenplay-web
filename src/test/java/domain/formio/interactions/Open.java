@@ -1,8 +1,8 @@
 package domain.formio.interactions;
 
+import domain.BrowseTheWeb;
 import domain.formio.pom.AngularFormExamplePage;
 import framework.screenplay.Interaction;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class Open {
 

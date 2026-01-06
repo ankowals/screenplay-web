@@ -1,10 +1,10 @@
 package domain.automationpractice.interactions;
 
+import domain.BrowseTheWeb;
 import domain.automationpractice.model.AccountFormData;
 import domain.automationpractice.pom.models.AuthenticationPage;
 import domain.automationpractice.pom.models.AutomationPracticeHomePage;
 import framework.screenplay.Interaction;
-import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Consumer;
 
 public class Create {

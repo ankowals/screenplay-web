@@ -1,8 +1,8 @@
 package domain.formio.questions;
 
+import domain.BrowseTheWeb;
 import domain.formio.pom.AngularFormExamplePage;
 import framework.screenplay.Question;
-import framework.web.screenplay.BrowseTheWeb;
 
 public class TheExampleForm {
 

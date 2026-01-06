@@ -3,7 +3,7 @@ package framework.screenplay.helpers;
 import framework.screenplay.Consequence;
 import framework.screenplay.Question;
 import framework.screenplay.abilities.AwaitPatiently;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

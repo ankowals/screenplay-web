@@ -1,4 +1,4 @@
-package framework.screenplay.actor.use;
+package framework.screenplay.helpers.use;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;

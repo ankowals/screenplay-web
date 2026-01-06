@@ -2,7 +2,7 @@ package framework.screenplay.abilities.memory;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 
 public record RememberThings(Memory memory) implements Ability {
   public static Memory as(Actor actor) {

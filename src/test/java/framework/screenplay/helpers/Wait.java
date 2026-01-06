@@ -3,7 +3,7 @@ package framework.screenplay.helpers;
 import framework.screenplay.Interaction;
 import framework.screenplay.Question;
 import framework.screenplay.abilities.AwaitPatiently;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 import org.hamcrest.Matcher;

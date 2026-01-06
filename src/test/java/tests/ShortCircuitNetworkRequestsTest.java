@@ -3,6 +3,7 @@ package tests;
 import static framework.screenplay.helpers.Bdd.*;
 
 import base.TestBase;
+import domain.BrowseTheWeb;
 import domain.formio.interactions.Fill;
 import domain.formio.interactions.Open;
 import domain.formio.interactions.Submit;
@@ -10,7 +11,6 @@ import domain.formio.questions.TheExampleForm;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
-import framework.web.screenplay.BrowseTheWeb;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;

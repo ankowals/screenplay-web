@@ -1,6 +1,7 @@
 package tests;
 
 import base.TestBase;
+import domain.BrowseTheWeb;
 import domain.saucedemo.interactions.Login;
 import domain.saucedemo.pom.LoginPage;
 import domain.saucedemo.questions.TheErrorMessage;
@@ -11,7 +12,6 @@ import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
 import framework.web.assertions.accessibility.AccessibilityAssert;
 import framework.web.assertions.visual.VisualAssert;
-import framework.web.screenplay.BrowseTheWeb;
 import io.github.bonigarcia.seljup.SingleSession;
 import java.io.File;
 import java.util.UUID;

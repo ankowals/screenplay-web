@@ -1,8 +1,8 @@
-package framework.web.screenplay;
+package domain;
 
 import framework.screenplay.Ability;
 import framework.screenplay.actor.Actor;
-import framework.screenplay.actor.use.UseAbility;
+import framework.screenplay.helpers.use.UseAbility;
 import framework.web.pom.page.BasePage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;

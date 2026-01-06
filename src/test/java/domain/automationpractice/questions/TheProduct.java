@@ -1,9 +1,9 @@
 package domain.automationpractice.questions;
 
+import domain.BrowseTheWeb;
 import domain.automationpractice.model.Product;
 import domain.automationpractice.pom.models.ProductDetailsPage;
 import framework.screenplay.Question;
-import framework.web.screenplay.BrowseTheWeb;
 import java.util.List;
 import java.util.Map;
 

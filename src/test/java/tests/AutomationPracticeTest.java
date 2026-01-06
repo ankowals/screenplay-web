@@ -5,6 +5,7 @@ import static framework.screenplay.helpers.Bdd.then;
 import static framework.screenplay.helpers.Bdd.when;
 
 import base.TestBase;
+import domain.BrowseTheWeb;
 import domain.automationpractice.interactions.*;
 import domain.automationpractice.interactions.Open;
 import domain.automationpractice.model.AccountFormData;
@@ -17,7 +18,6 @@ import domain.automationpractice.questions.TheProduct;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
-import framework.web.screenplay.BrowseTheWeb;
 import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;

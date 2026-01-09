@@ -6,7 +6,6 @@ import framework.screenplay.abilities.AwaitPatiently;
 import framework.screenplay.helpers.use.UseAbility;
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import org.apache.commons.lang3.function.FailableConsumer;
 import org.apache.commons.lang3.function.FailableSupplier;
 import org.apache.commons.lang3.stream.Streams;
@@ -28,13 +27,6 @@ public class See {
     };
   }
 
-  public static <T> Consequence that(Question<T> question, Predicate<? super T> predicate) {
-    return actor ->
-        actor.should(
-            See.whether(
-                question, answer -> Assertions.assertThat(predicate.test(answer)).isTrue()));
-  }
-
   @SafeVarargs
   public static <T> Consequence that(Question<T> question, Matcher<? super T>... matchers) {
     return actor -> {
@@ -45,7 +37,7 @@ public class See {
     };
   }
 
-  public static <T> Consequence whether(
+  public static <T> Consequence that(
       Question<T> question, FailableConsumer<? super T, Exception> assertConsumer) {
     return actor -> assertConsumer.accept(actor.asksFor(question));
   }
@@ -58,7 +50,7 @@ public class See {
             .untilAsserted(
                 () ->
                     actor.should(
-                        See.whether(
+                        See.that(
                             question,
                             answer ->
                                 Assertions.assertThat(answer)

@@ -59,7 +59,7 @@ class AutomationPracticeTest extends TestBase {
     when(this.user).attemptsTo(Open.automationPractice(), Find.product("Printed Chiffon Dress"));
     then(this.user)
         .should(
-            See.whether(
+            See.that(
                 TheProduct.details(),
                 product -> Assertions.assertThat(product).returns("$16.40", Product::getPrice)));
   }
@@ -91,7 +91,7 @@ class AutomationPracticeTest extends TestBase {
                 ProductDetailsPage.class));
     then(this.user)
         .should(
-            See.whether(
+            See.that(
                 TheProduct.dataSheet(),
                 product ->
                     Assertions.assertThat(product)

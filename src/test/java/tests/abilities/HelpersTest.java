@@ -66,7 +66,7 @@ class HelpersTest {
             TheRemembered.valueOf("thread", String.class), Matchers.not(Matchers.nullValue())));
 
     actor1.should(
-        See.whether(
+        See.that(
             TheRemembered.valueOf("thread", String.class),
             val ->
                 Assertions.assertThat(val)

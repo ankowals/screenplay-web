@@ -1,10 +1,11 @@
 package framework.web.pom.page;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 
 // can be used to represent particular page which can be open in the browser
-// can be composed of multiple page elements and views
-public abstract class BasePage extends BasePageElement {
+// can be composed of multiple pages and views
+public abstract class BasePage extends AbstractPage {
 
   public BasePage(WebDriver driver) {
     super(driver);
@@ -22,15 +23,15 @@ public abstract class BasePage extends BasePageElement {
     return ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BYTES);
   }
 
+  public byte[] takeScreenshot(WebElement webElement) {
+    return webElement.getScreenshotAs(OutputType.BYTES);
+  }
+
   protected WebDriver.Navigation navigate() {
     return this.driver.navigate();
   }
 
-  protected WebDriver.TargetLocator switchTo() {
-    return this.driver.switchTo();
-  }
-
-  protected boolean isInsideFrame() {
-    return this.js.executeScript("return window.frameElement") != null;
+  protected Actions createAction() {
+    return new Actions(this.driver);
   }
 }

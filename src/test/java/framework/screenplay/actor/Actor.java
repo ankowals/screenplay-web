@@ -36,9 +36,4 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
     Failable.stream(Arrays.asList(consequences))
         .forEach(consequence -> consequence.evaluateFor(this));
   }
-
-  @Override
-  public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
-    return Assertions.assertThat(this.asksFor(question));
-  }
 }

@@ -8,23 +8,19 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 // can be used to return web elements of a page or conditions
-public abstract class BaseView {
+public abstract class BaseView extends AbstractPage {
 
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
-  protected final WebDriver driver;
+
   protected final WebDriverWait wait;
 
   public BaseView(WebDriver driver) {
-    this.driver = driver;
-    this.wait = this.createWebDriverWait(DEFAULT_TIMEOUT);
+    super(driver);
+    this.wait = this.webDriverWait(DEFAULT_TIMEOUT);
   }
 
-  protected WebDriverWait createWebDriverWait(Duration timeout) {
+  protected WebDriverWait webDriverWait(Duration timeout) {
     return new WebDriverWait(this.driver, timeout);
-  }
-
-  protected WebDriverWait createWebDriverWait(Duration timeout, Duration sleep) {
-    return new WebDriverWait(this.driver, timeout, sleep);
   }
 
   protected void waitUntil(ExpectedCondition<?>... conditions) {

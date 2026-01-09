@@ -8,6 +8,7 @@ import framework.screenplay.helpers.InParallel;
 import framework.screenplay.helpers.See;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 
@@ -27,11 +28,18 @@ class HelpersTest {
         () ->
             RememberThat.valueOf("thread3").is(Thread.currentThread().getName()).performAs(actor));
 
-    actor.should(See.that(TheRemembered.valueOf("thread1", String.class))).isNotNull();
-    actor.should(See.that(TheRemembered.valueOf("thread3", String.class))).isNotNull();
-    actor
-        .should(See.that(TheRemembered.valueOf("thread1", String.class)))
-        .isNotEqualTo(TheRemembered.valueOf("thread3", String.class).answeredBy(actor));
+    actor.should(
+        See.that(
+            TheRemembered.valueOf("thread1", String.class), Matchers.not(Matchers.nullValue())));
+    actor.should(
+        See.that(
+            TheRemembered.valueOf("thread3", String.class), Matchers.not(Matchers.nullValue())));
+    actor.should(
+        See.that(
+            TheRemembered.valueOf("thread1", String.class),
+            Matchers.not(
+                Matchers.equalTo(
+                    TheRemembered.valueOf("thread3", String.class).answeredBy(actor)))));
   }
 
   @Test
@@ -50,12 +58,20 @@ class HelpersTest {
     InParallel.actors(actor1, actor2, actor3, actor4, actor5, actor6, actor7, actor8, actor9)
         .eachAttemptsTo(() -> RememberThat.valueOf("thread").is(Thread.currentThread().getName()));
 
-    actor1.should(See.that(TheRemembered.valueOf("thread", String.class))).isNotNull();
-    actor3.should(See.that(TheRemembered.valueOf("thread", String.class))).isNotNull();
+    actor1.should(
+        See.that(
+            TheRemembered.valueOf("thread", String.class), Matchers.not(Matchers.nullValue())));
+    actor3.should(
+        See.that(
+            TheRemembered.valueOf("thread", String.class), Matchers.not(Matchers.nullValue())));
 
-    actor1
-        .should(See.that(TheRemembered.valueOf("thread", String.class)))
-        .isNotEqualTo(TheRemembered.valueOf("thread", String.class).answeredBy(actor3));
+    actor1.should(
+        See.whether(
+            TheRemembered.valueOf("thread", String.class),
+            val ->
+                Assertions.assertThat(val)
+                    .isNotEqualTo(
+                        TheRemembered.valueOf("thread", String.class).answeredBy(actor3))));
   }
 
   @Test

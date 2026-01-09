@@ -21,7 +21,7 @@ import framework.screenplay.helpers.See;
 import java.util.*;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -57,7 +57,11 @@ class AutomationPracticeTest extends TestBase {
   void shouldSearchForProduct() throws Exception {
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user).attemptsTo(Open.automationPractice(), Find.product("Printed Chiffon Dress"));
-    then(this.user).should(See.that(TheProduct.details())).returns("$16.40", Product::getPrice);
+    then(this.user)
+        .should(
+            See.whether(
+                TheProduct.details(),
+                product -> Assertions.assertThat(product).returns("$16.40", Product::getPrice)));
   }
 
   @Test
@@ -86,11 +90,14 @@ class AutomationPracticeTest extends TestBase {
                     + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2",
                 ProductDetailsPage.class));
     then(this.user)
-        .should(See.that(TheProduct.dataSheet()))
-        .asInstanceOf(InstanceOfAssertFactories.LIST)
-        .contains(Collections.singletonMap("Compositions", "Polyester"))
-        .contains(Collections.singletonMap("Styles", "Girly"))
-        .contains(Collections.singletonMap("Properties", "Midi Dress"));
+        .should(
+            See.whether(
+                TheProduct.dataSheet(),
+                product ->
+                    Assertions.assertThat(product)
+                        .contains(Collections.singletonMap("Compositions", "Polyester"))
+                        .contains(Collections.singletonMap("Styles", "Girly"))
+                        .contains(Collections.singletonMap("Properties", "Midi Dress"))));
   }
 
   private static Stream<Arguments> accountFormDataProvider() {

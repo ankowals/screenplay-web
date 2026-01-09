@@ -47,6 +47,7 @@ public class AngularExpectedConditions {
   }
 
   private static String executeScript(String script, WebDriver webDriver) {
-    return ((JavascriptExecutor) webDriver).executeScript(script).toString();
+    return Objects.requireNonNull(((JavascriptExecutor) webDriver).executeScript(script))
+        .toString();
   }
 }

@@ -14,7 +14,6 @@ import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
 import io.github.bonigarcia.seljup.SingleSession;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 
@@ -41,18 +40,17 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
         Add.toCart("Sauce Labs Bike Light"),
         Add.toCart("Sauce Labs Backpack"));
 
-    CartPage.CartItem actualItem = this.user.asksFor(TheItem.inCart("Sauce Labs Bike Light"));
+    this.user.should(
+        See.eventually(
+            TheItem.inCart("Sauce Labs Bike Light"),
+            item -> {
+              Assertions.assertThat(item)
+                  .returns("Sauce Labs Bike Light", CartPage.CartItem::name)
+                  .returns(1, CartPage.CartItem::quantity)
+                  .returns("$9.99", CartPage.CartItem::price);
 
-    this.user
-        .should(See.that(actualItem))
-        .returns("Sauce Labs Bike Light", CartPage.CartItem::name)
-        .returns(1, CartPage.CartItem::quantity)
-        .returns("$9.99", CartPage.CartItem::price);
-
-    this.user
-        .should(See.that(actualItem.description()))
-        .asInstanceOf(InstanceOfAssertFactories.STRING)
-        .contains("1 AAA battery included");
+              Assertions.assertThat(item.description()).contains("1 AAA battery included");
+            }));
   }
 
   @Test
@@ -69,20 +67,17 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
     this.user.should(
         See.eventually(
             TheOrder.summaryInfo(),
-            summaryInfo ->
-                Assertions.assertThat(summaryInfo)
-                    .returns("SauceCard #31337", CheckoutOverviewPage.SummaryInfo::paymentInfo)
-                    .returns(
-                        "Free Pony Express Delivery!",
-                        CheckoutOverviewPage.SummaryInfo::shippingInfo)));
+            summaryInfo -> {
+              Assertions.assertThat(summaryInfo)
+                  .returns("SauceCard #31337", CheckoutOverviewPage.SummaryInfo::paymentInfo)
+                  .returns(
+                      "Free Pony Express Delivery!",
+                      CheckoutOverviewPage.SummaryInfo::shippingInfo);
 
-    this.user.should(
-        See.eventually(
-            TheOrder.summaryInfo(),
-            summaryInfo ->
-                Assertions.assertThat(summaryInfo.priceTotal())
-                    .returns("$39.98", CheckoutOverviewPage.PriceTotal::itemTotal)
-                    .returns("$3.20", CheckoutOverviewPage.PriceTotal::tax)
-                    .returns("$43.18", CheckoutOverviewPage.PriceTotal::total)));
+              Assertions.assertThat(summaryInfo.priceTotal())
+                  .returns("$39.98", CheckoutOverviewPage.PriceTotal::itemTotal)
+                  .returns("$3.20", CheckoutOverviewPage.PriceTotal::tax)
+                  .returns("$43.18", CheckoutOverviewPage.PriceTotal::total);
+            }));
   }
 }

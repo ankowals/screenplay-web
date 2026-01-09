@@ -29,8 +29,7 @@ Otherwise, expect size mismatch errors.
 public class VisualAssert extends AbstractAssert<VisualAssert, File> {
 
   private final ResourceLoader resourceLoader;
-  private List<Rectangle> excludedRectangles = new ArrayList<>();
-  private List<WebElement> excludedWebElements = new ArrayList<>();
+  private final List<Rectangle> excludedRectangles = new ArrayList<>();
 
   public VisualAssert(File actual) {
     super(actual, VisualAssert.class);
@@ -42,17 +41,16 @@ public class VisualAssert extends AbstractAssert<VisualAssert, File> {
   }
 
   public VisualAssert excluding(Rectangle... rectangles) {
-    this.excludedRectangles = new ArrayList<>(List.of(rectangles));
+    this.excludedRectangles.addAll(new ArrayList<>(List.of(rectangles)));
     return this;
   }
 
-  // may not work well when scaling factor in used
   public VisualAssert excluding(WebElement... webElements) {
     return this.excluding(List.of(webElements));
   }
 
   public VisualAssert excluding(List<WebElement> webElements) {
-    this.excludedWebElements = webElements;
+    this.excludedRectangles.addAll(this.toRectangles(webElements));
     return this;
   }
 
@@ -61,7 +59,6 @@ public class VisualAssert extends AbstractAssert<VisualAssert, File> {
       return this;
     }
 
-    this.excludedRectangles.addAll(this.toRectangles(this.excludedWebElements));
     File diffFile =
         new File(this.actual.toPath().toAbsolutePath().toString().replace(".png", "-diff.png"));
 

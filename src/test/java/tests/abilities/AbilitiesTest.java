@@ -40,7 +40,9 @@ class AbilitiesTest {
         .add(() -> Forget.everything().performAs(this.actor));
 
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
-    this.actor.should(See.that(TheRemembered.valueOf("message", String.class))).isNotNull();
+    this.actor.should(
+        See.that(
+            TheRemembered.valueOf("message", String.class), Matchers.not(Matchers.nullValue())));
   }
 
   @Test

@@ -8,7 +8,6 @@ import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.ManagesAbilities;
 import framework.screenplay.actor.PerformsChecks;
 import framework.screenplay.actor.PerformsInteractions;
-import org.assertj.core.api.ObjectAssert;
 
 public class Bdd {
   public static BddActorWrapper given(Actor actor) {
@@ -64,11 +63,6 @@ public class Bdd {
     @Override
     public void should(Consequence... consequences) throws Exception {
       this.actor.should(consequences);
-    }
-
-    @Override
-    public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
-      return this.actor.should(question);
     }
 
     public final void wasAbleTo(Interaction... interactions) {

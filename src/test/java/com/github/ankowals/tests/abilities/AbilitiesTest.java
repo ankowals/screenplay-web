@@ -54,13 +54,23 @@ class AbilitiesTest {
             TheRemembered.valueOf("terefere", String.class, Or.empty()),
             Matchers.is(Matchers.nullValue())));
 
-    Memory.Key<String> nonExistingKey = new Memory.Key<>("terefere", String.class);
+    Memory.Key<String> key = new Memory.Key<>("terefere", String.class);
 
     this.actor.should(
         See.that(
-            TheRemembered.valueOf(
-                nonExistingKey, Or.askFor(TheRemembered.valueOf("message", String.class))),
+            TheRemembered.valueOf(key, Or.askFor(TheRemembered.valueOf("message", String.class))),
             Matchers.equalTo("Do nothing")));
+
+    this.actor.attemptsTo(RememberThat.valueOf(key).is("terefere"));
+    this.actor.should(See.that(TheRemembered.valueOf(key), Matchers.is("terefere")));
+    this.actor.attemptsTo(Forget.valueOf(key));
+
+    answer = this.actor.asksFor(TheRemembered.valueOf(key, Or.value("hopsiaisa")));
+    this.actor.should(See.thatActual(answer, Matchers.is("hopsiaisa")));
+
+    this.actor.attemptsTo(RememberThat.valueOf("srututu").is(TheRemembered.valueOf(key)));
+    this.actor.should(
+        See.that(TheRemembered.valueOf("srututu", String.class), Matchers.is("hopsiaisa")));
   }
 
   @Test

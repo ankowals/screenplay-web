@@ -7,6 +7,10 @@ public class Or {
     return actor -> null;
   }
 
+  public static <T> Question<T> value(T value) {
+    return actor -> value;
+  }
+
   public static <T> Question<T> askFor(Question<T> question) {
     return question;
   }

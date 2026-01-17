@@ -6,6 +6,10 @@ import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 
 public class RememberThat {
 
+  public static <T> RememberThatFactory<T> valueOf(Memory.Key<T> key) {
+    return RememberThat.valueOf(key.name());
+  }
+
   public static <T> RememberThatFactory<T> valueOf(String name) {
     return new RememberThatFactory<>(name);
   }

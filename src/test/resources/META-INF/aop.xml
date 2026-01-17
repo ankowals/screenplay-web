@@ -1,16 +1,16 @@
 <aspectj>
     <weaver>
         <!-- only weave classes in our application-specific packages -->
-        <include within="domain..*" />
-        <include within="tests..*" />
-        <include within="framework.logging..*" />
+        <include within="com.github.ankowals.domain..*" />
+        <include within="com.github.ankowals.tests..*" />
+        <include within="com.github.ankowals.framework.logging..*" />
     </weaver>
     <aspects>
         <!-- weave in just this aspects -->
-        <concrete-aspect name="framework.logging.ConcreteLogAspect" extends="framework.logging.AbstractLogAspect">
-            <pointcut name="scope" expression="execution(* framework.web.pom.page.BasePage+.*(..))
-                || execution(public framework.screenplay.* domain..*(..))"/>
+        <concrete-aspect name="com.github.ankowals.framework.logging.ConcreteLogAspect" extends="com.github.ankowals.framework.logging.AbstractLogAspect">
+            <pointcut name="scope" expression="execution(* com.github.ankowals.framework.web.pom.page.BasePage+.*(..))
+                || execution(public com.github.ankowals.framework.screenplay.* com.github.ankowals.domain..*(..))"/>
         </concrete-aspect>
-        <aspect name="framework.logging.TestExceptionLoggerAspect"/>
+        <aspect name="com.github.ankowals.framework.logging.TestExceptionLoggerAspect"/>
     </aspects>
 </aspectj>

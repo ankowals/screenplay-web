@@ -42,8 +42,6 @@ dependencies {
     testImplementation("commons-io:commons-io:2.21.0")
     testImplementation("com.github.romankh3:image-comparison:4.4.0")
     testImplementation("com.deque.html.axe-core:selenium:4.11.0")
-
-
 }
 
 test {
@@ -64,7 +62,7 @@ test {
 
     environment "ACCESSIBILITY_ASSERTIONS_ENABLED", "true"
 
-    //requires to run tests in container
+    //requires to run com.github.ankowals.tests in container
     environment "VISUAL_ASSERTIONS_ENABLED", "false "
     environment "VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS", "false"
 

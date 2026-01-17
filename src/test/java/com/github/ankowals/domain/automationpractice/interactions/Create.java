@@ -1,0 +1,37 @@
+package com.github.ankowals.domain.automationpractice.interactions;
+
+import com.github.ankowals.domain.BrowseTheWeb;
+import com.github.ankowals.domain.automationpractice.model.AccountFormData;
+import com.github.ankowals.domain.automationpractice.pom.models.AuthenticationPage;
+import com.github.ankowals.domain.automationpractice.pom.models.AutomationPracticeHomePage;
+import com.github.ankowals.framework.screenplay.Interaction;
+import java.util.function.Consumer;
+
+public class Create {
+
+  public static Interaction account(AccountFormData accountFormData) {
+    return actor ->
+        BrowseTheWeb.as(actor)
+            .onPage(AutomationPracticeHomePage.class)
+            .clickSignInButton()
+            .enterIntoEmailInput(accountFormData.getEmail())
+            .clickCreateAccountButton()
+            .enterIntoFirstNameInput(accountFormData.getFirstName())
+            .enterIntoLastNameInput(accountFormData.getLastName())
+            .enterIntoPasswordInput(accountFormData.getPassword())
+            .enterIntoAddressInput(accountFormData.getAddress())
+            .enterIntoCityInput(accountFormData.getCity())
+            .selectStateFromDropDown(accountFormData.getState())
+            .enterIntoPostalCodeInput(accountFormData.getPostalCode())
+            .selectCountryFromDropDown(accountFormData.getCountry())
+            .enterIntoMobilePhoneInput(accountFormData.getMobilePhone())
+            .enterIntoAliasInput(accountFormData.getAlias())
+            .clickRegisterButton();
+  }
+
+  public static Interaction account(Consumer<AuthenticationPage> customizer) {
+    return actor ->
+        customizer.accept(
+            BrowseTheWeb.as(actor).onPage(AutomationPracticeHomePage.class).clickSignInButton());
+  }
+}

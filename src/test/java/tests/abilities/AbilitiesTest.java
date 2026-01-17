@@ -2,13 +2,16 @@ package tests.abilities;
 
 import framework.helpers.Try;
 import framework.screenplay.abilities.AssertSoftly;
+import framework.screenplay.abilities.AwaitPatiently;
 import framework.screenplay.abilities.cleanup.DoTheCleanUp;
 import framework.screenplay.abilities.memory.*;
 import framework.screenplay.actor.Actor;
 import framework.screenplay.actor.Actors;
 import framework.screenplay.helpers.See;
 import framework.screenplay.helpers.use.UseAbility;
+import java.time.Duration;
 import org.assertj.core.api.Assertions;
+import org.awaitility.Awaitility;
 import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
@@ -24,6 +27,8 @@ class AbilitiesTest {
   @BeforeAll
   void beforeAll() {
     this.actor = Actors.withAbilities();
+    this.actor.can(
+        AwaitPatiently.with(Awaitility.await().ignoreExceptions().atMost(Duration.ofSeconds(3))));
   }
 
   @AfterEach
@@ -40,9 +45,22 @@ class AbilitiesTest {
         .add(() -> Forget.everything().performAs(this.actor));
 
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
+    String answer = this.actor.asksFor(TheRemembered.valueOf("message", String.class));
+
+    this.actor.should(See.thatActual(answer, Matchers.is("Do nothing")));
+
     this.actor.should(
         See.that(
-            TheRemembered.valueOf("message", String.class), Matchers.not(Matchers.nullValue())));
+            TheRemembered.valueOf("terefere", String.class, Or.empty()),
+            Matchers.is(Matchers.nullValue())));
+
+    Memory.Key<String> nonExistingKey = new Memory.Key<>("terefere", String.class);
+
+    this.actor.should(
+        See.that(
+            TheRemembered.valueOf(
+                nonExistingKey, Or.askFor(TheRemembered.valueOf("message", String.class))),
+            Matchers.equalTo("Do nothing")));
   }
 
   @Test
@@ -102,5 +120,27 @@ class AbilitiesTest {
                 this.actor.should(
                     See.eventually(
                         () -> Assertions.assertThat(new Object()).isEqualTo("terefere"))));
+  }
+
+  @Test
+  @Order(7)
+  void shouldShallowCopyMemory() throws Exception {
+    Actor otherActor = Actors.withAbilities();
+
+    this.actor.attemptsTo(RememberThat.valueOf("word").is("Tequila123"));
+    this.actor.attemptsTo(RememberThat.valueOf("number").is(123));
+
+    Assertions.assertThatExceptionOfType(NoObjectToRecallException.class)
+        .isThrownBy( // NOSONAR
+            () -> otherActor.asksFor(TheRemembered.valueOf("word", String.class)))
+            .withMessage("Actor does not recall [word]. Call remember() first to define this object in Actor's memory.");
+
+    Memory memory = this.actor.asksFor(TheRemembered.memories());
+    otherActor.can(RememberThings.with(memory));
+
+    otherActor.should(
+        See.that(TheRemembered.valueOf("word", String.class), Matchers.equalTo("Tequila123")));
+    otherActor.should(
+        See.that(TheRemembered.valueOf("number", Integer.class), Matchers.equalTo(123)));
   }
 }

@@ -12,7 +12,7 @@ public class OnShutdownActions {
     ON_TEARDOWN_ACTIONS.add(runnable);
   }
 
-  public static void runAll() {
+  public static void runAllAtShutdown() {
     if (HAS_RUN.compareAndSet(false, true)) {
       Runtime.getRuntime().addShutdownHook(new Thread(ON_TEARDOWN_ACTIONS::runAll));
     }

@@ -20,7 +20,7 @@ import org.hamcrest.Matcher;
  */
 public class See {
 
-  public static <T> Consequence that(T actual, Matcher<? super T> matcher) {
+  public static <T> Consequence thatActual(T actual, Matcher<? super T> matcher) {
     return actor -> {
       Question<T> question = a -> actual;
       actor.should(See.that(question, matcher));

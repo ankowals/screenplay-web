@@ -3,7 +3,6 @@ package framework.screenplay.actor;
 import framework.screenplay.*;
 import java.util.*;
 import org.apache.commons.lang3.function.Failable;
-import org.assertj.core.api.*;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
 

@@ -1,6 +1,6 @@
 package framework.screenplay.helpers.use;
 
-class NoMatchingAbilityException extends RuntimeException {
+public class NoMatchingAbilityException extends RuntimeException {
   <T> NoMatchingAbilityException(Class<? extends T> ability) {
     super(
         String.format(

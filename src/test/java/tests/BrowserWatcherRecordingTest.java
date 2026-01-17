@@ -37,7 +37,7 @@ class BrowserWatcherRecordingTest extends TestBase {
     TimeUnit.MILLISECONDS.sleep(1500); // NOSONAR, extension needs a bit time to warm up
 
     this.user.should(
-        See.that(
+        See.eventually(
             TheErrorMessage.uponLogin(),
             Matchers.containsString(
                 "Username and password do not match any user in this service")));

@@ -30,5 +30,14 @@ public class Memory {
     this.cache.clear();
   }
 
-  record Key<T>(String name, Class<T> type) {}
+  Memory recall() {
+    Memory memory = new Memory();
+    this.cache
+        .keySet()
+        .forEach(key -> memory.remember(key.name(), this.recall(key.name(), key.type())));
+
+    return memory;
+  }
+
+  public record Key<T>(String name, Class<T> type) {}
 }

@@ -1,6 +1,7 @@
 package com.github.ankowals.tests.abilities;
 
 import com.github.ankowals.framework.helpers.Try;
+import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.abilities.AssertSoftly;
 import com.github.ankowals.framework.screenplay.abilities.AwaitPatiently;
 import com.github.ankowals.framework.screenplay.abilities.cleanup.DoTheCleanUp;
@@ -47,7 +48,7 @@ class AbilitiesTest {
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
     String answer = this.actor.asksFor(TheRemembered.valueOf("message", String.class));
 
-    this.actor.should(See.thatActual(answer, Matchers.is("Do nothing")));
+    this.actor.should(See.that(TheActual.value(answer), Matchers.is("Do nothing")));
 
     this.actor.should(
         See.that(
@@ -66,7 +67,7 @@ class AbilitiesTest {
     this.actor.attemptsTo(Forget.valueOf(key));
 
     answer = this.actor.asksFor(TheRemembered.valueOf(key, Or.value("hopsiaisa")));
-    this.actor.should(See.thatActual(answer, Matchers.is("hopsiaisa")));
+    this.actor.should(See.that(TheActual.value(answer), Matchers.is("hopsiaisa")));
 
     this.actor.attemptsTo(RememberThat.valueOf("srututu").is(TheRemembered.valueOf(key)));
     this.actor.should(
@@ -153,5 +154,11 @@ class AbilitiesTest {
         See.that(TheRemembered.valueOf("word", String.class), Matchers.equalTo("Tequila123")));
     otherActor.should(
         See.that(TheRemembered.valueOf("number", Integer.class), Matchers.equalTo(123)));
+  }
+
+  private static class TheActual {
+    private static <T> Question<T> value(T value) {
+      return actor -> value;
+    }
   }
 }

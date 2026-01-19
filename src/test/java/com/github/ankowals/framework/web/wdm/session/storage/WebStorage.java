@@ -13,8 +13,8 @@ public abstract class WebStorage {
 
   WebStorage(WebDriver webDriver, String type) {
     this.jsExecutor = (JavascriptExecutor) webDriver;
-    this.storage = this.getAll();
     this.type = type;
+    this.storage = this.getAll();
   }
 
   // clear not needed, assumed called only in new browser

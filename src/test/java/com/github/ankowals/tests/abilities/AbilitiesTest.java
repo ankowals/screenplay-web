@@ -48,7 +48,7 @@ class AbilitiesTest {
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
     String answer = this.actor.asksFor(TheRemembered.valueOf("message", String.class));
 
-    this.actor.should(See.that(TheActual.value(answer), Matchers.is("Do nothing")));
+    this.actor.should(See.that(TheActual.valueOf(answer), Matchers.is("Do nothing")));
 
     this.actor.should(
         See.that(
@@ -67,7 +67,7 @@ class AbilitiesTest {
     this.actor.attemptsTo(Forget.valueOf(key));
 
     answer = this.actor.asksFor(TheRemembered.valueOf(key, Or.value("hopsiaisa")));
-    this.actor.should(See.that(TheActual.value(answer), Matchers.is("hopsiaisa")));
+    this.actor.should(See.that(TheActual.valueOf(answer), Matchers.is("hopsiaisa")));
 
     this.actor.attemptsTo(RememberThat.valueOf("srututu").is(TheRemembered.valueOf(key)));
     this.actor.should(
@@ -97,7 +97,7 @@ class AbilitiesTest {
     UseAbility.of(this.actor)
         .to(AssertSoftly.class)
         .that(softly -> softly.assertThat(actual).isEqualTo("Do nothing"));
-  } // NOSONAR: assert all is called by ability
+  } // NOSONAR
 
   @Test
   @Order(4)
@@ -119,7 +119,7 @@ class AbilitiesTest {
                 this.actor.should(
                     See.eventually(
                         TheRemembered.valueOf("message", String.class),
-                        msg -> Assertions.assertThat(msg).isEqualTo("terefere"))));
+                        actual -> Assertions.assertThat(actual).isEqualTo("terefere"))));
   }
 
   @Test
@@ -157,7 +157,7 @@ class AbilitiesTest {
   }
 
   private static class TheActual {
-    private static <T> Question<T> value(T value) {
+    private static <T> Question<T> valueOf(T value) {
       return actor -> value;
     }
   }

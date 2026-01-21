@@ -1,6 +1,6 @@
 package com.github.ankowals.tests;
 
-import static com.github.ankowals.framework.screenplay.helpers.Bdd.*;
+import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.*;
 
 import com.github.ankowals.base.TestBase;
 import com.github.ankowals.domain.BrowseTheWeb;

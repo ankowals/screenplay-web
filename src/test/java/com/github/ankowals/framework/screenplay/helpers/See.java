@@ -5,7 +5,6 @@ import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.abilities.AwaitPatiently;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.util.Arrays;
-import java.util.function.Consumer;
 import org.apache.commons.lang3.function.FailableConsumer;
 import org.apache.commons.lang3.function.FailableSupplier;
 import org.apache.commons.lang3.stream.Streams;
@@ -40,23 +39,16 @@ public class See {
         UseAbility.of(actor)
             .to(AwaitPatiently.class)
             .conditionFactory()
-            .untilAsserted(
-                () ->
-                    actor.should(
-                        See.that(
-                            question,
-                            answer ->
-                                Assertions.assertThat(answer)
-                                    .is(HamcrestCondition.matching(matcher)))));
+            .untilAsserted(() -> actor.should(See.that(question, matcher)));
   }
 
   public static <T> Consequence eventually(
-      Question<T> question, Consumer<? super T> assertConsumer) {
+      Question<T> question, FailableConsumer<? super T, Exception> assertConsumer) {
     return actor ->
         UseAbility.of(actor)
             .to(AwaitPatiently.class)
             .conditionFactory()
-            .untilAsserted(() -> actor.asksFor(question), assertConsumer);
+            .untilAsserted(() -> actor.should(See.that(question, assertConsumer)));
   }
 
   public static <T> Consequence eventually(

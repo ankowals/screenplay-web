@@ -1,8 +1,8 @@
 package com.github.ankowals.tests;
 
-import static com.github.ankowals.framework.screenplay.helpers.Bdd.given;
-import static com.github.ankowals.framework.screenplay.helpers.Bdd.then;
-import static com.github.ankowals.framework.screenplay.helpers.Bdd.when;
+import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.given;
+import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.then;
+import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.when;
 
 import com.github.ankowals.base.TestBase;
 import com.github.ankowals.domain.BrowseTheWeb;

@@ -1,7 +1,7 @@
 package com.github.ankowals.base;
 
 import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
-import com.github.ankowals.framework.web.tracing.DevToolsTracer;
+import com.github.ankowals.framework.web.assertions.logs.LogsAssertionExtension;
 import com.github.ankowals.framework.web.wdm.ChromeOptionsFactory;
 import com.github.ankowals.framework.web.wdm.MyWebDriverManagerFactory;
 import io.github.bonigarcia.seljup.*;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.bidi.module.LogInspector;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 @ExtendWith({WatcherExtension.class})
@@ -30,6 +30,9 @@ public class TestBase {
 
   @RegisterExtension
   protected static final SeleniumJupiter SELENIUM_JUPITER = new SeleniumJupiter();
+
+  @RegisterExtension
+  protected LogsAssertionExtension logsAssertionExtension = new LogsAssertionExtension();
 
   protected WebDriver browser;
 
@@ -57,13 +60,14 @@ public class TestBase {
   }
 
   @BeforeEach
-  void testBaseBeforeEach(WebDriver webDriver) {
+  void testBaseBeforeEach(WebDriver webDriver, TestInfo testInfo) {
     this.browser = webDriver;
 
     // we can use devTools support like NetworkInterceptor, LogInspector etc or install
     // extension via BiDi but not both at the same time
     if (!Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
-      new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
+      this.logsAssertionExtension.logInspector(new LogInspector(this.browser), testInfo);
+      // new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
     }
   }
 

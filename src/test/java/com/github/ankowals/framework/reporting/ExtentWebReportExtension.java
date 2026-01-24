@@ -11,6 +11,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import org.jspecify.annotations.NonNull;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
@@ -18,7 +19,7 @@ import org.junit.platform.launcher.TestPlan;
 
 public class ExtentWebReportExtension implements TestExecutionListener {
 
-  public static final File REPORT_FILE = new File("build/reports/extent-report/index.html");
+  public static final File REPORT_FILE = ExtentWebReportExtension.getReportFile();
 
   private final ExtentReports extentReport;
   private final Map<FqdnTestName, ExtentTest> testStatusMap = new ConcurrentHashMap<>();
@@ -40,7 +41,7 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   restrictions: * junit 5 nested test class not supported
    */
   @Override
-  public void testPlanExecutionFinished(TestPlan testPlan) {
+  public void testPlanExecutionFinished(@NonNull TestPlan testPlan) {
     this.mediaAttacher.attachNestedMedia(this.testStatusMap);
     this.mediaAttacher.attachMedia(this.testStatusMap);
     this.extentReport.flush();
@@ -61,7 +62,7 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   }
 
   @Override
-  public void executionSkipped(TestIdentifier testIdentifier, String reason) {
+  public void executionSkipped(TestIdentifier testIdentifier, @NonNull String reason) {
     if (!testIdentifier.isTest()) {
       return;
     }
@@ -76,18 +77,14 @@ public class ExtentWebReportExtension implements TestExecutionListener {
 
   @Override
   public void executionFinished(
-      TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+      TestIdentifier testIdentifier, @NonNull TestExecutionResult testExecutionResult) {
     if (!testIdentifier.isTest()) {
       return;
     }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
     TestExecutionResult.Status status = testExecutionResult.getStatus();
-    String cause = "Cause unknown";
-
-    if (testExecutionResult.getThrowable().isPresent()) {
-      cause = testExecutionResult.getThrowable().get().toString();
-    }
+    Optional<Throwable> maybeThrowable = testExecutionResult.getThrowable();
 
     switch (status) {
       case SUCCESSFUL:
@@ -96,10 +93,25 @@ public class ExtentWebReportExtension implements TestExecutionListener {
       case ABORTED:
         this.testStatusMap
             .get(fqdnTestName)
-            .log(Status.WARNING, String.format("%s, %s", status.name(), cause));
+            .log(Status.WARNING, maybeThrowable.orElseGet(() -> new AssertionError("Aborted")));
         break;
       case FAILED:
-        this.testStatusMap.get(fqdnTestName).fail(String.format("%s, %s", status.name(), cause));
+        this.testStatusMap
+            .get(fqdnTestName)
+            .fail(maybeThrowable.orElseGet(() -> new AssertionError("Cause unknown")));
     }
+  }
+
+  private static File getReportFile() {
+    String targetOrBuildDir =
+        new File(
+                ExtentWebReportExtension.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath())
+            .getParent();
+
+    return new File(String.format("%s/reports/extent-report", targetOrBuildDir), "index.html");
   }
 }

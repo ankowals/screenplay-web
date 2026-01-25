@@ -34,23 +34,23 @@ public class CacheEntry {
     this.javascriptLogs.clear();
   }
 
-  public LogInspector getLogInspector() {
+  LogInspector getLogInspector() {
     return logInspector;
   }
 
-  public List<ConsoleLogEntry> getConsoleLogs() {
+  List<ConsoleLogEntry> getConsoleLogs() {
     return consoleLogs;
   }
 
-  public List<JavascriptLogEntry> getJavascriptLogs() {
+  List<JavascriptLogEntry> getJavascriptLogs() {
     return javascriptLogs;
   }
 
-  public Predicate<LogMessage> getIgnoringPredicate() {
+  Predicate<LogMessage> getIgnoringPredicate() {
     return ignoringPredicate;
   }
 
-  public void setIgnoringPredicate(Predicate<LogMessage> ignoringPredicate) {
+  void setIgnoringPredicate(Predicate<LogMessage> ignoringPredicate) {
     this.ignoringPredicate = ignoringPredicate;
   }
 }

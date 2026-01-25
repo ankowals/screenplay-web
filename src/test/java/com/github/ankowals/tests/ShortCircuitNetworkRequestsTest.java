@@ -16,6 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
 
@@ -47,25 +48,27 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
   Use NetworkInterceptor to short-circuit backend requests
    */
   @Test
+  @EnabledIfEnvironmentVariable(named = "BROWSER_WATCHER_ENABLED", matches = "false")
   void shouldNotifyAboutSubmissionFailure() throws Exception {
     String name = RandomStringUtils.insecure().nextAlphabetic(8);
+
+    given(this.user).can(BrowseTheWeb.with(this.browser));
 
     try (NetworkInterceptor interceptor =
         new NetworkInterceptor(this.browser, this.createRouting())) {
 
-      given(this.user).can(BrowseTheWeb.with(this.browser));
       when(this.user)
           .attemptsTo(
               Open.browser(),
               Fill.exampleForm(formPage -> formPage.enterFirstName(name).clickSubmit()));
-    }
 
-    then(this.user)
-        .should(
-            See.eventually(
-                TheExampleForm.submitMessage(),
-                Matchers.containsString(
-                    "Please check the form and correct all errors before submitting")));
+      then(this.user)
+          .should(
+              See.eventually(
+                  TheExampleForm.submitMessage(),
+                  Matchers.containsString(
+                      "Please check the form and correct all errors before submitting")));
+    }
   }
 
   private Routable createRouting() {

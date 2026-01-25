@@ -2,7 +2,6 @@ package com.github.ankowals.framework.web.tracing;
 
 import java.util.Optional;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v144.log.Log;
 import org.openqa.selenium.devtools.v144.network.Network;
 
 // ToDo: add support for screencasting using devTools??
@@ -31,14 +30,15 @@ public class DevToolsTracer {
             Optional.of(1920), //maxWidth
             Optional.of(1080), //maxHeight
             Optional.of(1))); //everyNthFrame
-     */
+
     this.devTools.send(Log.enable());
+     */
 
     new ListenerRegistrar(this.devTools)
         // .addPageScreencastListener()
         .addNetworkRequestListener()
-        .addNetworkResponseListener()
-        .addConsoleLogListener()
-        .addJavascriptExceptionListener();
+        .addNetworkResponseListener();
+    // .addConsoleLogListener()
+    // .addJavascriptExceptionListener();
   }
 }

@@ -72,6 +72,7 @@ public class TestBase {
     if (!Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
       this.logsAssertionExtension.logInspector(new LogInspector(this.browser), testInfo);
       this.biDiTracerExtension.network(new Network(this.browser), testInfo);
+      // new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
     }
   }
 

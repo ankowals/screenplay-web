@@ -59,7 +59,11 @@ public class ChromeOptionsFactory {
       chromiumOptions.addArguments(
           "window-size=1920,1080", // defaults to 800x600
           "screen-info={1920x1080}", // https://issues.chromium.org/issues/422346607#comment4
-          "headless");
+          "headless",
+          // https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/gpu/swiftshader.md
+          "use-gl=angle",
+          "use-angle=swiftshader-webgl",
+          "enable-unsafe-swiftshader");
     }
 
     return chromiumOptions;

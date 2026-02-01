@@ -3,6 +3,8 @@ package com.github.ankowals.framework.web.pom.page;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
+// collection of useful js scripts can be found for example
+// here https://github.com/selenide/selenide/tree/main/src/main/resources
 abstract class AbstractPage {
 
   protected final WebDriver driver;

@@ -48,7 +48,7 @@ test {
     sourceCompatibility = 1.22
     targetCompatibility = 1.22
 
-    //environment "WDM_CHROMEVERSION", "142.0"
+    //environment "WDM_CHROMEVERSION", "144.0"
 
     environment "BROWSER_IN_DOCKER_ENABLED", "false"
     environment "BROWSER_IN_HEADLESS_ENABLED", "false"

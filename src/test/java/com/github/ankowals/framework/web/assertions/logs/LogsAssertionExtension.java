@@ -11,14 +11,17 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.openqa.selenium.bidi.log.FilterBy;
 import org.openqa.selenium.bidi.log.GenericLogEntry;
 import org.openqa.selenium.bidi.log.LogLevel;
 import org.openqa.selenium.bidi.module.LogInspector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Requires LogInspector instance to be set for particular test */
 public class LogsAssertionExtension
     implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(LogsAssertionExtension.class);
 
   private static final Map<String, CacheEntry> CACHE = new ConcurrentHashMap<>();
 
@@ -32,8 +35,19 @@ public class LogsAssertionExtension
 
     cacheEntry
         .getLogInspector()
-        .onConsoleEntry(cacheEntry.getConsoleLogs()::add, FilterBy.logLevel(LogLevel.ERROR));
-    cacheEntry.getLogInspector().onJavaScriptException(cacheEntry.getJavascriptLogs()::add);
+        .onConsoleEntry(
+            consoleLogEntry -> {
+              this.log(consoleLogEntry);
+              cacheEntry.getConsoleLogs().add(consoleLogEntry);
+            });
+
+    cacheEntry
+        .getLogInspector()
+        .onJavaScriptLog(
+            javascriptLogEntry -> {
+              this.log(javascriptLogEntry);
+              cacheEntry.getJavascriptLogs().add(javascriptLogEntry);
+            });
   }
 
   @Override
@@ -48,14 +62,14 @@ public class LogsAssertionExtension
     cacheEntry.getLogInspector().close();
 
     List<LogMessage> filteredConsoleLogs =
-        this.filter(cacheEntry.getConsoleLogs(), cacheEntry.getIgnoringPredicate());
-
-    List<LogMessage> filteredJavascriptLogs =
-        this.filter(cacheEntry.getJavascriptLogs(), cacheEntry.getIgnoringPredicate());
+        this.filterErrors(cacheEntry.getConsoleLogs(), cacheEntry.getIgnoringPredicate());
 
     if (!filteredConsoleLogs.isEmpty()) {
       Assertions.fail("Console log errors have been caught:" + this.toMessage(filteredConsoleLogs));
     }
+
+    List<LogMessage> filteredJavascriptLogs =
+        this.filterErrors(cacheEntry.getJavascriptLogs(), cacheEntry.getIgnoringPredicate());
 
     if (!filteredJavascriptLogs.isEmpty()) {
       Assertions.fail(
@@ -78,15 +92,30 @@ public class LogsAssertionExtension
     }
   }
 
-  private List<LogMessage> filter(
+  private List<LogMessage> filterErrors(
       List<? extends GenericLogEntry> logEntries, Predicate<LogMessage> predicate) {
-    return logEntries.stream().map(LogMessage::new).filter(Predicate.not(predicate)).toList();
+    return logEntries.stream()
+        .filter(logEntry -> logEntry.getLevel() == LogLevel.ERROR)
+        .map(LogMessage::new)
+        .filter(Predicate.not(predicate))
+        .toList();
   }
 
   private String toMessage(List<LogMessage> logMessages) {
     return logMessages.stream()
         .map(LogMessage::asString)
         .collect(Collectors.joining(System.lineSeparator()));
+  }
+
+  private <T extends GenericLogEntry> void log(T logEntry) {
+    LogLevel logLevel = logEntry.getLevel();
+
+    switch (logLevel) {
+      case ERROR -> LOGGER.error(new LogMessage(logEntry).asString());
+      case WARNING -> LOGGER.warn(new LogMessage(logEntry).asString());
+      case INFO -> LOGGER.info(new LogMessage(logEntry).asString());
+      default -> LOGGER.debug(new LogMessage(logEntry).asString());
+    }
   }
 
   private String key(ExtensionContext context) {

@@ -19,7 +19,7 @@ import org.junit.platform.launcher.TestPlan;
 
 public class ExtentWebReportExtension implements TestExecutionListener {
 
-  public static final File REPORT_FILE = ExtentWebReportExtension.getReportFile();
+  public static final File REPORT_FILE = ExtentWebReportExtension.reportFile();
 
   private final ExtentReports extentReport;
   private final Map<FqdnTestName, ExtentTest> testStatusMap = new ConcurrentHashMap<>();
@@ -78,8 +78,16 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   @Override
   public void executionFinished(
       TestIdentifier testIdentifier, @NonNull TestExecutionResult testExecutionResult) {
+    // include failed configuration methods in the report
     if (!testIdentifier.isTest()) {
-      return;
+      if (testExecutionResult.getThrowable().isPresent()) {
+        FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
+        ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString());
+        testIdentifier.getTags().forEach(tag -> extentTest.assignCategory(tag.getName()));
+        this.testStatusMap.putIfAbsent(fqdnTestName, extentTest);
+      } else {
+        return;
+      }
     }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
@@ -102,7 +110,7 @@ public class ExtentWebReportExtension implements TestExecutionListener {
     }
   }
 
-  private static File getReportFile() {
+  private static File reportFile() {
     String targetOrBuildDir =
         new File(
                 ExtentWebReportExtension.class

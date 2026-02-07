@@ -2,7 +2,7 @@ package com.github.ankowals.base;
 
 import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
 import com.github.ankowals.framework.web.assertions.logs.LogsAssertionExtension;
-import com.github.ankowals.framework.web.tracing.bidi.BiDiTracerExtension;
+import com.github.ankowals.framework.web.assertions.requests.RequestsAssertionExtension;
 import com.github.ankowals.framework.web.wdm.ChromeOptionsFactory;
 import com.github.ankowals.framework.web.wdm.MyWebDriverManagerFactory;
 import io.github.bonigarcia.seljup.*;
@@ -36,7 +36,9 @@ public class TestBase {
   @RegisterExtension
   protected LogsAssertionExtension logsAssertionExtension = new LogsAssertionExtension();
 
-  @RegisterExtension protected BiDiTracerExtension biDiTracerExtension = new BiDiTracerExtension();
+  @RegisterExtension
+  protected RequestsAssertionExtension requestsAssertionExtension =
+      new RequestsAssertionExtension();
 
   protected WebDriver browser;
 
@@ -68,10 +70,10 @@ public class TestBase {
     this.browser = webDriver;
 
     // we can use devTools support like NetworkInterceptor, LogInspector etc or install
-    // extension via BiDi but not both at the same time
+    // extension via BiDi but not both at the same time unless chrome for testing in use
     if (!Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
       this.logsAssertionExtension.logInspector(new LogInspector(this.browser), testInfo);
-      this.biDiTracerExtension.network(new Network(this.browser), testInfo);
+      this.requestsAssertionExtension.network(new Network(this.browser), testInfo);
       // new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
     }
   }

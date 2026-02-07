@@ -35,19 +35,19 @@ public class CacheEntry {
   }
 
   LogInspector getLogInspector() {
-    return logInspector;
+    return this.logInspector;
   }
 
   List<ConsoleLogEntry> getConsoleLogs() {
-    return consoleLogs;
+    return this.consoleLogs;
   }
 
   List<JavascriptLogEntry> getJavascriptLogs() {
-    return javascriptLogs;
+    return this.javascriptLogs;
   }
 
   Predicate<LogMessage> getIgnoringPredicate() {
-    return ignoringPredicate;
+    return this.ignoringPredicate;
   }
 
   void setIgnoringPredicate(Predicate<LogMessage> ignoringPredicate) {

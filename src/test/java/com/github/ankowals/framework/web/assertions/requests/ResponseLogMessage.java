@@ -1,21 +1,24 @@
-package com.github.ankowals.framework.web.tracing.bidi;
+package com.github.ankowals.framework.web.assertions.requests;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import org.openqa.selenium.bidi.network.RequestData;
 import org.openqa.selenium.bidi.network.ResponseDetails;
 
-record ResponseLogMessage(LocalDateTime at, String method, String url) {
+public record ResponseLogMessage(LocalDateTime at, String method, String url, int status) {
 
-  ResponseLogMessage(ResponseDetails responseDetails) {
+  ResponseLogMessage(ResponseDetails responseDetails, RequestData requestData) {
     this(
         ResponseLogMessage.extractTimestamp(responseDetails),
+        requestData.getMethod(),
         responseDetails.getResponseData().getUrl(),
-        String.valueOf(responseDetails.getResponseData().getStatus()));
+        responseDetails.getResponseData().getStatus());
   }
 
   String asString() {
-    return "at: %s, url: %s, status: %s".formatted(this.at, this.method, this.url);
+    return "at: %s, method: %s, url: %s, status: %s"
+        .formatted(this.at, this.method, this.url, this.status);
   }
 
   private static LocalDateTime extractTimestamp(ResponseDetails responseDetails) {

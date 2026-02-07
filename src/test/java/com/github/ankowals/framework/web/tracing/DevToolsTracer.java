@@ -5,6 +5,7 @@ import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v144.network.Network;
 
 // ToDo: add support for screencasting using devTools??
+@Deprecated(forRemoval = false)
 public class DevToolsTracer {
 
   private final DevTools devTools;

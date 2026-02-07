@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 /*
 Support may vary between different drivers
  */
+@Deprecated(forRemoval = false)
 public class ListenerRegistrar {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ListenerRegistrar.class);

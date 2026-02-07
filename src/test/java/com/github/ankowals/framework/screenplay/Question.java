@@ -5,7 +5,7 @@ import com.github.ankowals.framework.screenplay.actor.Actor;
 // Proposed naming convention
 // TheCreation.of(CustomerTemplate customerTemplate)
 // TheRegistration.of(Asset asset)
-// TheDevice.details(String customerId)
+// TheDevice.details(String deviceId)
 @FunctionalInterface
 public interface Question<T> {
   T answeredBy(Actor actor) throws Exception;

@@ -36,7 +36,11 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
 
   @Test
   @Order(1)
-  void shouldValidateItemInCart() throws Exception {
+  void shouldValidateItemInCart(TestInfo testInfo) throws Exception {
+    // filter out expected request failures otherwise test will fail
+    this.requestsAssertionExtension.ignoringPredicate(
+        response -> response.status() == 401, testInfo);
+
     this.user.attemptsTo(
         Login.with(new Login.Credentials("standard_user", "secret_sauce")),
         Add.toCart("Sauce Labs Bike Light"),

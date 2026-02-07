@@ -2,32 +2,32 @@ package com.github.ankowals.framework.web.pom.elements.common;
 
 import com.github.ankowals.framework.web.pom.elements.Button;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-// awaits for a spinner to stop being displayed but it is not removed from DOM
-public class DisappearingSpinnerTriggeringButton implements Button {
+// awaits for a spinner to be removed or not displayed in the DOM
+public class SpinnerTriggeringButton implements Button {
 
   private final WebElement webElement;
   private final WebDriverWait webDriverWait;
-  private final By[] spinnersLocators;
+  private final ExpectedCondition<?>[] expectedConditions;
 
-  private DisappearingSpinnerTriggeringButton(
+  private SpinnerTriggeringButton(
       WebElement webElement, WebDriverWait webDriverWait, By... spinnersLocators) {
     this.webElement = webElement;
     this.webDriverWait = webDriverWait;
-    this.spinnersLocators = spinnersLocators;
+    this.expectedConditions =
+        Arrays.stream(spinnersLocators)
+            .map(ExpectedConditions::visibilityOfElementLocated)
+            .toArray(ExpectedCondition[]::new);
   }
 
-  public static DisappearingSpinnerTriggeringButton of(
+  public static SpinnerTriggeringButton of(
       WebElement webElement, WebDriverWait webDriverWait, By... spinnersLocators) {
-    return new DisappearingSpinnerTriggeringButton(webElement, webDriverWait, spinnersLocators);
+    return new SpinnerTriggeringButton(webElement, webDriverWait, spinnersLocators);
   }
 
   @Override
@@ -35,18 +35,15 @@ public class DisappearingSpinnerTriggeringButton implements Button {
     this.webElement.click();
 
     // waits up to 500 ms for spinner to appear
-    ExpectedCondition<?>[] expectedConditions =
-        Arrays.stream(this.spinnersLocators)
-            .map(ExpectedConditions::visibilityOfElementLocated)
-            .toArray(ExpectedCondition[]::new);
-
     try {
       this.wait(this.webElement, Duration.ofMillis(500), Duration.ofMillis(100))
-          .until(ExpectedConditions.or(expectedConditions));
+          .until(ExpectedConditions.or(this.expectedConditions));
     } catch (TimeoutException ignored) { // NOSONAR
     }
 
-    this.webDriverWait.until(this.invisibilityOfSpinner(this.spinnersLocators));
+    // waits long for spinner to disappear
+    this.webDriverWait.until(
+        ExpectedConditions.not(ExpectedConditions.or(this.expectedConditions)));
   }
 
   @Override
@@ -57,16 +54,5 @@ public class DisappearingSpinnerTriggeringButton implements Button {
   private WebDriverWait wait(WebElement webElement, Duration timeout, Duration sleep) {
     WebDriver webDriver = ((WrapsDriver) webElement).getWrappedDriver();
     return new WebDriverWait(webDriver, timeout, sleep);
-  }
-
-  private ExpectedCondition<Boolean> invisibilityOfSpinner(By... spinnersLocators) {
-    return webDriver -> {
-      Objects.requireNonNull(webDriver);
-      List<WebElement> elements = new ArrayList<>();
-
-      Arrays.stream(spinnersLocators).forEach(by -> elements.addAll(webDriver.findElements(by)));
-
-      return ExpectedConditions.invisibilityOfAllElements(elements).apply(webDriver);
-    };
   }
 }

@@ -1,6 +1,6 @@
 package com.github.ankowals.domain.automationpractice.interactions;
 
-import com.github.ankowals.domain.BrowseTheWeb;
+import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.domain.automationpractice.model.AccountFormData;
 import com.github.ankowals.domain.automationpractice.pom.models.AuthenticationPage;
 import com.github.ankowals.domain.automationpractice.pom.models.AutomationPracticeHomePage;

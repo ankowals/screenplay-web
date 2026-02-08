@@ -109,12 +109,13 @@ public class LogsAssertionExtension
 
   private <T extends GenericLogEntry> void log(T logEntry) {
     LogLevel logLevel = logEntry.getLevel();
+    String msg = new LogMessage(logEntry).asString();
 
     switch (logLevel) {
-      case ERROR -> LOGGER.error(new LogMessage(logEntry).asString());
-      case WARNING -> LOGGER.warn(new LogMessage(logEntry).asString());
-      case INFO -> LOGGER.info(new LogMessage(logEntry).asString());
-      default -> LOGGER.debug(new LogMessage(logEntry).asString());
+      case ERROR -> LOGGER.error(msg);
+      case WARNING -> LOGGER.warn(msg);
+      case INFO -> LOGGER.info(msg);
+      default -> LOGGER.debug(msg);
     }
   }
 

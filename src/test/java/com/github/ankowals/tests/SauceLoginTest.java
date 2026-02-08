@@ -1,7 +1,7 @@
 package com.github.ankowals.tests;
 
+import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.base.TestBase;
-import com.github.ankowals.domain.BrowseTheWeb;
 import com.github.ankowals.domain.saucedemo.interactions.Login;
 import com.github.ankowals.domain.saucedemo.pom.LoginPage;
 import com.github.ankowals.domain.saucedemo.questions.TheErrorMessage;
@@ -10,8 +10,8 @@ import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
 import com.github.ankowals.framework.screenplay.actor.Actor;
 import com.github.ankowals.framework.screenplay.actor.Actors;
 import com.github.ankowals.framework.screenplay.helpers.See;
+import com.github.ankowals.framework.web.assertions.VisualAssert;
 import com.github.ankowals.framework.web.assertions.accessibility.AccessibilityAssert;
-import com.github.ankowals.framework.web.assertions.visual.VisualAssert;
 import io.github.bonigarcia.seljup.SingleSession;
 import java.io.File;
 import java.util.UUID;

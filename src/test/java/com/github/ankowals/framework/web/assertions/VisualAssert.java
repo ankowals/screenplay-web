@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.assertions.visual;
+package com.github.ankowals.framework.web.assertions;
 
 import com.github.ankowals.framework.helpers.ResourceLoader;
 import com.github.romankh3.image.comparison.ImageComparison;

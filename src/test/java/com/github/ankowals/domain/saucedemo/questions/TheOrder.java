@@ -1,6 +1,6 @@
 package com.github.ankowals.domain.saucedemo.questions;
 
-import com.github.ankowals.domain.BrowseTheWeb;
+import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.domain.saucedemo.pom.CheckoutOverviewPage;
 import com.github.ankowals.framework.screenplay.Question;
 

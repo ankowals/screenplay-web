@@ -1,4 +1,4 @@
-package com.github.ankowals.domain;
+package com.github.ankowals.abilities;
 
 import com.github.ankowals.framework.screenplay.Ability;
 import com.github.ankowals.framework.screenplay.actor.Actor;

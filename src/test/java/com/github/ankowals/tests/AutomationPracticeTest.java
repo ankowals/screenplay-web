@@ -4,8 +4,8 @@ import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.given;
 import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.then;
 import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.when;
 
+import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.base.TestBase;
-import com.github.ankowals.domain.BrowseTheWeb;
 import com.github.ankowals.domain.automationpractice.interactions.*;
 import com.github.ankowals.domain.automationpractice.interactions.Open;
 import com.github.ankowals.domain.automationpractice.model.AccountFormData;

@@ -1,7 +1,7 @@
 package com.github.ankowals.domain.saucedemo.interactions;
 
-import com.github.ankowals.domain.BrowseTheWeb;
-import com.github.ankowals.domain.ManageBrowsers;
+import com.github.ankowals.abilities.BrowseTheWeb;
+import com.github.ankowals.abilities.ManageBrowsers;
 import com.github.ankowals.domain.saucedemo.pom.LoginPage;
 import com.github.ankowals.framework.screenplay.Interaction;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;

@@ -1,6 +1,6 @@
 package com.github.ankowals.domain.automationpractice.questions;
 
-import com.github.ankowals.domain.BrowseTheWeb;
+import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.domain.automationpractice.model.Product;
 import com.github.ankowals.domain.automationpractice.pom.models.ProductDetailsPage;
 import com.github.ankowals.framework.screenplay.Question;

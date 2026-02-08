@@ -1,8 +1,8 @@
 package com.github.ankowals.tests;
 
+import com.github.ankowals.abilities.BrowseTheWeb;
+import com.github.ankowals.abilities.ManageBrowsers;
 import com.github.ankowals.base.TestBase;
-import com.github.ankowals.domain.BrowseTheWeb;
-import com.github.ankowals.domain.ManageBrowsers;
 import com.github.ankowals.domain.saucedemo.interactions.Login;
 import com.github.ankowals.domain.saucedemo.questions.TheErrorMessage;
 import com.github.ankowals.framework.screenplay.actor.Actor;

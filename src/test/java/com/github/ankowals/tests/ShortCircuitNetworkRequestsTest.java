@@ -2,8 +2,8 @@ package com.github.ankowals.tests;
 
 import static com.github.ankowals.framework.screenplay.helpers.bdd.Bdd.*;
 
+import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.base.TestBase;
-import com.github.ankowals.domain.BrowseTheWeb;
 import com.github.ankowals.domain.formio.interactions.Fill;
 import com.github.ankowals.domain.formio.interactions.Open;
 import com.github.ankowals.domain.formio.interactions.Submit;

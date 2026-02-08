@@ -40,11 +40,6 @@ public record TraceNetworkRequests(Network network, List<ResponseDetails> respon
     return UseAbility.of(actor).to(TraceNetworkRequests.class).responses();
   }
 
-  public List<ResponseDetails> responses() {
-    this.network.close();
-    return this.responses;
-  }
-
   private static String toLogMessage(ResponseDetails responseDetails) {
     return "at: %s, method: %s, url: %s, status: %s"
         .formatted(

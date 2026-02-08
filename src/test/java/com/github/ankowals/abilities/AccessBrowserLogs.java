@@ -43,16 +43,6 @@ public record AccessBrowserLogs(
     return new AccessBrowserLogs(logInspector, new ArrayList<>(), new ArrayList<>());
   }
 
-  public List<ConsoleLogEntry> consoleLogs() {
-    this.logInspector.close();
-    return this.consoleLogs;
-  }
-
-  public List<JavascriptLogEntry> javaScriptLogs() {
-    this.logInspector.close();
-    return this.javascriptLogs;
-  }
-
   private <T extends GenericLogEntry> void log(T logEntry) {
     LogLevel logLevel = logEntry.getLevel();
     String msg = new LogMessage(logEntry).asString();

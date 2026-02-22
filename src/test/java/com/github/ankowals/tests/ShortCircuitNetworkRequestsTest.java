@@ -16,6 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.openqa.selenium.devtools.NetworkInterceptor;
 import org.openqa.selenium.remote.http.*;
@@ -31,7 +32,10 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
   }
 
   @Test
-  void shouldSubmitForm() throws Exception {
+  void shouldSubmitForm(TestInfo testInfo) throws Exception {
+    this.requestsAssertionExtension.ignoringPredicate(
+        responseLogMessage -> responseLogMessage.status() == 401, testInfo);
+
     given(this.user).can(BrowseTheWeb.with(this.browser));
     when(this.user)
         .attemptsTo(

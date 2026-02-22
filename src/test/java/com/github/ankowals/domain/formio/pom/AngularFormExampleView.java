@@ -1,8 +1,8 @@
 package com.github.ankowals.domain.formio.pom;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
+import com.github.ankowals.framework.web.pom.ElementsExpectedConditions;
 import com.github.ankowals.framework.web.pom.elements.Button;
 import com.github.ankowals.framework.web.pom.elements.Element;
 import com.github.ankowals.framework.web.pom.elements.Input;
@@ -28,7 +28,8 @@ class AngularFormExampleView extends BaseView {
 
   Button submitButton() {
     WebElement element =
-        this.wait.until(elementToBeClickable(By.xpath("//*[@name='data[submit]']")));
+        this.wait.until(
+            ElementsExpectedConditions.elementToBeClickable(By.xpath("//*[@name='data[submit]']")));
     return ButtonImpl.of(element);
   }
 

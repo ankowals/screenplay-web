@@ -10,6 +10,4 @@ public interface Element extends WebElement {
   void scrollTo();
 
   boolean isInsideFrame();
-
-  boolean isVisibleInViewport();
 }

@@ -5,9 +5,10 @@ import com.github.ankowals.domain.saucedemo.pom.CartPage;
 import com.github.ankowals.domain.saucedemo.pom.CheckoutOverviewPage;
 import com.github.ankowals.domain.saucedemo.pom.LoginPage;
 import com.github.ankowals.domain.saucedemo.pom.ProductsPage;
+import com.github.ankowals.framework.web.assertions.Eventually;
 import io.github.bonigarcia.seljup.SingleSession;
-import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 
@@ -42,9 +43,7 @@ class SauceOrderSummaryTest extends TestBase {
             .enterPassword("secret_sauce")
             .clickLogin();
 
-    String actual = this.productsPage.getTitle();
-
-    Assertions.assertThat(actual).contains("Products");
+    Eventually.assertThat(this.productsPage::getTitle, Matchers.containsString("Products"));
   }
 
   @Test
@@ -56,8 +55,8 @@ class SauceOrderSummaryTest extends TestBase {
             .clickAddToCart("Sauce Labs Backpack")
             .clickCartButton();
 
-    List<CartPage.CartItem> actual = this.cartPage.getCartItems();
-    Assertions.assertThat(actual).isNotEmpty();
+    Eventually.assertThat(
+        this.cartPage::getCartItems, cartItems -> Assertions.assertThat(cartItems).isNotEmpty());
   }
 
   @Test

@@ -122,25 +122,6 @@ public class ElementImpl implements Element {
     return this.js.executeScript("return window.frameElement") != null;
   }
 
-  @Override
-  public boolean isVisibleInViewport() {
-    return (Boolean)
-        this.js.executeScript(
-            """
-                    var elem = arguments[0],
-                    box = elem.getBoundingClientRect(),
-                    cx = box.left + box.width / 2,
-                    cy = box.top + box.height / 2,
-                    e = document.elementFromPoint(cx, cy);
-                    for (; e; e = e.parentElement) {
-                      if (e === elem)
-                        return true;
-                    }
-                    return false;
-                    """,
-            this.webElement);
-  }
-
   public static ElementImpl of(WebElement element) {
     return new ElementImpl(element);
   }

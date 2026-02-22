@@ -1,6 +1,5 @@
 package com.github.ankowals.framework.web.pom.elements.common;
 
-import com.github.ankowals.framework.web.pom.elements.Button;
 import java.time.Duration;
 import java.util.Arrays;
 import org.openqa.selenium.*;
@@ -9,20 +8,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 // awaits for a spinner to be removed or not displayed in the DOM
-public class SpinnerTriggeringButton implements Button {
+public class SpinnerTriggeringButton extends ButtonImpl {
 
-  private final WebElement webElement;
   private final WebDriverWait webDriverWait;
-  private final ExpectedCondition<?>[] expectedConditions;
+  private final By[] spinnersLocators;
 
   private SpinnerTriggeringButton(
       WebElement webElement, WebDriverWait webDriverWait, By... spinnersLocators) {
-    this.webElement = webElement;
+    super(webElement);
     this.webDriverWait = webDriverWait;
-    this.expectedConditions =
-        Arrays.stream(spinnersLocators)
-            .map(ExpectedConditions::visibilityOfElementLocated)
-            .toArray(ExpectedCondition[]::new);
+    this.spinnersLocators = spinnersLocators;
   }
 
   public static SpinnerTriggeringButton of(
@@ -34,21 +29,27 @@ public class SpinnerTriggeringButton implements Button {
   public void click() {
     this.webElement.click();
 
+    ExpectedCondition<?>[] expectedConditions =
+        Arrays.stream(this.spinnersLocators)
+            .map(ExpectedConditions::visibilityOfElementLocated)
+            .toArray(ExpectedCondition[]::new);
+
     // waits up to 500 ms for spinner to appear
     try {
       this.wait(this.webElement, Duration.ofMillis(500), Duration.ofMillis(100))
-          .until(ExpectedConditions.or(this.expectedConditions));
+          .until(ExpectedConditions.or(expectedConditions));
     } catch (TimeoutException ignored) { // NOSONAR
     }
 
-    // waits long for spinner to disappear
-    this.webDriverWait.until(
-        ExpectedConditions.not(ExpectedConditions.or(this.expectedConditions)));
-  }
+    WebDriver webDriver = ((WrapsDriver) this.webElement).getWrappedDriver();
 
-  @Override
-  public String getText() {
-    return this.webElement.getAttribute("title");
+    expectedConditions =
+        Arrays.stream(this.spinnersLocators)
+            .map(by -> ExpectedConditions.invisibilityOfAllElements(webDriver.findElements(by)))
+            .toArray(ExpectedCondition[]::new);
+
+    // waits longer for spinner to disappear
+    this.webDriverWait.until(ExpectedConditions.and(expectedConditions));
   }
 
   private WebDriverWait wait(WebElement webElement, Duration timeout, Duration sleep) {

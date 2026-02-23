@@ -114,7 +114,7 @@ public class ElementImpl implements Element {
 
   @Override
   public void scrollTo() {
-    this.js.executeScript("arguments[0].scrollIntoViewIfNeeded();", this.webElement);
+    this.js.executeScript("arguments[0].scrollIntoView({ block: 'end' });", this.webElement);
   }
 
   @Override

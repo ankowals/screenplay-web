@@ -2,7 +2,7 @@ package com.github.ankowals.framework.web.tracing;
 
 import java.util.Optional;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v144.network.Network;
+import org.openqa.selenium.devtools.v145.network.Network;
 
 // ToDo: add support for screencasting using devTools??
 @Deprecated(forRemoval = false)

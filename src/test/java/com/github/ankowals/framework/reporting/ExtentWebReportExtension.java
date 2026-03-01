@@ -118,6 +118,8 @@ public class ExtentWebReportExtension implements TestExecutionListener {
                     .getCodeSource()
                     .getLocation()
                     .getPath())
+            .getParentFile()
+            .getParentFile()
             .getParent();
 
     return new File(String.format("%s/reports/extent-report", targetOrBuildDir), "index.html");

@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Set;
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.webextension.ExtensionPath;
 import org.openqa.selenium.bidi.webextension.InstallExtensionParameters;
@@ -126,7 +131,16 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
                       .getPath())
               .getParentFile();
 
-      targetDir = Files.createTempDirectory(target.toPath(), "browserwatcher").toFile();
+      if (SystemUtils.IS_OS_UNIX) {
+        // it is probably too much and r-x for others would be sufficient
+        Set<PosixFilePermission> posixFilePermissions =
+            PosixFilePermissions.fromString("rwxrwxrwx");
+        FileAttribute<?> fileAttribute = PosixFilePermissions.asFileAttribute(posixFilePermissions);
+        targetDir =
+            Files.createTempDirectory(target.toPath(), "browserwatcher", fileAttribute).toFile();
+      } else {
+        targetDir = Files.createTempDirectory(target.toPath(), "browserwatcher").toFile();
+      }
 
       try (InputStream inputStream = new FileInputStream(crxPackagePath.toFile())) {
         Zip.unzip(inputStream, targetDir);
@@ -135,7 +149,7 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
       Runtime.getRuntime().addShutdownHook(new Thread(() -> FileHandler.delete(targetDir)));
 
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e); // NOSONAR
     }
 
     return targetDir.toPath();

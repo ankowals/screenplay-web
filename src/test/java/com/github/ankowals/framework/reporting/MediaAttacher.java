@@ -64,15 +64,13 @@ class MediaAttacher {
                     switch (extentTest.getStatus()) {
                       case FAIL:
                         extentTest.fail(
-                            String.format(
-                                "<a href='./%s'>click to view %s</a>",
-                                txtFile.getName(), txtFile.getName()));
+                            "<a href='./%s'>click to view %s</a>"
+                                .formatted(txtFile.getName(), txtFile.getName()));
                         break;
                       case PASS:
                         extentTest.pass(
-                            String.format(
-                                "<a href='./%s'>click to view %s</a>",
-                                txtFile.getName(), txtFile.getName()));
+                            "<a href='./%s'>click to view %s</a>"
+                                .formatted(txtFile.getName(), txtFile.getName()));
                     }
                   });
         });
@@ -97,10 +95,10 @@ class MediaAttacher {
                     .forEach(
                         screenshot ->
                             extentTest.addScreenCaptureFromPath(
-                                String.format(
-                                    "./%s/%s",
-                                    maybeMediaDirForTestClass.get().getName(),
-                                    screenshot.getName()),
+                                "./%s/%s"
+                                    .formatted(
+                                        maybeMediaDirForTestClass.get().getName(),
+                                        screenshot.getName()),
                                 screenshot.getName()));
 
                 List<File> videos = this.mediaFinder.getVideos(dir);
@@ -121,19 +119,19 @@ class MediaAttacher {
                               extentTest.fail(
                                   MarkupHelper.toTable(
                                       new MyVideo(
-                                          String.format(
-                                              "./%s/%s",
-                                              maybeMediaDirForTestClass.get().getName(),
-                                              video.getName()))));
+                                          "./%s/%s"
+                                              .formatted(
+                                                  maybeMediaDirForTestClass.get().getName(),
+                                                  video.getName()))));
                               break;
                             case PASS:
                               extentTest.pass(
                                   MarkupHelper.toTable(
                                       new MyVideo(
-                                          String.format(
-                                              "./%s/%s",
-                                              maybeMediaDirForTestClass.get().getName(),
-                                              video.getName()))));
+                                          "./%s/%s"
+                                              .formatted(
+                                                  maybeMediaDirForTestClass.get().getName(),
+                                                  video.getName()))));
                               break;
                           }
                         });
@@ -147,19 +145,19 @@ class MediaAttacher {
                           switch (extentTest.getStatus()) {
                             case FAIL:
                               extentTest.fail(
-                                  String.format(
-                                      "<a href='./%s/%s'>click to view %s</a>",
-                                      maybeMediaDirForTestClass.get().getName(),
-                                      txtFile.getName(),
-                                      txtFile.getName()));
+                                  "<a href='./%s/%s'>click to view %s</a>"
+                                      .formatted(
+                                          maybeMediaDirForTestClass.get().getName(),
+                                          txtFile.getName(),
+                                          txtFile.getName()));
                               break;
                             case PASS:
                               extentTest.pass(
-                                  String.format(
-                                      "<a href='./%s/%s'>click to view %s</a>",
-                                      maybeMediaDirForTestClass.get().getName(),
-                                      txtFile.getName(),
-                                      txtFile.getName()));
+                                  "<a href='./%s/%s'>click to view %s</a>"
+                                      .formatted(
+                                          maybeMediaDirForTestClass.get().getName(),
+                                          txtFile.getName(),
+                                          txtFile.getName()));
                               break;
                           }
                         });

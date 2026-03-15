@@ -1,27 +1,20 @@
-package com.github.ankowals.framework.web.wdm;
+package com.github.ankowals.framework.web.wdm.bitbucket;
 
-import com.github.ankowals.framework.web.wdm.docker.BitbucketDockerService;
 import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chromium.ChromiumOptions;
 
-public class ChromeOptionsFactory {
+public class BitBucketChromeOptionsFactory {
 
   public static ChromiumOptions<?> desktop() {
-    Map<String, Object> browserPreferences = ChromeOptionsFactory.getBrowserPreferences();
+    Map<String, Object> browserPreferences = BitBucketChromeOptionsFactory.getBrowserPreferences();
 
     // https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-    // map rendering component expects HW acceleration, when disabled "Something went
-    // wrong..." notification is shown
     ChromiumOptions<?> chromiumOptions =
         new ChromeOptions()
-            .setUnhandledPromptBehaviour(
-                UnexpectedAlertBehaviour.ACCEPT) // other ideas for example nicely summarized here
-            // https://github.com/webdriverio/webdriverio/discussions/7191 didn't work
-            // in container:/ alternatively we can use BiDi driver
-            // //https://github.com/SeleniumHQ/selenium/issues/15967
+            .setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE)
             .setExperimentalOption(
                 "excludeSwitches", new String[] {"enable-automation", "disable-infobars"})
             .setExperimentalOption("prefs", browserPreferences)

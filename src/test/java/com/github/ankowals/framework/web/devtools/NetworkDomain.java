@@ -1,67 +1,37 @@
-package com.github.ankowals.framework.web.tracing;
+package com.github.ankowals.framework.web.devtools;
 
-import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v145.log.Log;
-import org.openqa.selenium.devtools.v145.log.model.LogEntry;
 import org.openqa.selenium.devtools.v145.network.Network;
 import org.openqa.selenium.devtools.v145.network.model.*;
-import org.openqa.selenium.devtools.v145.page.Page;
-import org.openqa.selenium.devtools.v145.page.model.ScreencastFrameMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
-Support may vary between different drivers
- */
-@Deprecated(forRemoval = false)
-public class ListenerRegistrar {
+public class NetworkDomain {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ListenerRegistrar.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NetworkDomain.class);
 
   private final DevTools devTools;
 
-  ListenerRegistrar(DevTools devTools) {
+  NetworkDomain(DevTools devTools) {
     this.devTools = devTools;
   }
 
-  public ListenerRegistrar addPageScreencastListener() {
-    this.devTools.addListener(
-        Page.screencastFrame(),
-        screencastFrame -> {
-          int sessionId = screencastFrame.getSessionId();
-          ScreencastFrameMetadata screencastFrameMetadata = screencastFrame.getMetadata();
-          String data = screencastFrame.getData();
-          byte[] bytes = Base64.getDecoder().decode(data);
-
-          try {
-            BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
-            String name =
-                String.format(
-                    "%s_%s.png", sessionId, screencastFrameMetadata.getTimestamp().orElseThrow());
-            File file = Path.of(ExtentWebReportExtension.REPORT_FILE.getParent(), name).toFile();
-            ImageIO.write(img, "png", file);
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        });
-
-    return this;
+  public void enable() {
+    this.devTools.send(
+        Network.enable(
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()));
   }
 
-  public ListenerRegistrar addNetworkRequestListener() {
+  public void addRequestListener() {
     this.devTools.addListener(
         Network.requestWillBeSent(),
         entry -> {
@@ -70,11 +40,9 @@ public class ListenerRegistrar {
             LOGGER.info(this.createLogMessage(request));
           }
         });
-
-    return this;
   }
 
-  public ListenerRegistrar addNetworkResponseListener() {
+  public void addResponseListener() {
     this.devTools.addListener(
         Network.responseReceived(),
         entry -> {
@@ -89,37 +57,38 @@ public class ListenerRegistrar {
             }
           }
         });
-
-    return this;
   }
 
-  public ListenerRegistrar addConsoleLogListener() {
-    this.devTools.addListener(
-        Log.entryAdded(),
-        entry -> {
-          if (entry.getLevel().equals(LogEntry.Level.ERROR)) {
-            LOGGER.error(
-                "Console log entry: {}{}{}",
-                entry.getText(),
-                System.lineSeparator(),
-                Objects.toString(entry.getStackTrace().orElse(null), ""));
-          }
-        });
-
-    return this;
+  public List<Cookie> getCookies() {
+    // alternative Storage.getCookies(Optional.empty());
+    return this.devTools.send(Network.getAllCookies());
   }
 
-  public ListenerRegistrar addJavascriptExceptionListener() {
-    this.devTools
-        .getDomains()
-        .events()
-        .addJavascriptExceptionListener(
-            e -> {
-              LOGGER.error("Java script exception: {}", e.getMessage());
-              e.printStackTrace();
-            });
+  public void set(List<Cookie> cookies) {
+    List<CookieParam> cookieParams =
+        cookies.stream()
+            .map(
+                cookie ->
+                    new CookieParam(
+                        cookie.getName(),
+                        cookie.getValue(),
+                        Optional.empty(),
+                        Optional.of(cookie.getDomain()),
+                        Optional.of(cookie.getPath()),
+                        Optional.of(cookie.getSecure()),
+                        Optional.of(cookie.getHttpOnly()),
+                        cookie.getSameSite(),
+                        Optional.of(new TimeSinceEpoch(cookie.getExpires())),
+                        Optional.of(cookie.getPriority()),
+                        Optional.of(cookie.getSameParty()),
+                        Optional.of(cookie.getSourceScheme()),
+                        Optional.of(cookie.getSourcePort()),
+                        cookie.getPartitionKey()))
+            .toList();
 
-    return this;
+    // alternative Storage.setCookies(cookieParams);
+    // this.devTools.send(Network.clearBrowserCookies());
+    this.devTools.send(Network.setCookies(cookieParams));
   }
 
   private String createLogMessage(Request request) {
@@ -158,7 +127,7 @@ public class ListenerRegistrar {
         this.convertToString(response.getHeaders()),
         System.lineSeparator(),
         System.lineSeparator(),
-        this.getBody(requestId));
+        this.getResponseBody(requestId));
   }
 
   private String convertToString(Headers headers) {
@@ -167,7 +136,7 @@ public class ListenerRegistrar {
         .collect(Collectors.joining(System.lineSeparator()));
   }
 
-  private String getBody(RequestId requestId) {
+  private String getResponseBody(RequestId requestId) {
     try {
       return this.devTools.send(Network.getResponseBody(requestId)).getBody();
     } catch (WebDriverException ignored) { // NOSONAR

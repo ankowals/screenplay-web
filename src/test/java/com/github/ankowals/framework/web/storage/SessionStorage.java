@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.wdm.session.storage;
+package com.github.ankowals.framework.web.storage;
 
 import org.openqa.selenium.WebDriver;
 

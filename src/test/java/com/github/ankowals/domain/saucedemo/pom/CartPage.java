@@ -4,8 +4,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElem
 
 import com.github.ankowals.framework.web.pom.elements.Button;
 import com.github.ankowals.framework.web.pom.elements.Element;
-import com.github.ankowals.framework.web.pom.elements.common.ButtonImpl;
-import com.github.ankowals.framework.web.pom.elements.common.ElementImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.ButtonImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.ElementImpl;
 import com.github.ankowals.framework.web.pom.page.BasePage;
 import com.github.ankowals.framework.web.pom.page.BaseView;
 import java.util.ArrayList;

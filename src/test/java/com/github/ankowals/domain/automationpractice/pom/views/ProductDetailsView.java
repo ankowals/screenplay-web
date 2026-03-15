@@ -4,7 +4,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllE
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import com.github.ankowals.framework.web.pom.elements.Element;
-import com.github.ankowals.framework.web.pom.elements.common.ElementImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.ElementImpl;
 import com.github.ankowals.framework.web.pom.page.BaseView;
 import java.util.List;
 import java.util.stream.Collectors;

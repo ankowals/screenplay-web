@@ -1,5 +1,6 @@
 package com.github.ankowals.framework.web.wdm;
 
+import com.github.ankowals.framework.web.wdm.bitbucket.BitbucketChromeDriverManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chromium.ChromiumOptions;
 

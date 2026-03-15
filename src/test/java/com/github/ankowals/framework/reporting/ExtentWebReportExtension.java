@@ -9,6 +9,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import java.io.File;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.jspecify.annotations.NonNull;
@@ -26,13 +27,9 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   private final MediaAttacher mediaAttacher;
 
   public ExtentWebReportExtension() {
-    this(REPORT_FILE);
-  }
-
-  public ExtentWebReportExtension(File file) {
     this.extentReport = new ExtentReports();
-    this.extentReport.attachReporter(new ExtentSparkReporter(file.getAbsolutePath()));
-    this.mediaAttacher = new MediaAttacher(file);
+    this.extentReport.attachReporter(new ExtentSparkReporter(REPORT_FILE.getAbsolutePath()));
+    this.mediaAttacher = new MediaAttacher(REPORT_FILE);
   }
 
   /*
@@ -111,17 +108,32 @@ public class ExtentWebReportExtension implements TestExecutionListener {
   }
 
   private static File reportFile() {
-    String targetOrBuildDir =
-        new File(
-                ExtentWebReportExtension.class
-                    .getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .getPath())
-            .getParentFile()
-            .getParentFile()
-            .getParent();
+    URL initLocation =
+        ExtentWebReportExtension.class.getProtectionDomain().getCodeSource().getLocation();
 
-    return new File(String.format("%s/reports/extent-report", targetOrBuildDir), "index.html");
+    File targetOrBuildDir =
+        ExtentWebReportExtension.doGetTargetOrBuildDir(new File(initLocation.getPath()));
+
+    File reportFile =
+        new File(
+            String.format("%s/extent-report", targetOrBuildDir.getAbsolutePath()), "index.html");
+
+    if (!reportFile.getParentFile().exists()) {
+      reportFile.getParentFile().mkdirs();
+    }
+
+    return reportFile;
+  }
+
+  private static File doGetTargetOrBuildDir(File file) {
+    if (file == null || !file.exists()) {
+      throw new IllegalStateException("target or build directory not found!");
+    }
+
+    if (file.isDirectory() && (file.getName().equals("target") || file.getName().equals("build"))) {
+      return file;
+    }
+
+    return ExtentWebReportExtension.doGetTargetOrBuildDir(file.getParentFile());
   }
 }

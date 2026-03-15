@@ -42,11 +42,12 @@ dependencies {
     testImplementation("commons-io:commons-io:2.21.0")
     testImplementation("com.github.romankh3:image-comparison:4.4.0")
     testImplementation("com.deque.html.axe-core:selenium:4.11.1")
+    testImplementation("net.bramp.ffmpeg:ffmpeg:0.8.0")
 }
 
 test {
-    sourceCompatibility = 1.22
-    targetCompatibility = 1.22
+    sourceCompatibility = 1.21
+    targetCompatibility = 1.21
 
     //environment "WDM_CHROMEVERSION", "145.0"
 
@@ -54,11 +55,14 @@ test {
     environment "BROWSER_IN_HEADLESS_ENABLED", "false"
 
     //recording via container
-    //environment "WDM_DOCKERENABLERECORDING", "false"
+    environment "WDM_DOCKERENABLERECORDING", "false"
 
-    //recording via extension works in headless in container
+    //recording via extension or screencasting works in headless & in container
     //when in use switch off recording via container
     environment "BROWSER_WATCHER_ENABLED", "false"
+    environment "PAGE_SCREENCASTING_ENABLED", "false"
+
+    environment "TRACING_ENABLED", "false"
 
     environment "ACCESSIBILITY_ASSERTIONS_ENABLED", "true"
 

@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.wdm.docker;
+package com.github.ankowals.framework.web.wdm.bitbucket;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.*;

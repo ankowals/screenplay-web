@@ -1,7 +1,6 @@
-package com.github.ankowals.framework.web.wdm;
+package com.github.ankowals.framework.web.wdm.bitbucket;
 
-import com.github.ankowals.framework.web.wdm.docker.BitbucketDockerService;
-import com.github.ankowals.framework.web.wdm.mutators.CapabilitiesMutator;
+import com.github.ankowals.framework.web.wdm.CapabilitiesMutator;
 import io.github.bonigarcia.wdm.docker.DockerService;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import io.github.bonigarcia.wdm.webdriver.WebDriverBrowser;

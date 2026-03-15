@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.pom.elements.common;
+package com.github.ankowals.framework.web.pom.elements.impl;
 
 import com.github.ankowals.framework.web.pom.elements.Button;
 import java.util.Objects;

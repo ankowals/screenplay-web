@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.wdm.mutators;
+package com.github.ankowals.framework.web.wdm;
 
 import java.lang.reflect.Field;
 import java.net.URL;

@@ -5,10 +5,11 @@ import com.github.ankowals.abilities.ManageBrowsers;
 import com.github.ankowals.domain.saucedemo.pom.LoginPage;
 import com.github.ankowals.framework.screenplay.Interaction;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
-import com.github.ankowals.framework.web.wdm.session.Cookies;
-import com.github.ankowals.framework.web.wdm.session.Session;
-import com.github.ankowals.framework.web.wdm.session.storage.LocalStorage;
-import com.github.ankowals.framework.web.wdm.session.storage.SessionStorage;
+import com.github.ankowals.framework.web.devtools.DevToolsSupport;
+import com.github.ankowals.framework.web.devtools.NetworkDomain;
+import com.github.ankowals.framework.web.devtools.Session;
+import com.github.ankowals.framework.web.storage.LocalStorage;
+import com.github.ankowals.framework.web.storage.SessionStorage;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.openqa.selenium.WebDriver;
@@ -25,8 +26,13 @@ public class Login {
 
       // webdriver limitation, cookies can be set only after opening url in the browser
       // to overcome this limitation we will use devTools
+      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).driver();
+      NetworkDomain networkDomain = new DevToolsSupport(webDriver).getNetworkDomain();
+
       if (session != null && !isBrowserWatcherEnabled) {
-        session.cookies().set();
+        // we may consider to call clear cookies first but for now assumed not needed when used with
+        // new browser instance
+        networkDomain.set(session.cookies());
       }
 
       BrowseTheWeb.as(actor).onPage(LoginPage.class).open();
@@ -39,10 +45,7 @@ public class Login {
       }
 
       if (isBrowserWatcherEnabled) {
-        UseAbility.of(actor)
-            .to(ManageBrowsers.class)
-            .webDriverManager()
-            .startRecording(UseAbility.of(actor).to(BrowseTheWeb.class).driver());
+        UseAbility.of(actor).to(ManageBrowsers.class).webDriverManager().startRecording(webDriver);
       }
 
       // devTools does not work with extensions installation via bidi
@@ -61,12 +64,12 @@ public class Login {
       // remember new session
       // it works only if login was successful otherwise exception can be thrown when getting
       // storage
-      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).driver();
-
       SESSION_CACHE.put(
           credentials.username(),
           new Session(
-              new Cookies(webDriver), new LocalStorage(webDriver), new SessionStorage(webDriver)));
+              networkDomain.getCookies(),
+              new LocalStorage(webDriver),
+              new SessionStorage(webDriver)));
     };
   }
 

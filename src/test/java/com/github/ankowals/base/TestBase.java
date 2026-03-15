@@ -3,8 +3,12 @@ package com.github.ankowals.base;
 import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
 import com.github.ankowals.framework.web.assertions.logs.LogsAssertionExtension;
 import com.github.ankowals.framework.web.assertions.requests.RequestsAssertionExtension;
-import com.github.ankowals.framework.web.wdm.ChromeOptionsFactory;
+import com.github.ankowals.framework.web.devtools.DevToolsSupport;
+import com.github.ankowals.framework.web.devtools.NetworkDomain;
+import com.github.ankowals.framework.web.devtools.PageDomain;
+import com.github.ankowals.framework.web.devtools.VideoMerger;
 import com.github.ankowals.framework.web.wdm.MyWebDriverManagerFactory;
+import com.github.ankowals.framework.web.wdm.bitbucket.BitBucketChromeOptionsFactory;
 import io.github.bonigarcia.seljup.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.glytching.junit.extension.watcher.WatcherExtension;
@@ -14,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.UUID;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,19 +55,18 @@ public class TestBase {
   static void testBaseBeforeAll() {
     SELENIUM_JUPITER
         .getConfig()
-        .setManager(MyWebDriverManagerFactory.chrome(ChromeOptionsFactory.desktop()));
+        .setManager(MyWebDriverManagerFactory.chrome(BitBucketChromeOptionsFactory.desktop()));
     SELENIUM_JUPITER.getConfig().enableScreenshotWhenFailure();
     SELENIUM_JUPITER.getConfig().setScreenshotFormat("png");
     // SELENIUM_JUPITER.getConfig().enableRecording();
     SELENIUM_JUPITER.getConfig().enableRecordingWhenFailure();
-
-    // works only with docker and does not work in headless
-    if (Boolean.parseBoolean(System.getenv("WDM_DOCKERENABLERECORDING"))) {
-      SELENIUM_JUPITER.getConfig().setRecording(true);
-    }
-
     SELENIUM_JUPITER.getConfig().setOutputFolderPerClass(true);
     SELENIUM_JUPITER.getConfig().setOutputFolder(ExtentWebReportExtension.REPORT_FILE.getParent());
+
+    // works only with docker and does not work in headless
+    // if (Boolean.parseBoolean(System.getenv("WDM_DOCKERENABLERECORDING"))) {
+    // SELENIUM_JUPITER.getConfig().enableRecordingWhenFailure();
+    // }
   }
 
   @BeforeEach
@@ -74,7 +78,24 @@ public class TestBase {
     if (!Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
       this.logsAssertionExtension.logInspector(new LogInspector(this.browser), testInfo);
       this.requestsAssertionExtension.network(new Network(this.browser), testInfo);
-      // new DevToolsTracer(((HasDevTools) this.browser).getDevTools()).trace();
+
+      DevToolsSupport devToolsSupport = new DevToolsSupport(this.browser);
+      PageDomain pageDomain = devToolsSupport.getPageDomain();
+      NetworkDomain networkDomain = devToolsSupport.getNetworkDomain();
+
+      devToolsSupport.createSession();
+      pageDomain.enable();
+      networkDomain.enable();
+
+      // prefer screencasting for video recording
+      if (Boolean.parseBoolean(System.getenv("PAGE_SCREENCASTING_ENABLED"))) {
+        pageDomain.startScreencast(testInfo);
+      }
+
+      if (Boolean.parseBoolean(System.getenv("TRACING_ENABLED"))) {
+        networkDomain.addRequestListener();
+        networkDomain.addResponseListener();
+      }
     }
   }
 
@@ -82,6 +103,31 @@ public class TestBase {
   void testBaseAfterEach(TestInfo testInfo) throws IOException {
     if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
       this.stopRecording(this.browser, testInfo);
+    } else {
+      DevToolsSupport devToolsSupport = new DevToolsSupport(this.browser);
+
+      try {
+        if (Boolean.parseBoolean(System.getenv("PAGE_SCREENCASTING_ENABLED"))) {
+          PageDomain pageDomain = devToolsSupport.getPageDomain();
+          pageDomain.stopScreencast();
+
+          File reportDir = ExtentWebReportExtension.REPORT_FILE.getParentFile();
+
+          Path screencastDir = Files.createTempDirectory(reportDir.toPath(), "tmp-");
+          boolean result = pageDomain.flush(screencastDir, testInfo);
+
+          if (result) {
+            VideoMerger.merge(screencastDir, reportDir, testInfo);
+          }
+
+          FileUtils.cleanDirectory(screencastDir.toFile());
+          FileUtils.deleteDirectory(screencastDir.toFile());
+        }
+
+      } finally {
+        // has to be done to allow to attach new screencast listener
+        devToolsSupport.clearListeners();
+      }
     }
   }
 
@@ -107,10 +153,6 @@ public class TestBase {
   }
 
   private File doWrite(byte[] bytes, String name) throws IOException {
-    if (!Files.exists(ExtentWebReportExtension.REPORT_FILE.getParentFile().toPath())) {
-      ExtentWebReportExtension.REPORT_FILE.getParentFile().mkdir();
-    }
-
     File file = Path.of(ExtentWebReportExtension.REPORT_FILE.getParent(), name).toFile();
     Files.write(file.toPath(), bytes);
 

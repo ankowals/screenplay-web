@@ -4,8 +4,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClick
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import com.github.ankowals.framework.web.pom.elements.*;
-import com.github.ankowals.framework.web.pom.elements.common.ButtonImpl;
-import com.github.ankowals.framework.web.pom.elements.common.InputImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.ButtonImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.InputImpl;
 import com.github.ankowals.framework.web.pom.page.BaseView;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

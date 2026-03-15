@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.wdm.session.storage;
+package com.github.ankowals.framework.web.storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public abstract class WebStorage {
   WebStorage(WebDriver webDriver, String type) {
     this.jsExecutor = (JavascriptExecutor) webDriver;
     this.type = type;
-    this.storage = this.getAll();
+    this.storage = this.get();
   }
 
   // clear not needed, assumed called only in new browser
@@ -22,7 +22,7 @@ public abstract class WebStorage {
     this.storage.forEach(this::setItem);
   }
 
-  private Map<String, String> getAll() {
+  public Map<String, String> get() {
     Map<String, String> map = new HashMap<>();
 
     for (int i = 0; i < this.getLength(); i++) {
@@ -33,7 +33,7 @@ public abstract class WebStorage {
     return map;
   }
 
-  private String getItem(String key) {
+  public String getItem(String key) {
     return (String)
         this.jsExecutor.executeScript("return window.%s.getItem('%s');".formatted(this.type, key));
   }

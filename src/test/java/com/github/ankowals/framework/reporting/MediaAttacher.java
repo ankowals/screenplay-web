@@ -166,8 +166,6 @@ class MediaAttacher {
   }
 
   private Predicate<File> startsWith(String expectedPrefix) {
-    List<String> patterns = List.of(expectedPrefix + "_", expectedPrefix + "-");
-
-    return file -> patterns.stream().anyMatch(p -> file.getName().startsWith(p));
+    return file -> file.getName().matches("^%s.*[\\.\\w\\{3,4}]$".formatted(expectedPrefix));
   }
 }

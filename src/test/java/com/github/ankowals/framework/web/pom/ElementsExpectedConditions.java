@@ -1,12 +1,9 @@
 package com.github.ankowals.framework.web.pom;
 
-import com.github.ankowals.framework.web.pom.elements.common.ElementImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.ElementImpl;
 import java.util.Map;
 import java.util.Objects;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -17,16 +14,30 @@ public class ElementsExpectedConditions {
     return driver -> {
       Objects.requireNonNull(driver);
 
-      // visible, enabled & in viewport
-      ElementImpl.of(ExpectedConditions.elementToBeClickable(locator).apply(driver)).scrollTo();
+      // visible, enabled
+      WebElement webElement = ExpectedConditions.elementToBeClickable(locator).apply(driver);
+
+      if (webElement == null) {
+        return null;
+      }
+
+      // in viewport
+      ElementImpl.of(webElement).scrollTo();
 
       // stable & not covered
-      ExpectedConditions.and(
-              ElementsExpectedConditions.hasFinishedAnimating(
-                  ExpectedConditions.elementToBeClickable(locator).apply(driver)),
-              ElementsExpectedConditions.isInteractable(
-                  ExpectedConditions.elementToBeClickable(locator).apply(driver)))
-          .apply(driver);
+      try {
+        Boolean result =
+            ExpectedConditions.and(
+                    ElementsExpectedConditions.hasFinishedAnimating(webElement),
+                    ElementsExpectedConditions.isInteractable(webElement))
+                .apply(driver);
+
+        if (!result) {
+          return null;
+        }
+      } catch (StaleElementReferenceException e) {
+        return null;
+      }
 
       return ExpectedConditions.elementToBeClickable(locator).apply(driver);
     };

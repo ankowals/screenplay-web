@@ -1,7 +1,7 @@
 package com.github.ankowals.domain.saucedemo.pom;
 
 import com.github.ankowals.framework.web.pom.elements.Button;
-import com.github.ankowals.framework.web.pom.elements.common.ButtonImpl;
+import com.github.ankowals.framework.web.pom.elements.impl.ButtonImpl;
 import com.github.ankowals.framework.web.pom.page.BasePage;
 import com.github.ankowals.framework.web.pom.page.BaseView;
 import org.openqa.selenium.By;

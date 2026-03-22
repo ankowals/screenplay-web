@@ -18,7 +18,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 
-/** test from SauceOrderSummaryTest re-written using screenplay */
+/** test from SauceOrderSummaryTest re-written using screenplay pattern */
 @SingleSession
 @DisableIfTestFails
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

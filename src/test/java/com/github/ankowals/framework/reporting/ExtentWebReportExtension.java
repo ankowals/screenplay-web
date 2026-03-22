@@ -51,7 +51,7 @@ public class ExtentWebReportExtension implements TestExecutionListener {
     }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
-    ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString());
+    ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.getFullTestName());
 
     testIdentifier.getTags().forEach(tag -> extentTest.assignCategory(tag.getName()));
 
@@ -65,7 +65,8 @@ public class ExtentWebReportExtension implements TestExecutionListener {
     }
 
     FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
-    ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString()).skip(reason);
+    ExtentTest extentTest =
+        this.extentReport.createTest(fqdnTestName.getFullTestName()).skip(reason);
 
     testIdentifier.getTags().forEach(tag -> extentTest.assignCategory(tag.getName()));
 
@@ -79,7 +80,7 @@ public class ExtentWebReportExtension implements TestExecutionListener {
     if (!testIdentifier.isTest()) {
       if (testExecutionResult.getThrowable().isPresent()) {
         FqdnTestName fqdnTestName = new FqdnTestName(testIdentifier);
-        ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.asString());
+        ExtentTest extentTest = this.extentReport.createTest(fqdnTestName.getFullTestName());
         testIdentifier.getTags().forEach(tag -> extentTest.assignCategory(tag.getName()));
         this.testStatusMap.putIfAbsent(fqdnTestName, extentTest);
       } else {

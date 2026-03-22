@@ -3,18 +3,14 @@ package com.github.ankowals.tests;
 import com.github.ankowals.abilities.BrowseTheWeb;
 import com.github.ankowals.base.TestBase;
 import com.github.ankowals.domain.saucedemo.interactions.Login;
-import com.github.ankowals.domain.saucedemo.pom.LoginPage;
 import com.github.ankowals.domain.saucedemo.questions.TheErrorMessage;
 import com.github.ankowals.domain.saucedemo.questions.TheScreenshot;
-import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
 import com.github.ankowals.framework.screenplay.actor.Actor;
 import com.github.ankowals.framework.screenplay.actor.Actors;
 import com.github.ankowals.framework.screenplay.helpers.See;
 import com.github.ankowals.framework.web.assertions.VisualAssert;
 import com.github.ankowals.framework.web.assertions.accessibility.AccessibilityAssert;
 import io.github.bonigarcia.seljup.SingleSession;
-import java.io.File;
-import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -30,9 +26,12 @@ class SauceLoginTest extends TestBase {
   private Actor user;
 
   @BeforeEach
-  void beforeEach() {
+  void beforeEach(TestInfo testInfo) {
     this.user = Actors.withAbilities();
     this.user.can(BrowseTheWeb.with(this.browser));
+
+    this.requestsAssertionExtension.ignoringPredicate(
+        responseLogMessage -> responseLogMessage.status() == 401, testInfo);
   }
 
   @Test
@@ -56,7 +55,7 @@ class SauceLoginTest extends TestBase {
   void shouldDisplayLoginForm(TestInfo testInfo) throws Exception {
     this.user.should(
         See.eventually(
-            TheScreenshot.takenFor(testInfo),
+            TheScreenshot.storedUnder(this.toPath(testInfo, "png")),
             screenshot ->
                 VisualAssert.assertThat(screenshot)
                     .excluding(this.browser.findElement(By.id("user-name")))
@@ -66,26 +65,8 @@ class SauceLoginTest extends TestBase {
   @Test
   @Order(3)
   void shouldDisplayAccessibleLoginForm(TestInfo testInfo) {
-    new LoginPage(this.browser).open();
     AccessibilityAssert.assertThatPage(this.browser)
-        .reportAs(this.destination(testInfo), this.title(testInfo))
+        .reportAs(this.toPath(testInfo, "html"))
         .isViolationFree();
-  }
-
-  private File destination(TestInfo testInfo) {
-    return new File(
-        "%s/%s/%s-axe-%s.html"
-            .formatted(
-                ExtentWebReportExtension.REPORT_FILE.getParentFile(),
-                testInfo.getTestClass().orElseThrow().getName(),
-                testInfo.getTestMethod().orElseThrow().getName(),
-                UUID.randomUUID()));
-  }
-
-  private String title(TestInfo testInfo) {
-    return "%s.%s"
-        .formatted(
-            testInfo.getTestClass().orElseThrow().getSimpleName(),
-            testInfo.getTestMethod().orElseThrow().getName());
   }
 }

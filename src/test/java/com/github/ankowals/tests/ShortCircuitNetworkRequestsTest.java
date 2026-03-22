@@ -53,7 +53,12 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
    */
   @Test
   @EnabledIfEnvironmentVariable(named = "BROWSER_WATCHER_ENABLED", matches = "false")
-  void shouldNotifyAboutSubmissionFailure() throws Exception {
+  void shouldNotifyAboutSubmissionFailure(TestInfo testInfo) throws Exception {
+    this.requestsAssertionExtension.ignoringPredicate(
+        responseLogMessage ->
+            responseLogMessage.status() == 401 || responseLogMessage.status() == 418,
+        testInfo);
+
     String name = RandomStringUtils.insecure().nextAlphabetic(8);
 
     given(this.user).can(BrowseTheWeb.with(this.browser));

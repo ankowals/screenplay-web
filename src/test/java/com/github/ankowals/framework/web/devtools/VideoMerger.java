@@ -1,6 +1,5 @@
 package com.github.ankowals.framework.web.devtools;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import net.bramp.ffmpeg.FFmpeg;
@@ -8,7 +7,6 @@ import net.bramp.ffmpeg.FFmpegExecutor;
 import net.bramp.ffmpeg.builder.FFmpegBuilder;
 import net.bramp.ffmpeg.job.FFmpegJob;
 import org.awaitility.Awaitility;
-import org.junit.jupiter.api.TestInfo;
 
 // To install ffmpeg static build on amazon linux
 /*
@@ -26,19 +24,13 @@ public class VideoMerger {
 
   private VideoMerger() {}
 
-  public static void merge(Path screencastDir, File reportDir, TestInfo testInfo)
-      throws IOException {
+  public static void merge(Path screencastDir, Path outputFilePathInfo) throws IOException {
     FFmpegBuilder ffmpegBuilder =
         new FFmpegBuilder()
             .addExtraArgs("-framerate", String.valueOf(10))
             .addInput(screencastDir + "/%d.png")
             .setVideoFilter("pad=iw+mod(iw\\,2):ih+mod(ih\\,2)")
-            .addOutput(
-                "%s/%s.%s.mp4"
-                    .formatted(
-                        reportDir,
-                        testInfo.getTestClass().orElseThrow().getName(),
-                        testInfo.getTestMethod().orElseThrow().getName()))
+            .addOutput(outputFilePathInfo.toAbsolutePath().toString())
             .setVideoFrameRate(10, 1)
             .setVideoCodec("h264")
             .setVideoPixelFormat("yuv420p")

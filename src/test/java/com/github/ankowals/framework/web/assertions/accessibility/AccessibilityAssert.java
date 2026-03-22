@@ -3,7 +3,9 @@ package com.github.ankowals.framework.web.assertions.accessibility;
 import com.deque.html.axecore.results.Results;
 import com.deque.html.axecore.selenium.AxeBuilder;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.function.Consumer;
+import org.apache.commons.io.FilenameUtils;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
@@ -12,7 +14,6 @@ public class AccessibilityAssert implements MandatoryReportAs {
   private final WebDriver webDriver;
   private final AxeBuilder axeBuilder;
 
-  private String title;
   private File destination;
 
   private AccessibilityAssert(WebDriver webDriver, AxeBuilder axeBuilder) {
@@ -25,9 +26,8 @@ public class AccessibilityAssert implements MandatoryReportAs {
   }
 
   @Override
-  public AccessibilityAssert reportAs(File destination, String title) {
-    this.destination = destination;
-    this.title = title;
+  public AccessibilityAssert reportAs(Path destination) {
+    this.destination = destination.toFile();
     return this;
   }
 
@@ -38,11 +38,13 @@ public class AccessibilityAssert implements MandatoryReportAs {
 
     Results results = this.axeBuilder.analyze(this.webDriver);
 
-    new HtmlReportCreator(results).create(this.destination.getAbsolutePath(), this.title);
+    String path = this.destination.getAbsolutePath();
+    String fileName = FilenameUtils.getName(path);
+
+    new HtmlReportCreator(results).create(path, FilenameUtils.getBaseName(fileName));
 
     Assertions.assertThat(results.violationFree())
-        .withFailMessage(
-            "Accessibility report %s validation failed!", this.destination.getAbsolutePath())
+        .withFailMessage("Accessibility report %s validation failed!", path)
         .isTrue();
   }
 

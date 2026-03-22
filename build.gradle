@@ -60,6 +60,8 @@ test {
     //recording via extension or screencasting works in headless & in container
     //when in use switch off recording via container
     environment "BROWSER_WATCHER_ENABLED", "false"
+
+    //recommended way of recording videos, works in headless
     environment "PAGE_SCREENCASTING_ENABLED", "false"
 
     environment "TRACING_ENABLED", "false"
@@ -67,7 +69,7 @@ test {
     environment "ACCESSIBILITY_ASSERTIONS_ENABLED", "true"
 
     //requires to run com.github.ankowals.tests in container
-    environment "VISUAL_ASSERTIONS_ENABLED", "false "
+    environment "VISUAL_ASSERTIONS_ENABLED", "true"
     environment "VISUAL_ASSERTIONS_REPLACE_SCREENSHOTS", "false"
 
     useJUnitPlatform()
@@ -80,6 +82,7 @@ test {
         jvmArgs += "--add-opens=java.base/java.lang=ALL-UNNAMED"
         jvmArgs += "--add-opens=java.base/java.time=ALL-UNNAMED"
         jvmArgs += "--add-opens=java.base/java.time.format=ALL-UNNAMED"
+        jvmArgs += "--add-opens=java.base/sun.nio.fs=ALL-UNNAMED"
     }
 }
 

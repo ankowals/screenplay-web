@@ -25,9 +25,7 @@ class MediaAttacher {
     testStatusMap.forEach(
         (fqdnTestName, extentTest) -> {
           screenshots.stream()
-              .filter(
-                  this.startsWith(
-                      "%s.%s".formatted(fqdnTestName.getClassName(), fqdnTestName.getMethodName())))
+              .filter(this.startsWith(fqdnTestName.getTestName()))
               .forEach(
                   screenshot ->
                       extentTest.addScreenCaptureFromPath(
@@ -35,14 +33,8 @@ class MediaAttacher {
 
           videos.stream()
               .filter(
-                  this.startsWith(
-                          "%s.%s"
-                              .formatted(fqdnTestName.getClassName(), fqdnTestName.getMethodName()))
-                      .or(
-                          file ->
-                              fqdnTestName
-                                  .asString()
-                                  .startsWith(file.getName().replace(".webm", ""))))
+                  this.startsWith(fqdnTestName.getTestName())
+                      .or(this.startsWith(fqdnTestName.getMethodName())))
               .max(Comparator.comparingLong(File::lastModified))
               .ifPresent(
                   video -> {
@@ -56,9 +48,7 @@ class MediaAttacher {
                   });
 
           txtFiles.stream()
-              .filter(
-                  this.startsWith(
-                      "%s.%s".formatted(fqdnTestName.getClassName(), fqdnTestName.getMethodName())))
+              .filter(this.startsWith(fqdnTestName.getTestName()))
               .forEach(
                   txtFile -> {
                     switch (extentTest.getStatus()) {
@@ -91,7 +81,7 @@ class MediaAttacher {
                 List<File> screenshots = this.mediaFinder.getScreenshots(dir);
 
                 screenshots.stream()
-                    .filter(this.startsWith(fqdnTestName.getMethodName()))
+                    .filter(this.startsWith(fqdnTestName.getMethodNameWithInvocationCount()))
                     .forEach(
                         screenshot ->
                             extentTest.addScreenCaptureFromPath(
@@ -105,12 +95,8 @@ class MediaAttacher {
 
                 videos.stream()
                     .filter(
-                        this.startsWith(fqdnTestName.getMethodName())
-                            .or(
-                                file ->
-                                    fqdnTestName
-                                        .getMethodName()
-                                        .startsWith(file.getName().replace(".webm", ""))))
+                        this.startsWith(fqdnTestName.getMethodNameWithInvocationCount())
+                            .or(this.startsWith(fqdnTestName.getMethodName())))
                     .max(Comparator.comparingLong(File::lastModified))
                     .ifPresent(
                         video -> {
@@ -139,7 +125,7 @@ class MediaAttacher {
                 List<File> txtFiles = this.mediaFinder.getTextFiles(dir);
 
                 txtFiles.stream()
-                    .filter(this.startsWith(fqdnTestName.getMethodName()))
+                    .filter(this.startsWith(fqdnTestName.getMethodNameWithInvocationCount()))
                     .forEach(
                         txtFile -> {
                           switch (extentTest.getStatus()) {
@@ -166,6 +152,8 @@ class MediaAttacher {
   }
 
   private Predicate<File> startsWith(String expectedPrefix) {
-    return file -> file.getName().matches("^%s.*[\\.\\w\\{3,4}]$".formatted(expectedPrefix));
+    return file ->
+        file.getName()
+            .matches("^%s.*[\\.\\w\\{3,4}]$".formatted(expectedPrefix.replace("[", "\\[")));
   }
 }

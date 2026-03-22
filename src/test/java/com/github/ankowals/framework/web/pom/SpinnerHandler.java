@@ -24,8 +24,8 @@ public record SpinnerHandler(
     try {
       new WebDriverWait(this.webDriver, Duration.ofMillis(500), Duration.ofMillis(100))
           .until(ExpectedConditions.or(expectedConditions));
-    } catch (TimeoutException ignored) {
-    } // NOSONAR
+    } catch (TimeoutException ignored) { // NOSONAR
+    }
 
     // waits longer for spinner to disappear
     this.webDriverWait.until(ExpectedConditions.not(ExpectedConditions.or(expectedConditions)));

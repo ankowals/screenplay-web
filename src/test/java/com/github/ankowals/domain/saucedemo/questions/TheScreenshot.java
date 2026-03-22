@@ -1,36 +1,22 @@
 package com.github.ankowals.domain.saucedemo.questions;
 
 import com.github.ankowals.abilities.BrowseTheWeb;
-import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
 import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
-import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 public class TheScreenshot {
-  public static Question<File> takenFor(TestInfo testInfo) {
+  public static Question<File> storedUnder(Path path) {
     return actor -> {
       WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).driver();
       byte[] bytes = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
 
-      String name =
-          "%s/%s-%s.%s"
-              .formatted(
-                  testInfo.getTestClass().orElseThrow().getName(),
-                  testInfo.getTestMethod().orElseThrow().getName(),
-                  UUID.randomUUID(),
-                  "png");
-
-      File file = Path.of(ExtentWebReportExtension.REPORT_FILE.getParent(), name).toFile();
-      Files.write(file.toPath(), bytes);
-
-      return file;
+      return Files.write(path, bytes).toFile();
     };
   }
 }

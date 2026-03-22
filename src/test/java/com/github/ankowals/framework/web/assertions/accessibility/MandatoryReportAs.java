@@ -1,7 +1,7 @@
 package com.github.ankowals.framework.web.assertions.accessibility;
 
-import java.io.File;
+import java.nio.file.Path;
 
 public interface MandatoryReportAs {
-  AccessibilityAssert reportAs(File destination, String title);
+  AccessibilityAssert reportAs(Path destination);
 }

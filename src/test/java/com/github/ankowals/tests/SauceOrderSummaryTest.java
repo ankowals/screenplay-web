@@ -35,7 +35,10 @@ class SauceOrderSummaryTest extends TestBase {
 
   @Test
   @Order(1)
-  void shouldLoginSuccessfully() {
+  void shouldLoginSuccessfully(TestInfo testInfo) {
+    this.requestsAssertionExtension.ignoringPredicate(
+        response -> response.status() == 401, testInfo);
+
     this.productsPage =
         new LoginPage(this.browser)
             .open()

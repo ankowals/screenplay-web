@@ -4,12 +4,11 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.function.FailableCallable;
-import org.apache.commons.lang3.function.FailableSupplier;
 import org.apache.commons.lang3.stream.Streams;
-import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.HamcrestCondition;
 import org.awaitility.Awaitility;
+import org.awaitility.core.ThrowingRunnable;
 import org.hamcrest.Matcher;
 
 public class Eventually {
@@ -39,7 +38,7 @@ public class Eventually {
         .untilAsserted(callable::call, assertConsumer);
   }
 
-  public static <T> void assertThat(FailableSupplier<Assert<?, T>, Throwable> assertSupplier) {
-    Awaitility.await().atMost(TIMEOUT).ignoreExceptions().untilAsserted(assertSupplier::get);
+  public static void assertThat(ThrowingRunnable throwingRunnable) {
+    Awaitility.await().atMost(TIMEOUT).ignoreExceptions().untilAsserted(throwingRunnable);
   }
 }

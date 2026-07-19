@@ -1,12 +1,12 @@
 package com.github.ankowals.base;
 
 import com.github.ankowals.framework.reporting.ExtentWebReportExtension;
-import com.github.ankowals.framework.web.assertions.logs.LogsAssertionExtension;
-import com.github.ankowals.framework.web.assertions.requests.RequestsAssertionExtension;
 import com.github.ankowals.framework.web.devtools.DevToolsSupport;
 import com.github.ankowals.framework.web.devtools.NetworkDomain;
 import com.github.ankowals.framework.web.devtools.PageDomain;
 import com.github.ankowals.framework.web.devtools.VideoMerger;
+import com.github.ankowals.framework.web.extensions.logs.LogsAssertionExtension;
+import com.github.ankowals.framework.web.extensions.requests.RequestsAssertionExtension;
 import com.github.ankowals.framework.web.wdm.MyWebDriverManagerFactory;
 import com.github.ankowals.framework.web.wdm.bitbucket.BitBucketChromeOptionsFactory;
 import io.github.bonigarcia.seljup.*;
@@ -102,8 +102,8 @@ public class TestBase {
     // we can use devTools support like NetworkInterceptor, LogInspector etc or install
     // extension via BiDi but not both at the same time unless chrome for testing in use
     if (!Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
-      this.logsAssertionExtension.logInspector(new LogInspector(this.browser), testInfo);
-      this.requestsAssertionExtension.network(new Network(this.browser), testInfo);
+      this.logsAssertionExtension.addOnLogHandler(new LogInspector(this.browser), testInfo);
+      this.requestsAssertionExtension.addOnResponseHandler(new Network(this.browser), testInfo);
 
       DevToolsSupport devToolsSupport = new DevToolsSupport(this.browser);
       PageDomain pageDomain = devToolsSupport.getPageDomain();

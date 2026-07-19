@@ -13,7 +13,7 @@ import org.junit.jupiter.api.*;
 import org.junitpioneer.jupiter.DisableIfTestFails;
 
 /**
- * In parallel execution each method requires separate driver instance and with @SingleSession
+ * In parallel execution each method requires separate webDriver instance and with @SingleSession
  * enabled we have a single instance shared for all com.github.ankowals.tests. To run test configure
  * parallel execution so that top-level classes run in parallel but methods in same thread.
  *

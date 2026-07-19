@@ -6,6 +6,6 @@ import com.github.ankowals.framework.screenplay.Interaction;
 
 public class Add {
   public static Interaction toCart(String product) {
-    return actor -> BrowseTheWeb.as(actor).onPage(ProductsPage.class).clickAddToCart(product);
+    return actor -> BrowseTheWeb.as(actor).on(ProductsPage::new).clickAddToCart(product);
   }
 }

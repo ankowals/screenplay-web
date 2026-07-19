@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.TestInfo;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v145.page.Page;
+import org.openqa.selenium.devtools.latest.page.Page;
 
 public class PageDomain {
 

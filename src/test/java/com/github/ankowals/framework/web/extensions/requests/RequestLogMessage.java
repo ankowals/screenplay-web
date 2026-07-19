@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.assertions.requests;
+package com.github.ankowals.framework.web.extensions.requests;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

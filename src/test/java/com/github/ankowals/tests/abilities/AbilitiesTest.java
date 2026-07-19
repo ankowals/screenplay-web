@@ -52,21 +52,22 @@ class AbilitiesTest {
 
     this.actor.should(
         See.that(
-            TheRemembered.valueOf("terefere", String.class, Or.empty()),
+            TheRemembered.valueOf("terefere", String.class, OrElse.empty()),
             Matchers.is(Matchers.nullValue())));
 
     Memory.Key<String> key = new Memory.Key<>("terefere", String.class);
 
     this.actor.should(
         See.that(
-            TheRemembered.valueOf(key, Or.askFor(TheRemembered.valueOf("message", String.class))),
+            TheRemembered.valueOf(
+                key, OrElse.askFor(TheRemembered.valueOf("message", String.class))),
             Matchers.equalTo("Do nothing")));
 
     this.actor.attemptsTo(RememberThat.valueOf(key).is("terefere"));
     this.actor.should(See.that(TheRemembered.valueOf(key), Matchers.is("terefere")));
     this.actor.attemptsTo(Forget.valueOf(key));
 
-    answer = this.actor.asksFor(TheRemembered.valueOf(key, Or.value("hopsiaisa")));
+    answer = this.actor.asksFor(TheRemembered.valueOf(key, OrElse.value("hopsiaisa")));
     this.actor.should(See.that(TheActual.valueOf(answer), Matchers.is("hopsiaisa")));
 
     this.actor.attemptsTo(RememberThat.valueOf("srututu").is(TheRemembered.valueOf(key)));
@@ -106,7 +107,7 @@ class AbilitiesTest {
         .isThrownBy( // NOSONAR
             () ->
                 this.actor.should(
-                    See.eventually(
+                    See.eventuallyThat(
                         TheRemembered.valueOf("message", String.class), Matchers.is("terefere"))));
   }
 
@@ -117,7 +118,7 @@ class AbilitiesTest {
         .isThrownBy( // NOSONAR
             () ->
                 this.actor.should(
-                    See.eventually(
+                    See.eventuallyThat(
                         TheRemembered.valueOf("message", String.class),
                         actual -> Assertions.assertThat(actual).isEqualTo("terefere"))));
   }
@@ -129,7 +130,7 @@ class AbilitiesTest {
         .isThrownBy( // NOSONAR
             () ->
                 this.actor.should(
-                    See.eventually(
+                    See.eventuallyThat(
                         () -> Assertions.assertThat(new Object()).isEqualTo("terefere"))));
   }
 

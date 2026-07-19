@@ -6,6 +6,6 @@ import com.github.ankowals.framework.screenplay.Interaction;
 
 public class Submit {
   public static Interaction exampleForm() {
-    return actor -> BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).clickSubmit();
+    return actor -> BrowseTheWeb.as(actor).on(AngularFormExamplePage::new).clickSubmit();
   }
 }

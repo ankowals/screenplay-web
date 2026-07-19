@@ -13,13 +13,13 @@ public class Fill {
 
   // better alternative
   public static Interaction exampleForm(Consumer<AngularFormExamplePage> customizer) {
-    return actor -> customizer.accept(BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class));
+    return actor -> customizer.accept(BrowseTheWeb.as(actor).on(AngularFormExamplePage::new));
   }
 
   public static class FillExampleFormFactory {
     public Interaction firstName(String firstName) {
       return actor ->
-          BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).enterFirstName(firstName);
+          BrowseTheWeb.as(actor).on(AngularFormExamplePage::new).enterFirstName(firstName);
     }
   }
 }

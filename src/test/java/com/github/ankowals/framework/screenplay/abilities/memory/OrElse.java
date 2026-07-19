@@ -2,7 +2,7 @@ package com.github.ankowals.framework.screenplay.abilities.memory;
 
 import com.github.ankowals.framework.screenplay.Question;
 
-public class Or {
+public class OrElse {
   public static <T> Question<T> empty() {
     return actor -> null;
   }

@@ -7,6 +7,6 @@ import com.github.ankowals.framework.screenplay.Question;
 public class TheExampleForm {
 
   public static Question<String> submitMessage() {
-    return actor -> BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).getSubmitMessage();
+    return actor -> BrowseTheWeb.as(actor).on(AngularFormExamplePage::new).getSubmitMessage();
   }
 }

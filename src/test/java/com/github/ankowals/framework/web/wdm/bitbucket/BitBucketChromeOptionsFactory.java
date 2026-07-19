@@ -2,6 +2,7 @@ package com.github.ankowals.framework.web.wdm.bitbucket;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chromium.ChromiumOptions;
@@ -19,7 +20,7 @@ public class BitBucketChromeOptionsFactory {
                 "excludeSwitches", new String[] {"enable-automation", "disable-infobars"})
             .setExperimentalOption("prefs", browserPreferences)
             .addArguments(
-                // default chromium driver flags
+                // default chromium webDriver flags
                 // https://source.chromium.org/chromium/chromium/src/+/main:chrome/test/chromedriver/chrome_launcher.cc?q=f:chrome_launcher%20%20kDesktopSwitches&ss=chromium
                 "start-maximized",
                 "ignore-certificate-errors",
@@ -57,6 +58,12 @@ public class BitBucketChromeOptionsFactory {
           "use-gl=angle",
           "use-angle=swiftshader-webgl",
           "enable-unsafe-swiftshader");
+    }
+
+    String browserBinary = System.getenv("WDM_CHROME_BINARY");
+
+    if (!StringUtils.isBlank(browserBinary)) {
+      chromiumOptions.setBinary(browserBinary);
     }
 
     return chromiumOptions;

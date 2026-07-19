@@ -7,10 +7,10 @@ import com.github.ankowals.framework.screenplay.Interaction;
 
 public class GoTo {
   public static Interaction cart() {
-    return actor -> BrowseTheWeb.as(actor).onPage(ProductsPage.class).clickCartButton();
+    return actor -> BrowseTheWeb.as(actor).on(ProductsPage::new).clickCartButton();
   }
 
   public static Interaction checkout() {
-    return actor -> BrowseTheWeb.as(actor).onPage(CartPage.class).clickCheckout();
+    return actor -> BrowseTheWeb.as(actor).on(CartPage::new).clickCheckout();
   }
 }

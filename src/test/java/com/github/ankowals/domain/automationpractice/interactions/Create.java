@@ -12,7 +12,7 @@ public class Create {
   public static Interaction account(AccountFormData accountFormData) {
     return actor ->
         BrowseTheWeb.as(actor)
-            .onPage(AutomationPracticeHomePage.class)
+            .on(AutomationPracticeHomePage::new)
             .clickSignInButton()
             .enterIntoEmailInput(accountFormData.getEmail())
             .clickCreateAccountButton()
@@ -32,6 +32,6 @@ public class Create {
   public static Interaction account(Consumer<AuthenticationPage> customizer) {
     return actor ->
         customizer.accept(
-            BrowseTheWeb.as(actor).onPage(AutomationPracticeHomePage.class).clickSignInButton());
+            BrowseTheWeb.as(actor).on(AutomationPracticeHomePage::new).clickSignInButton());
   }
 }

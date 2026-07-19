@@ -15,7 +15,7 @@
     <logger name="com.github.dockerjava" level="WARN"/>
     <logger name="io.github.bonigarcia.wdm" level="INFO"/>
     <logger name="com.github.ankowals.framework.logging.AbstractLogAspect" level="DEBUG"/>
-    <logger name="org.openqa.selenium" level="WARN"/> <!-- can be used to trace communication with driver -->
+    <logger name="org.openqa.selenium" level="WARN"/> <!-- can be used to trace communication with webDriver -->
     <logger name="io.github.glytching.junit.extension.watcher.WatcherExtension" level="INFO"/>
     <logger name="com.github.ankowals.framework.web.devtools.NetworkDomain" level="INFO"/>
 </configuration>

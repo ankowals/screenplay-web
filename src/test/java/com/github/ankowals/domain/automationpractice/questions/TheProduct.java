@@ -11,8 +11,7 @@ public class TheProduct {
 
   public static Question<Product> details() {
     return actor -> {
-      ProductDetailsPage productDetailsPage =
-          BrowseTheWeb.as(actor).onPage(ProductDetailsPage.class);
+      ProductDetailsPage productDetailsPage = BrowseTheWeb.as(actor).on(ProductDetailsPage::new);
       return new Product.Builder()
           .with(
               $ -> {
@@ -24,6 +23,6 @@ public class TheProduct {
   }
 
   public static Question<List<Map<String, String>>> dataSheet() {
-    return actor -> BrowseTheWeb.as(actor).onPage(ProductDetailsPage.class).getDataSheet();
+    return actor -> BrowseTheWeb.as(actor).on(ProductDetailsPage::new).getDataSheet();
   }
 }

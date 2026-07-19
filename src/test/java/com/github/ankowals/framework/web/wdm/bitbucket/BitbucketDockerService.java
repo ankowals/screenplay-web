@@ -9,7 +9,7 @@ import io.github.bonigarcia.wdm.docker.DockerService;
 import java.util.*;
 
 /*
-Customization done below allows us to run containers in BB pipelines and use features provided by DevTools driver in CI
+Customization done below allows us to run containers in BB pipelines and use features provided by DevTools webDriver in CI
 Following docker flags are restricted from usage in bitbucket pipelines
    --privileged
    --cap-add

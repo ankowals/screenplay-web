@@ -7,6 +7,6 @@ import com.github.ankowals.framework.screenplay.Interaction;
 public class Open {
 
   public static Interaction browser() {
-    return actor -> BrowseTheWeb.as(actor).onPage(AngularFormExamplePage.class).open();
+    return actor -> BrowseTheWeb.as(actor).on(AngularFormExamplePage::new).open();
   }
 }

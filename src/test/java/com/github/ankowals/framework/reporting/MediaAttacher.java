@@ -3,10 +3,7 @@ package com.github.ankowals.framework.reporting;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import java.io.File;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 class MediaAttacher {
@@ -17,10 +14,11 @@ class MediaAttacher {
     this.mediaFinder = new MediaFinder(report.getParentFile());
   }
 
-  void attachMedia(Map<FqdnTestName, ExtentTest> testStatusMap) {
+  void attach(Map<FqdnTestName, ExtentTest> testStatusMap) {
     List<File> screenshots = this.mediaFinder.getScreenshots();
     List<File> videos = this.mediaFinder.getVideos();
     List<File> txtFiles = this.mediaFinder.getTextFiles();
+    List<File> archives = this.mediaFinder.getArchives();
 
     testStatusMap.forEach(
         (fqdnTestName, extentTest) -> {
@@ -40,10 +38,12 @@ class MediaAttacher {
                   video -> {
                     switch (extentTest.getStatus()) {
                       case FAIL:
-                        extentTest.fail(MarkupHelper.toTable(new MyVideo("./" + video.getName())));
+                        extentTest.fail(
+                            MarkupHelper.toTable(new VideoFile("./" + video.getName())));
                         break;
                       case PASS:
-                        extentTest.pass(MarkupHelper.toTable(new MyVideo("./" + video.getName())));
+                        extentTest.pass(
+                            MarkupHelper.toTable(new VideoFile("./" + video.getName())));
                     }
                   });
 
@@ -63,10 +63,29 @@ class MediaAttacher {
                                 .formatted(txtFile.getName(), txtFile.getName()));
                     }
                   });
+
+          archives.stream()
+              .filter(this.startsWith(fqdnTestName.getTestName()))
+              .forEach(
+                  archive -> {
+                    switch (extentTest.getStatus()) {
+                      case FAIL:
+                        extentTest.fail(
+                            "<a href='./%s'>click to download %s</a>"
+                                .formatted(archive.getName(), archive.getName()));
+                        break;
+                      case PASS:
+                        extentTest.pass(
+                            "<a href='./%s'>click to download %s</a>"
+                                .formatted(archive.getName(), archive.getName()));
+                    }
+                  });
         });
+
+    this.attachNestedMedia(testStatusMap);
   }
 
-  void attachNestedMedia(Map<FqdnTestName, ExtentTest> testStatusMap) {
+  private void attachNestedMedia(Map<FqdnTestName, ExtentTest> testStatusMap) {
     List<File> dirs = this.mediaFinder.getMediaDirs();
 
     testStatusMap.forEach(
@@ -104,7 +123,7 @@ class MediaAttacher {
                             case FAIL:
                               extentTest.fail(
                                   MarkupHelper.toTable(
-                                      new MyVideo(
+                                      new VideoFile(
                                           "./%s/%s"
                                               .formatted(
                                                   maybeMediaDirForTestClass.get().getName(),
@@ -113,7 +132,7 @@ class MediaAttacher {
                             case PASS:
                               extentTest.pass(
                                   MarkupHelper.toTable(
-                                      new MyVideo(
+                                      new VideoFile(
                                           "./%s/%s"
                                               .formatted(
                                                   maybeMediaDirForTestClass.get().getName(),
@@ -147,6 +166,32 @@ class MediaAttacher {
                               break;
                           }
                         });
+
+                List<File> archives = this.mediaFinder.getArchives(dir);
+
+                archives.stream()
+                    .filter(this.startsWith(fqdnTestName.getMethodNameWithInvocationCount()))
+                    .forEach(
+                        archive -> {
+                          switch (extentTest.getStatus()) {
+                            case FAIL:
+                              extentTest.fail(
+                                  "<a href='./%s/%s'>click to download %s</a>"
+                                      .formatted(
+                                          maybeMediaDirForTestClass.get().getName(),
+                                          archive.getName(),
+                                          archive.getName()));
+                              break;
+                            case PASS:
+                              extentTest.pass(
+                                  "<a href='./%s/%s'>click to download %s</a>"
+                                      .formatted(
+                                          maybeMediaDirForTestClass.get().getName(),
+                                          archive.getName(),
+                                          archive.getName()));
+                              break;
+                          }
+                        });
               });
         });
   }
@@ -155,5 +200,17 @@ class MediaAttacher {
     return file ->
         file.getName()
             .matches("^%s.*[\\.\\w\\{3,4}]$".formatted(expectedPrefix.replace("[", "\\[")));
+  }
+
+  private static class VideoFile {
+
+    private final List<String> video;
+
+    private VideoFile(String path) {
+      String css = "width: 100% !important; height: auto !important;";
+      this.video =
+          Collections.singletonList(
+              String.format("<video style='%s' src='%s' controls></video>", css, path));
+    }
   }
 }

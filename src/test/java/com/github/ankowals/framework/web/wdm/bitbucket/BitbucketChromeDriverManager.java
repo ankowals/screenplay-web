@@ -103,7 +103,7 @@ public class BitbucketChromeDriverManager extends ChromeDriverManager {
   }
 
   // WDM tracks webdrivers by putting them into a list and uses object hash as a key
-  // driver augmentation can modify the hash
+  // webDriver augmentation can modify the hash
   // let us replace it in the wdm list
   private void replace(WebDriver oldWebDriver, WebDriver newWebDriver) {
     for (WebDriverBrowser webDriverBrowser : this.webDriverList) {

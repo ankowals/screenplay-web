@@ -26,7 +26,7 @@ public class Login {
 
       // webdriver limitation, cookies can be set only after opening url in the browser
       // to overcome this limitation we will use devTools
-      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).driver();
+      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).webDriver();
       NetworkDomain networkDomain = new DevToolsSupport(webDriver).getNetworkDomain();
 
       if (session != null && !isBrowserWatcherEnabled) {
@@ -35,7 +35,7 @@ public class Login {
         networkDomain.set(session.cookies());
       }
 
-      BrowseTheWeb.as(actor).onPage(LoginPage.class).open();
+      BrowseTheWeb.as(actor).on(LoginPage::new).open();
 
       // webdrvier limitation, storage can be set only after opening url in the browser
       // would be better to use devTools to set it before calling open
@@ -54,7 +54,7 @@ public class Login {
       }
 
       BrowseTheWeb.as(actor)
-          .onPage(LoginPage.class)
+          .on(LoginPage::new)
           .enterUsername(credentials.username())
           .enterPassword(credentials.password())
           .clickLogin();
@@ -75,17 +75,17 @@ public class Login {
 
   public static Interaction with(Credentials credentials) {
     return actor -> {
-      BrowseTheWeb.as(actor).onPage(LoginPage.class).open();
+      BrowseTheWeb.as(actor).on(LoginPage::new).open();
 
       if (Boolean.parseBoolean(System.getenv("BROWSER_WATCHER_ENABLED"))) {
         UseAbility.of(actor)
             .to(ManageBrowsers.class)
             .webDriverManager()
-            .startRecording(UseAbility.of(actor).to(BrowseTheWeb.class).driver());
+            .startRecording(UseAbility.of(actor).to(BrowseTheWeb.class).webDriver());
       }
 
       BrowseTheWeb.as(actor)
-          .onPage(LoginPage.class)
+          .on(LoginPage::new)
           .enterUsername(credentials.username())
           .enterPassword(credentials.password())
           .clickLogin();

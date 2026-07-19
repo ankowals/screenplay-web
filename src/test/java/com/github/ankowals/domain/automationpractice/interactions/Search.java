@@ -9,7 +9,7 @@ public class Search {
   public static Interaction forText(String text) {
     return actor ->
         BrowseTheWeb.as(actor)
-            .onPage(AutomationPracticeHomePage.class)
+            .on(AutomationPracticeHomePage::new)
             .enterIntoSearchInput(text)
             .clickSearchButton();
   }

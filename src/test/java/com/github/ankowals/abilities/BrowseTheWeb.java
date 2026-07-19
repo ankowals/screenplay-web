@@ -4,17 +4,17 @@ import com.github.ankowals.framework.screenplay.Ability;
 import com.github.ankowals.framework.screenplay.actor.Actor;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import com.github.ankowals.framework.web.pom.page.BasePage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import java.util.function.Function;
 import org.openqa.selenium.WebDriver;
 
-public record BrowseTheWeb(WebDriver driver) implements Ability {
-  public static BrowseTheWeb with(WebDriver driver) {
-    return new BrowseTheWeb(driver);
+public record BrowseTheWeb(WebDriver webDriver) implements Ability {
+  public static BrowseTheWeb with(WebDriver webDriver) {
+    return new BrowseTheWeb(webDriver);
   }
 
   public static PageFactory as(Actor actor) {
-    return new PageFactory(UseAbility.of(actor).to(BrowseTheWeb.class).driver());
+    return new PageFactory(UseAbility.of(actor).to(BrowseTheWeb.class).webDriver());
   }
 
   public static class PageFactory {
@@ -25,23 +25,8 @@ public record BrowseTheWeb(WebDriver driver) implements Ability {
       this.driver = Objects.requireNonNull(driver);
     }
 
-    public <T extends BasePage> T onPage(Class<T> clazz) {
-      try {
-        return this.init(clazz);
-      } catch (NoSuchMethodException
-          | InvocationTargetException
-          | InstantiationException
-          | IllegalAccessException e) {
-        throw new RuntimeException(e.getMessage());
-      }
-    }
-
-    private <T extends BasePage> T init(Class<T> type)
-        throws NoSuchMethodException,
-            InvocationTargetException,
-            InstantiationException,
-            IllegalAccessException {
-      return type.getConstructor(WebDriver.class).newInstance(this.driver);
+    public <T extends BasePage> T on(Function<WebDriver, T> mapper) {
+      return mapper.apply(this.driver);
     }
   }
 }

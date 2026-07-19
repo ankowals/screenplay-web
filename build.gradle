@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.diffplug.spotless' version "8.1.0"
+    id 'com.diffplug.spotless' version "8.8.0"
 }
 
 group 'com.github.ankowals'
@@ -12,21 +12,21 @@ repositories {
 }
 
 dependencies {
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
-    testCompileOnly("org.projectlombok:lombok:1.18.42")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.46")
+    testCompileOnly("org.projectlombok:lombok:1.18.46")
 
     //runner
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
-    testImplementation("org.junit.platform:junit-platform-launcher:6.0.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.1")
+    testImplementation("org.junit.platform:junit-platform-launcher:6.1.1")
     testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
     testImplementation("io.github.glytching:junit-extensions:2.6.0")
 
     //logging
-    testImplementation("ch.qos.logback:logback-core:1.5.25")
-    testImplementation("ch.qos.logback:logback-classic:1.5.25")
-    testImplementation("org.slf4j:slf4j-api:2.0.17")
-    testImplementation("org.slf4j:jul-to-slf4j:2.0.17")
-    testImplementation("org.aspectj:aspectjweaver:1.9.25")
+    testImplementation("ch.qos.logback:logback-core:1.5.38")
+    testImplementation("ch.qos.logback:logback-classic:1.5.38")
+    testImplementation("org.slf4j:slf4j-api:2.0.18")
+    testImplementation("org.slf4j:jul-to-slf4j:2.0.18")
+    testImplementation("org.aspectj:aspectjweaver:1.9.25.1")
 
     //screenplay
     testImplementation("org.apache.commons:commons-lang3:3.20.0")
@@ -35,13 +35,13 @@ dependencies {
     testImplementation("org.awaitility:awaitility:4.3.0")
 
     //selenium
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.41.0")
-    testImplementation("io.github.bonigarcia:selenium-jupiter:6.3.1")
-    testImplementation("org.jsoup:jsoup:1.21.2")
+    testImplementation("org.seleniumhq.selenium:selenium-java:4.45.0")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:6.3.2")
+    testImplementation("org.jsoup:jsoup:1.22.2")
     testImplementation("com.aventstack:extentreports:5.1.2")
     testImplementation("commons-io:commons-io:2.21.0")
     testImplementation("com.github.romankh3:image-comparison:4.4.0")
-    testImplementation("com.deque.html.axe-core:selenium:4.11.1")
+    testImplementation("com.deque.html.axe-core:selenium:4.12.0")
     testImplementation("net.bramp.ffmpeg:ffmpeg:0.8.0")
 }
 
@@ -50,6 +50,9 @@ test {
     targetCompatibility = 1.21
 
     //environment "WDM_CHROMEVERSION", "145.0"
+
+    //use it to set path to chrome for testing
+    environment "WDM_CHROME_BINARY", ""
 
     environment "BROWSER_IN_DOCKER_ENABLED", "false"
     environment "BROWSER_IN_HEADLESS_ENABLED", "false"

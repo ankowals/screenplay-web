@@ -50,7 +50,7 @@ class AutomationPracticeTest extends TestBase {
     when(this.user).attemptsTo(Open.automationPractice(), Create.account(data));
     then(this.user)
         .should(
-            See.that(ThePage.title(AccountPage.class), Matchers.equalTo("My account - My Store")));
+            See.that(ThePage.title(AccountPage::new), Matchers.equalTo("My account - My Store")));
   }
 
   @Test
@@ -72,7 +72,7 @@ class AutomationPracticeTest extends TestBase {
             Open.browser(
                 AUTOMATION_PRACTICE_HOME
                     + "?controller=search&orderby=position&orderway=desc&search_query=dress&submit_search=",
-                SearchResultsPage.class),
+                SearchResultsPage::new),
             View.product("Printed Chiffon Dress"));
     then(this.user)
         .should(
@@ -88,7 +88,7 @@ class AutomationPracticeTest extends TestBase {
             Open.browser(
                 AUTOMATION_PRACTICE_HOME
                     + "?id_product=7&controller=product&search_query=Printed+Chiffon+Dress&results=2",
-                ProductDetailsPage.class));
+                ProductDetailsPage::new));
     then(this.user)
         .should(
             See.that(

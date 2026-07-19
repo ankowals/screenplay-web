@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
 public class TheScreenshot {
   public static Question<File> storedUnder(Path path) {
     return actor -> {
-      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).driver();
+      WebDriver webDriver = UseAbility.of(actor).to(BrowseTheWeb.class).webDriver();
       byte[] bytes = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
 
       return Files.write(path, bytes).toFile();

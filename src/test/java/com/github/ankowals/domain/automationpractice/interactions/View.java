@@ -8,6 +8,6 @@ public class View {
 
   public static Interaction product(String product) {
     return actor ->
-        BrowseTheWeb.as(actor).onPage(SearchResultsPage.class).clickProductLinkButton(product);
+        BrowseTheWeb.as(actor).on(SearchResultsPage::new).clickProductLinkButton(product);
   }
 }

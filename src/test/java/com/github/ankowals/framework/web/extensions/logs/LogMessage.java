@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.web.assertions.logs;
+package com.github.ankowals.framework.web.extensions.logs;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

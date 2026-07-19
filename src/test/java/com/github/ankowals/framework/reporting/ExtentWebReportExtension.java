@@ -24,12 +24,10 @@ public class ExtentWebReportExtension implements TestExecutionListener {
 
   private final ExtentReports extentReport;
   private final Map<FqdnTestName, ExtentTest> testStatusMap = new ConcurrentHashMap<>();
-  private final MediaAttacher mediaAttacher;
 
   public ExtentWebReportExtension() {
     this.extentReport = new ExtentReports();
     this.extentReport.attachReporter(new ExtentSparkReporter(REPORT_FILE.getAbsolutePath()));
-    this.mediaAttacher = new MediaAttacher(REPORT_FILE);
   }
 
   /*
@@ -39,8 +37,8 @@ public class ExtentWebReportExtension implements TestExecutionListener {
    */
   @Override
   public void testPlanExecutionFinished(@NonNull TestPlan testPlan) {
-    this.mediaAttacher.attachNestedMedia(this.testStatusMap);
-    this.mediaAttacher.attachMedia(this.testStatusMap);
+    MediaAttacher mediaAttacher = new MediaAttacher(REPORT_FILE);
+    mediaAttacher.attach(this.testStatusMap);
     this.extentReport.flush();
   }
 

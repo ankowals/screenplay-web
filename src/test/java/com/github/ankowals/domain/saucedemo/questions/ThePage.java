@@ -6,6 +6,6 @@ import com.github.ankowals.framework.screenplay.Question;
 
 public class ThePage {
   public static Question<String> title() {
-    return actor -> BrowseTheWeb.as(actor).onPage(ProductsPage.class).getTitle();
+    return actor -> BrowseTheWeb.as(actor).on(ProductsPage::new).getTitle();
   }
 }

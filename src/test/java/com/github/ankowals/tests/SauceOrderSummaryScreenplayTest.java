@@ -47,7 +47,7 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
         Add.toCart("Sauce Labs Backpack"));
 
     this.user.should(
-        See.eventually(
+        See.eventuallyThat(
             TheItem.inCart("Sauce Labs Bike Light"),
             item -> {
               Assertions.assertThat(item)
@@ -71,7 +71,7 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
                     .clickContinue()));
 
     this.user.should(
-        See.eventually(
+        See.eventuallyThat(
             TheOrder.summaryInfo(),
             summaryInfo -> {
               Assertions.assertThat(summaryInfo)

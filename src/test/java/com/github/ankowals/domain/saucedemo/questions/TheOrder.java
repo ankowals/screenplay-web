@@ -6,6 +6,6 @@ import com.github.ankowals.framework.screenplay.Question;
 
 public class TheOrder {
   public static Question<CheckoutOverviewPage.SummaryInfo> summaryInfo() {
-    return actor -> BrowseTheWeb.as(actor).onPage(CheckoutOverviewPage.class).getSummaryInfo();
+    return actor -> BrowseTheWeb.as(actor).on(CheckoutOverviewPage::new).getSummaryInfo();
   }
 }

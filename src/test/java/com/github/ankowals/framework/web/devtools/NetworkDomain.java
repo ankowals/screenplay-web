@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v145.network.Network;
-import org.openqa.selenium.devtools.v145.network.model.*;
+import org.openqa.selenium.devtools.latest.network.Network;
+import org.openqa.selenium.devtools.latest.network.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +80,6 @@ public class NetworkDomain {
                         cookie.getSameSite(),
                         Optional.of(new TimeSinceEpoch(cookie.getExpires())),
                         Optional.of(cookie.getPriority()),
-                        Optional.of(cookie.getSameParty()),
                         Optional.of(cookie.getSourceScheme()),
                         Optional.of(cookie.getSourcePort()),
                         cookie.getPartitionKey()))

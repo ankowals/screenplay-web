@@ -6,6 +6,6 @@ import com.github.ankowals.framework.screenplay.Question;
 
 public class TheErrorMessage {
   public static Question<String> uponLogin() {
-    return actor -> BrowseTheWeb.as(actor).onPage(LoginPage.class).getErrorText();
+    return actor -> BrowseTheWeb.as(actor).on(LoginPage::new).getErrorText();
   }
 }

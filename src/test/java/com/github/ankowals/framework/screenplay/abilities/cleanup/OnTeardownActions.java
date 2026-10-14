@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.function.FailableRunnable;
 
-@Slf4j
 public class OnTeardownActions {
 
   private final List<FailableRunnable<?>> runnables;
@@ -29,7 +27,6 @@ public class OnTeardownActions {
           try {
             runnable.run();
           } catch (Throwable e) {
-            log.error(e.getMessage(), e);
             this.errors.add(e);
           }
         });

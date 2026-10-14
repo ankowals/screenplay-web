@@ -4,8 +4,8 @@ import com.github.ankowals.framework.screenplay.abilities.memory.RememberThat;
 import com.github.ankowals.framework.screenplay.abilities.memory.TheRemembered;
 import com.github.ankowals.framework.screenplay.actor.Actor;
 import com.github.ankowals.framework.screenplay.actor.Actors;
-import com.github.ankowals.framework.screenplay.helpers.InParallel;
 import com.github.ankowals.framework.screenplay.helpers.See;
+import com.github.ankowals.framework.screenplay.helpers.parallel.InParallel;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -22,11 +22,11 @@ class HelpersTest {
   void shouldRunParallelTasks() throws Exception {
     Actor actor = Actors.withAbilities();
 
-    InParallel.perform(
-        () -> RememberThat.valueOf("thread1").is(Thread.currentThread().getName()).performAs(actor),
-        () -> RememberThat.valueOf("thread2").is(Thread.currentThread().getName()).performAs(actor),
-        () ->
-            RememberThat.valueOf("thread3").is(Thread.currentThread().getName()).performAs(actor));
+    InParallel.actor(actor)
+        .attemptsTo(
+            RememberThat.valueOf("thread1").is(Thread.currentThread().getName()),
+            RememberThat.valueOf("thread2").is(Thread.currentThread().getName()),
+            RememberThat.valueOf("thread3").is(Thread.currentThread().getName()));
 
     actor.should(
         See.that(
@@ -90,15 +90,8 @@ class HelpersTest {
         .eachAttemptsTo(() -> RememberThat.valueOf("thread").is(Thread.currentThread().getName()));
 
     List<String> threads =
-        InParallel.performAndGet(
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor1),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor2),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor3),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor4),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor5),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor6),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor7),
-            () -> TheRemembered.valueOf("thread", String.class).answeredBy(actor8));
+        InParallel.actors(actor1, actor2, actor3, actor4, actor5, actor6, actor7, actor8)
+            .eachAsksFor(() -> TheRemembered.valueOf("thread", String.class));
 
     Assertions.assertThat(threads).isNotEmpty().hasSize(8);
     Assertions.assertThat(threads.getFirst()).isNotEqualTo(threads.getLast());

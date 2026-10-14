@@ -2,7 +2,6 @@ package com.github.ankowals.framework.screenplay.abilities.memory;
 
 import com.github.ankowals.framework.screenplay.Interaction;
 import com.github.ankowals.framework.screenplay.Question;
-import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 
 public class RememberThat {
 
@@ -23,16 +22,11 @@ public class RememberThat {
     }
 
     public Interaction is(T value) {
-      return actor ->
-          UseAbility.of(actor).to(RememberThings.class).memory().remember(this.name, value);
+      return actor -> RememberThings.as(actor).remember(this.name, value);
     }
 
     public Interaction is(Question<?> question) {
-      return actor ->
-          UseAbility.of(actor)
-              .to(RememberThings.class)
-              .memory()
-              .remember(this.name, question.answeredBy(actor));
+      return actor -> RememberThings.as(actor).remember(this.name, question.answeredBy(actor));
     }
   }
 }

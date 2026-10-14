@@ -4,34 +4,28 @@ import com.github.ankowals.framework.screenplay.*;
 import java.util.*;
 import org.apache.commons.lang3.function.Failable;
 
-public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
+public class Actor {
 
   private final Map<Class<?>, Ability> abilities = new HashMap<>();
 
-  @Override
-  @SafeVarargs
-  public final <T extends Ability> void can(T... doSomething) {
+  public final void can(Ability... doSomething) {
     Arrays.stream(doSomething).forEach(ability -> this.abilities.put(ability.getClass(), ability));
   }
 
-  @Override
   public <T extends Ability> T usingAbilityTo(Class<T> doSomething) {
     return doSomething.cast(this.abilities.get(doSomething));
   }
 
-  @Override
   public final void attemptsTo(Interaction... interactions) {
     Failable.stream(Arrays.asList(interactions))
         .forEach(interaction -> interaction.performAs(this));
   }
 
-  @Override
   public <T> T asksFor(Question<T> question) throws Exception {
     return question.answeredBy(this);
   }
 
-  @Override
-  public void should(Consequence... consequences) throws Exception {
+  public void should(Consequence... consequences) {
     Failable.stream(Arrays.asList(consequences))
         .forEach(consequence -> consequence.evaluateFor(this));
   }

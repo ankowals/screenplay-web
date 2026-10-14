@@ -5,11 +5,8 @@ import com.github.ankowals.framework.screenplay.Consequence;
 import com.github.ankowals.framework.screenplay.Interaction;
 import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.actor.Actor;
-import com.github.ankowals.framework.screenplay.actor.ManagesAbilities;
-import com.github.ankowals.framework.screenplay.actor.PerformsChecks;
-import com.github.ankowals.framework.screenplay.actor.PerformsInteractions;
 
-public class BddActorWrapper implements PerformsInteractions, PerformsChecks, ManagesAbilities {
+public class BddActorWrapper {
 
   private final Actor actor;
 
@@ -17,28 +14,22 @@ public class BddActorWrapper implements PerformsInteractions, PerformsChecks, Ma
     this.actor = actor;
   }
 
-  @Override
-  @SafeVarargs
-  public final <T extends Ability> void can(T... doSomething) {
+  public final void can(Ability... doSomething) {
     this.actor.can(doSomething);
   }
 
-  @Override
   public <T extends Ability> T usingAbilityTo(Class<T> doSomething) {
     return this.actor.usingAbilityTo(doSomething);
   }
 
-  @Override
   public final void attemptsTo(Interaction... interactions) {
     this.actor.attemptsTo(interactions);
   }
 
-  @Override
   public <T> T asksFor(Question<T> question) throws Exception {
     return this.actor.asksFor(question);
   }
 
-  @Override
   public void should(Consequence... consequences) throws Exception {
     this.actor.should(consequences);
   }

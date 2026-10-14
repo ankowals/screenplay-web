@@ -17,7 +17,8 @@ public class Actors {
         RememberThings.with(new Memory()),
         DoTheCleanUp.with(new OnTeardownActions()),
         AssertSoftly.with(new SoftAssertions()),
-        AwaitPatiently.with(Awaitility.await().ignoreExceptions().atMost(Duration.ofSeconds(11))));
+        AwaitPatiently.with(
+            Awaitility.await().ignoreExceptions().logging().atMost(Duration.ofSeconds(4))));
 
     return actor;
   }

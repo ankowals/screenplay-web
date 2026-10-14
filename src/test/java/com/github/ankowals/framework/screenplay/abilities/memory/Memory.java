@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Limitations you can't use collections types like List<String> as your value type. As a workaround
- * create your own wrapper type and use in place of collection type.
+ * You can't use collections types like List<String> as your value type. As a workaround create your
+ * own wrapper type and use in place of collection type.
  */
 public class Memory {
   private final Map<Key<?>, Object> cache;
@@ -26,7 +26,7 @@ public class Memory {
     this.cache.remove(new Key<>(name, type));
   }
 
-  void clear() {
+  void forget() {
     this.cache.clear();
   }
 

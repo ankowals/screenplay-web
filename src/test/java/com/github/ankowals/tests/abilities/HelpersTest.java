@@ -44,7 +44,7 @@ class HelpersTest {
 
   @Test
   @Order(2)
-  void shouldRunParallelInteractionsByEachActor() throws Exception {
+  void shouldRunParallelInteractionsByEachActor() {
     Actor actor1 = Actors.withAbilities();
     Actor actor2 = Actors.withAbilities();
     Actor actor3 = Actors.withAbilities();

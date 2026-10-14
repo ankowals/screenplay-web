@@ -36,7 +36,7 @@ class SauceLoginTest extends TestBase {
 
   @Test
   @Order(1)
-  void shouldSeeMessageWhenPasswordIsWrong() throws Exception {
+  void shouldSeeMessageWhenPasswordIsWrong() {
     this.user.attemptsTo(Login.with(new Login.Credentials("standard_user", "terefere")));
 
     this.user.should(
@@ -52,7 +52,7 @@ class SauceLoginTest extends TestBase {
   @Test
   @Order(2)
   @EnabledIfEnvironmentVariable(named = "BROWSER_IN_DOCKER_ENABLED", matches = "true")
-  void shouldDisplayLoginForm(TestInfo testInfo) throws Exception {
+  void shouldDisplayLoginForm(TestInfo testInfo) {
     this.user.should(
         See.eventuallyThat(
             TheScreenshot.storedUnder(this.toPath(testInfo, "png")),

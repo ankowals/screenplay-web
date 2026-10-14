@@ -36,7 +36,7 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
 
   @Test
   @Order(1)
-  void shouldValidateItemInCart(TestInfo testInfo) throws Exception {
+  void shouldValidateItemInCart(TestInfo testInfo) {
     // filter out expected request failures otherwise test will fail
     this.requestsAssertionExtension.ignoringPredicate(
         response -> response.status() == 401, testInfo);
@@ -61,14 +61,11 @@ class SauceOrderSummaryScreenplayTest extends TestBase {
 
   @Test
   @Order(2)
-  void shouldCheckOrderSummary() throws Exception {
+  void shouldCheckOrderSummary() {
     this.user.attemptsTo(
         Checkout.completingForm(
             form ->
-                form.enterFirstName("terefere")
-                    .enterLastName("hopsiasia")
-                    .enterPostalCode("123")
-                    .clickContinue()));
+                form.enterFirstName("terefere").enterLastName("hopsiasia").enterPostalCode("123")));
 
     this.user.should(
         See.eventuallyThat(

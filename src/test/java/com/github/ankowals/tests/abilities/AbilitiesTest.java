@@ -8,6 +8,7 @@ import com.github.ankowals.framework.screenplay.abilities.cleanup.DoTheCleanUp;
 import com.github.ankowals.framework.screenplay.abilities.memory.*;
 import com.github.ankowals.framework.screenplay.actor.Actor;
 import com.github.ankowals.framework.screenplay.actor.Actors;
+import com.github.ankowals.framework.screenplay.helpers.OrElse;
 import com.github.ankowals.framework.screenplay.helpers.See;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.time.Duration;
@@ -40,10 +41,7 @@ class AbilitiesTest {
   @Test
   @Order(1)
   void shouldRememberThings() throws Exception {
-    UseAbility.of(this.actor)
-        .to(DoTheCleanUp.class)
-        .onTeardownActions()
-        .add(() -> Forget.everything().performAs(this.actor));
+    DoTheCleanUp.as(this.actor).add(() -> Forget.everything().performAs(this.actor));
 
     this.actor.attemptsTo(RememberThat.valueOf("message").is("Do nothing"));
     String answer = this.actor.asksFor(TheRemembered.valueOf("message", String.class));

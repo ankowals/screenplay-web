@@ -9,7 +9,10 @@ public class Checkout {
   public static Interaction completingForm(Consumer<CheckoutYourInformationPage> checkoutFormData) {
     return actor -> {
       actor.attemptsTo(GoTo.checkout());
-      checkoutFormData.accept(BrowseTheWeb.as(actor).on(CheckoutYourInformationPage::new));
+      CheckoutYourInformationPage checkoutPage =
+          BrowseTheWeb.as(actor).on(CheckoutYourInformationPage::new);
+      checkoutFormData.accept(checkoutPage);
+      checkoutPage.clickContinue();
     };
   }
 }

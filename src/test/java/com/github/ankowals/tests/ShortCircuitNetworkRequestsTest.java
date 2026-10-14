@@ -32,7 +32,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
   }
 
   @Test
-  void shouldSubmitForm(TestInfo testInfo) throws Exception {
+  void shouldSubmitForm(TestInfo testInfo) {
     this.requestsAssertionExtension.ignoringPredicate(
         responseLogMessage -> responseLogMessage.status() == 401, testInfo);
 
@@ -53,7 +53,7 @@ class ShortCircuitNetworkRequestsTest extends TestBase {
    */
   @Test
   @EnabledIfEnvironmentVariable(named = "BROWSER_WATCHER_ENABLED", matches = "false")
-  void shouldNotifyAboutSubmissionFailure(TestInfo testInfo) throws Exception {
+  void shouldNotifyAboutSubmissionFailure(TestInfo testInfo) {
     this.requestsAssertionExtension.ignoringPredicate(
         responseLogMessage ->
             responseLogMessage.status() == 401 || responseLogMessage.status() == 418,

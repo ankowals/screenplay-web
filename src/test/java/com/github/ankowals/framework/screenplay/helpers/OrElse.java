@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.screenplay.abilities.memory;
+package com.github.ankowals.framework.screenplay.helpers;
 
 import com.github.ankowals.framework.screenplay.Question;
 

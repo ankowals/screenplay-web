@@ -3,7 +3,6 @@ package com.github.ankowals.framework.screenplay.helpers;
 import com.github.ankowals.framework.screenplay.Consequence;
 import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.abilities.AwaitPatiently;
-import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.util.Arrays;
 import org.apache.commons.lang3.function.FailableConsumer;
 import org.apache.commons.lang3.stream.Streams;
@@ -37,20 +36,17 @@ public class See {
     return actor -> assertConsumer.accept(actor.asksFor(question));
   }
 
-  public static <T> Consequence eventuallyThat(Question<T> question, Matcher<? super T> matcher) {
+  @SafeVarargs
+  public static <T> Consequence eventuallyThat(
+      Question<T> question, Matcher<? super T>... matchers) {
     return actor ->
-        UseAbility.of(actor)
-            .to(AwaitPatiently.class)
-            .conditionFactory()
-            .untilAsserted(() -> actor.should(See.that(question, matcher)));
+        AwaitPatiently.as(actor).untilAsserted(() -> actor.should(See.that(question, matchers)));
   }
 
   public static <T> Consequence eventuallyThat(
       Question<T> question, FailableConsumer<? super T, Exception> assertConsumer) {
     return actor ->
-        UseAbility.of(actor)
-            .to(AwaitPatiently.class)
-            .conditionFactory()
+        AwaitPatiently.as(actor)
             .untilAsserted(() -> actor.should(See.that(question, assertConsumer)));
   }
 
@@ -60,10 +56,6 @@ public class See {
    * Assertions.assertThat(actual).isEqualTo("Tequila123"); }
    */
   public static Consequence eventuallyThat(ThrowingRunnable throwingRunnable) {
-    return actor ->
-        UseAbility.of(actor)
-            .to(AwaitPatiently.class)
-            .conditionFactory()
-            .untilAsserted(throwingRunnable);
+    return actor -> AwaitPatiently.as(actor).untilAsserted(throwingRunnable);
   }
 }

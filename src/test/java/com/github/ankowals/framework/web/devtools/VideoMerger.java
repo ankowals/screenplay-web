@@ -28,8 +28,9 @@ public class VideoMerger {
     FFmpegBuilder ffmpegBuilder =
         new FFmpegBuilder()
             .addExtraArgs("-framerate", String.valueOf(10))
-            .addInput(screencastDir + "/%d.png")
             .setVideoFilter("pad=iw+mod(iw\\,2):ih+mod(ih\\,2)")
+            .addInput(screencastDir + "/%d.png")
+            .done()
             .addOutput(outputFilePathInfo.toAbsolutePath().toString())
             .setVideoFrameRate(10, 1)
             .setVideoCodec("h264")
